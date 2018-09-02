@@ -14,15 +14,20 @@
 
 /* Expresssoes Regulares */
 %%
-    [ \t\n] // Se houverem espacos em branco, fazer nada
-    "//".*\n {cout << "COMENTARIO!";} // Trata um comentario
-    (\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)* {
-                                    cout << "Id encontrado: " << yytext << endln;
-                                    return ID;}
+	/* trata um comentario */
+"//".*\n {cout << "COMENTARIO!\n";}
+
+	/* Identificador */
+(\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)* {
+                                cout << "Id encontrado: " << yytext << endl;
+                                //return ID;
+				}
+	/* Elimina os Espacos em branco*/
+[ \t\n] {} 
 %%
 
 /* Codificacao C++ */
 
-int main(){
+int main(int argc, char **argv){
     while(yylex());
 }

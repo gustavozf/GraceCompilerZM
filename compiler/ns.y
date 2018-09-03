@@ -20,9 +20,9 @@ void yyerror(const char *s);
    Utilizada pela ferramenta
 */
 %union {
-	int ival;
-	float fval;
-	char *sval;
+	int ival;   // Inteiro
+	float fval; // Float
+	char *sval; // String
 }
 
 /* Tokens 

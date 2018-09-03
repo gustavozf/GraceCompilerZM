@@ -90,11 +90,11 @@ void inicia_tabela(){
 	tokens_table["&&"] = "t_and";
 	tokens_table["!"] = "t_not";
 	tokens_table["="] = "t_atribuicao";
-	tokens_table["+="] = "t_";
-	tokens_table["-="] = "t_";
-	tokens_table["*="] = "t_";
-	tokens_table["/="] = "t_";
-	tokens_table["%="] = "t_";
-	tokens_table["?"] = "t_";
-	tokens_table[":"] = "t_";
+	tokens_table["+="] = "t_atrib_soma";
+	tokens_table["-="] = "t_atrib_sub";
+	tokens_table["*="] = "t_atrib_mult";
+	tokens_table["/="] = "t_atrib_div";
+	tokens_table["%="] = "t_atrib_mod";
+	tokens_table["?"] = "t_cond_op_ter";
+	tokens_table[":"] = "t_sep_op_ter";
 }

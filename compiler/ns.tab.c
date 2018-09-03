@@ -77,10 +77,12 @@ extern int yylex();
 extern int yyparse();
 extern FILE *yyin;
 
+extern int num_linhas;
+
 // Tratar Erros (aparentemente obrigatorio)
 void yyerror(const char *s);
 
-#line 84 "ns.tab.c" /* yacc.c:339  */
+#line 86 "ns.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -124,13 +126,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 22 "ns.y" /* yacc.c:355  */
+#line 24 "ns.y" /* yacc.c:355  */
 
-	int ival;
-	float fval;
-	char *sval;
+	int ival;   // Inteiro
+	float fval; // Float
+	char *sval; // String
 
-#line 134 "ns.tab.c" /* yacc.c:355  */
+#line 136 "ns.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -147,7 +149,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 151 "ns.tab.c" /* yacc.c:358  */
+#line 153 "ns.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -387,18 +389,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  3
+#define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   1
+#define YYLAST   3
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  4
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  2
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  2
+#define YYNRULES  3
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  4
+#define YYNSTATES  5
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -444,7 +446,7 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    37,    37
+       0,    40,    40,    41
 };
 #endif
 
@@ -480,7 +482,7 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -3,    -4,     1,    -4
+      -3,    -3,     1,    -4,    -4
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -488,13 +490,13 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     2,     0,     1
+       0,     3,     0,     2,     1
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4
+      -4,     2
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -508,31 +510,31 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       1,     3
+       1,     4,     0,     3
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
-       3,     0
+       3,     0,    -1,     1
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     3,     5,     0
+       0,     3,     5,     5,     0
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,     4,     5
+       0,     4,     5,     5
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1
+       0,     2,     2,     1
 };
 
 
@@ -1209,13 +1211,19 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 37 "ns.y" /* yacc.c:1646  */
+#line 40 "ns.y" /* yacc.c:1646  */
+    {cout << "Variavel identificada: " << (yyvsp[-1].sval) << endl;}
+#line 1217 "ns.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 3:
+#line 41 "ns.y" /* yacc.c:1646  */
     {cout << "Variavel identificada: " << (yyvsp[0].sval) << endl;}
-#line 1215 "ns.tab.c" /* yacc.c:1646  */
+#line 1223 "ns.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1219 "ns.tab.c" /* yacc.c:1646  */
+#line 1227 "ns.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1443,7 +1451,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 38 "ns.y" /* yacc.c:1906  */
+#line 43 "ns.y" /* yacc.c:1906  */
 
 
 /* Codificacao C++ */
@@ -1469,7 +1477,7 @@ int main(int argc, char *argv[]){
 }
 
 void yyerror(const char *s){
-	cout<< "Erro Sintatico! Mensagem: " << s << endl;
+	cout<< "Erro Sintatico na linha nº " << num_linhas << "! Mensagem: " << s << endl;
 
 	exit(-1);
 }

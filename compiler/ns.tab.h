@@ -54,11 +54,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 22 "ns.y" /* yacc.c:1909  */
+#line 24 "ns.y" /* yacc.c:1909  */
 
-	int ival;
-	float fval;
-	char *sval;
+	int ival;   // Inteiro
+	float fval; // Float
+	char *sval; // String
 
 #line 64 "ns.tab.h" /* yacc.c:1909  */
 };

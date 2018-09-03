@@ -375,8 +375,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 5
-#define YY_END_OF_BUFFER 6
+#define YY_NUM_RULES 6
+#define YY_END_OF_BUFFER 7
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -386,7 +386,7 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[14] =
     {   0,
-        0,    0,    6,    4,    1,    1,    4,    3,    0,    3,
+        0,    0,    7,    5,    1,    4,    5,    3,    0,    3,
         0,    2,    0
     } ;
 
@@ -483,13 +483,14 @@ using namespace std;
 
 extern int yylex();
 
-std::map<std::string, int> tokens_table;
+std::map<std::string, string> tokens_table;
+int num_linhas = 1;
 /* opcoes 
 %option debug
 %option noyywrap
 */
 /* Expresssoes Regulares */
-#line 493 "lex.yy.c"
+#line 494 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -707,10 +708,10 @@ YY_DECL
 		}
 
 	{
-#line 25 "ns.l"
+#line 26 "ns.l"
 
 	/* Elimina os Espacos em Branco*/
-#line 714 "lex.yy.c"
+#line 715 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -768,9 +769,8 @@ do_action:	/* This label is used only to access EOF actions. */
 			goto yy_find_action;
 
 case 1:
-/* rule 1 can match eol */
 YY_RULE_SETUP
-#line 27 "ns.l"
+#line 28 "ns.l"
 {} 
 	YY_BREAK
 /* Palavras Reservadas */
@@ -779,33 +779,44 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 34 "ns.l"
-{cout << "COMENTARIO!\n";}
+#line 35 "ns.l"
+{
+	cout << "COMENTARIO!\n";
+	num_linhas++;
+}
 	YY_BREAK
 /* Identificador */
 case 3:
 YY_RULE_SETUP
-#line 37 "ns.l"
+#line 41 "ns.l"
 {
-                                cout << "Id encontrado: " << yytext << endl;
-                                yylval.sval = strdup(yytext);
-								return t_id;
-				}
+    cout << "Id encontrado: " << yytext << endl;
+    // Converte o 'yytext' para uma string
+	yylval.sval = strdup(yytext);
+	return t_id;
+}
 	YY_BREAK
 /* Numeros */
 /* Strings */
-/* Elimina Demais Caracteres Indesejados */
+/* Conta o numero de linhas */
 case 4:
+/* rule 4 can match eol */
 YY_RULE_SETUP
-#line 48 "ns.l"
-;
+#line 53 "ns.l"
+{num_linhas++;}
 	YY_BREAK
+/* Elimina Demais Caracteres Indesejados */
 case 5:
 YY_RULE_SETUP
-#line 49 "ns.l"
+#line 56 "ns.l"
+{}
+	YY_BREAK
+case 6:
+YY_RULE_SETUP
+#line 57 "ns.l"
 ECHO;
 	YY_BREAK
-#line 809 "lex.yy.c"
+#line 820 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1806,30 +1817,54 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 49 "ns.l"
+#line 57 "ns.l"
 
 
 
 /* Codificacao C++ */
-/*
-int main(int argc, char *argv[]){
-	if(argc < 2){
-		cout << "ERRO: Eh necessario passar o nome do arquivo de entrada!\n";
-
-		return 0;
-	}
-
-	FILE *entrada = fopen(argv[1], "r");
-
-	if (!entrada) {
-		cout << "Erro ao abrir o arquivo: '" << argv[1] << "'!\n";
-		return -1;
-	}
-
-	yyin = entrada;
-
-    while(yylex());
-
-	return 0;
-}*/
-
+void inicia_tabela(){
+	tokens_table["bool"] = "t_bool";
+	tokens_table["else"] = "t_else";
+	tokens_table["false"] = "t_false";
+	tokens_table["for"] = "t_for";
+	tokens_table["if"] = "t_if";
+	tokens_table["int"] = "t_int";
+	tokens_table["read"] = "t_read";
+	tokens_table["return"] = "t_return";
+	tokens_table["skip"] = "t_skip";
+	tokens_table["stop"] = "t_stop";
+	tokens_table["string"] = "t_string";
+	tokens_table["true"] = "t_true";
+	tokens_table["var"] = "t_var";
+	tokens_table["while"] = "t_while";
+	tokens_table["("] = "t_abre_parenteses";
+	tokens_table[")"] = "t_fecha_parenteses";
+	tokens_table["["] = "t_abre_colchetes";
+	tokens_table["]"] = "t_fecha_colchetes";
+	tokens_table["{"] = "t_abre_chaves";
+	tokens_table["}"] = "t_fecha_chaves";
+	tokens_table[","] = "t_virgula";
+	tokens_table[";"] = "t_ponto_virgula";
+	tokens_table["+"] = "t_adicao";
+	tokens_table["-"] = "t_subtracao";
+	tokens_table["*"] = "t_multiplicacao";
+	tokens_table["/"] = "t_divisao";
+	tokens_table["%"] = "t_modulo";
+	tokens_table["=="] = "t_eq_logica";
+	tokens_table["!="] = "t_dif_logica";
+	tokens_table[">"] = "t_maior";
+	tokens_table[">="] = "t_maior_igual";
+	tokens_table["<"] = "t_menor";
+	tokens_table["<="] = "t_menor_igual";
+	tokens_table["||"] = "t_or";
+	tokens_table["&&"] = "t_and";
+	tokens_table["!"] = "t_not";
+	tokens_table["="] = "t_atribuicao";
+	tokens_table["+="] = "t_atrib_soma";
+	tokens_table["-="] = "t_atrib_sub";
+	tokens_table["*="] = "t_atrib_mult";
+	tokens_table["/="] = "t_atrib_div";
+	tokens_table["%="] = "t_atrib_mod";
+	tokens_table["?"] = "t_cond_op_ter";
+	tokens_table[":"] = "t_sep_op_ter";
+}

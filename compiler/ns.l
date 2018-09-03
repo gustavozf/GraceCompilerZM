@@ -14,6 +14,7 @@ using namespace std;
 extern int yylex();
 
 std::map<std::string, string> tokens_table;
+int num_linhas = 1;
 %}
 
 /* opcoes 
@@ -24,7 +25,7 @@ std::map<std::string, string> tokens_table;
 /* Expresssoes Regulares */
 %%
 	/* Elimina os Espacos em Branco*/
-[ \t\n] {} 
+[ \t] {} 
 
 	/* Palavras Reservadas */
 	
@@ -33,6 +34,7 @@ std::map<std::string, string> tokens_table;
 	/* trata um comentario */
 "//".*\n {
 	cout << "COMENTARIO!\n";
+	num_linhas++;
 }
 
 	/* Identificador */
@@ -47,8 +49,11 @@ std::map<std::string, string> tokens_table;
 
 	/* Strings */
 	
+	/* Conta o numero de linhas */
+\n {num_linhas++;}
+
 	/* Elimina Demais Caracteres Indesejados */
-	. {}
+. {}
 %%
 
 /* Codificacao C++ */
@@ -78,7 +83,7 @@ void inicia_tabela(){
 	tokens_table["+"] = "t_adicao";
 	tokens_table["-"] = "t_subtracao";
 	tokens_table["*"] = "t_multiplicacao";
-	tokens_table["/"] = "t_divisal";
+	tokens_table["/"] = "t_divisao";
 	tokens_table["%"] = "t_modulo";
 	tokens_table["=="] = "t_eq_logica";
 	tokens_table["!="] = "t_dif_logica";

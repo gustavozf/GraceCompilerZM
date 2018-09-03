@@ -12,6 +12,8 @@ extern int yylex();
 extern int yyparse();
 extern FILE *yyin;
 
+extern int num_linhas;
+
 // Tratar Erros (aparentemente obrigatorio)
 void yyerror(const char *s);
 %}
@@ -27,14 +29,17 @@ void yyerror(const char *s);
 
 /* Tokens 
 
-%token <TIPO> <NOME>;
+%token <TIPO> <NOME>
 
 */
-%token <sval> t_id;
+%token <sval> t_id
 
 %%
     /* Gramatica */ 
-    identificador: t_id {cout << "Variavel identificada: " << $1 << endl;}
+    identificador: 
+		t_id identificador {cout << "Variavel identificada: " << $1 << endl;}
+		| t_id {cout << "Variavel identificada: " << $1 << endl;}
+		;
 %%
 
 /* Codificacao C++ */
@@ -60,7 +65,7 @@ int main(int argc, char *argv[]){
 }
 
 void yyerror(const char *s){
-	cout<< "Erro Sintatico! Mensagem: " << s << endl;
+	cout<< "Erro Sintatico na linha nº " << num_linhas << "! Mensagem: " << s << endl;
 
 	exit(-1);
 }

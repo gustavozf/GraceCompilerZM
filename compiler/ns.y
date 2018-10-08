@@ -28,14 +28,31 @@ void yyerror(const char *s);
 }
 
 /* Tokens 
-
 %token <TIPO> <NOME>
-
 */
 %token <sval> t_id
+%token <sval> t_num
+%token <sval> t_lit_string
+/*
+%token <sval> t_bool
+%token <sval> t_else
+%token <sval> t_def
+%token <sval> t_false
+%token <sval> t_for
+%token <sval> t_if
+%token <sval> t_int
+%token <sval> t_read
+%token <sval> t_return
+%token <sval> t_skip
+%token <sval> t_stop
+%token <sval> t_string
+%token <sval> t_true
+%token <sval> t_var
+%token <sval> t_while
+*/
 
 %%
-    /* Gramatica */ 
+	/* Gramatica */ 
     identificador: 
 		t_id identificador {cout << "Variavel identificada: " << $1 << endl;}
 		| t_id {cout << "Variavel identificada: " << $1 << endl;}

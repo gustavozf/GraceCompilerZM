@@ -13,6 +13,7 @@ extern int yyparse();
 extern FILE *yyin;
 
 extern int num_linhas;
+extern int num_carac;
 
 // Tratar Erros (aparentemente obrigatorio)
 void yyerror(const char *s);
@@ -82,7 +83,7 @@ int main(int argc, char *argv[]){
 }
 
 void yyerror(const char *s){
-	cout<< "Erro Sintatico na linha nº " << num_linhas << "! Mensagem: " << s << endl;
+	cout<< "Erro Sintatico: " << s <<" (l: "<<num_linhas<< ", c: "<<num_carac<<")\n";
 
 	exit(-1);
 }

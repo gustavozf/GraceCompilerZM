@@ -13,6 +13,7 @@ using namespace std;
 
 extern int yylex();
 int num_linhas = 1;
+int num_carac = 1;
 
 /*
 std::unordered_map<string, int> tokens_table;
@@ -76,29 +77,38 @@ tokens_table[":" ] = "t_sep_op_ter";
 
 	/* Palavras Reservadas */
 ("bool"|"def"|"else"|"false"|"for"|"if"|"int"|"read"|"return"|"skip"|"stop"|"string"|"true"|"var"|"while") {
-	cout << yytext << endl;
+	cout <<"Palavra reservada: "<< yytext << endl;
+
 	yylval.sval = strdup(yytext);
-	return yytext;
+	
+	num_carac += strlen(strdup(yytext));
+
+	return yytext[0];
 }
 	
 	/* Simbolo */
 ("("|")"|"["|"]"|"{"|"}"|","|";"|"+"|"-"|"*"|"/"|"%"|"=="|"!="|">"|">="|"<"|"<="|"||"|"&&"|"!"|"="|"+="|"-="|"*="|"/="|"%="|"?"|":") {
 	cout << yytext << endl;
 	yylval.sval = strdup(yytext);
-	return yytext;
+
+	num_carac += strlen(strdup(yytext));
+
+	return yytext[0];
 }
 
 	/* trata um comentario */
 "//"[^\n]*\n {
 	cout << "COMENTARIO!\n";
 	num_linhas++;
+	num_carac = 1;
 }
 
 	/* Identificador */
 (\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)* {
-    // cout << "Id encontrado: " << yytext << endl;
+    cout << "Id encontrado: " << yytext << endl;
     // Converte o 'yytext' para uma string
 	yylval.sval = strdup(yytext);
+	num_carac += strlen(strdup(yytext));
 	return t_id;
 }
 
@@ -106,17 +116,19 @@ tokens_table[":" ] = "t_sep_op_ter";
 [0-9]+ {
 	yylval.sval = strdup(yytext);
 	cout << yytext<< endl;
+	num_carac += strlen(strdup(yytext));
 	return t_num; // < -- colocar no bison
 }
 	/* Strings */
 \"[^\"]*\" {
 	cout  << yytext << endl;
 	yylval.sval = strdup(yytext);
+	num_carac += strlen(strdup(yytext));
 	return t_lit_string; // < -- colocar no bison
 }
 
 	/* Conta o numero de linhas */
-\n {num_linhas++;}
+\n {num_linhas++; num_carac = 1;}
 
 	/* Elimina Demais Caracteres Indesejados */
 . {}

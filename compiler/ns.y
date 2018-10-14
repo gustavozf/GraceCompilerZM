@@ -7,7 +7,7 @@
 
 using namespace std;
 
-// Coisas do Flex que o Biso precisa
+// Coisas do Flex que o Bison precisa
 extern int yylex();
 extern int yyparse();
 extern FILE *yyin;
@@ -28,36 +28,197 @@ void yyerror(const char *s);
 	char *sval; // String
 }
 
-/* Tokens 
-%token <TIPO> <NOME>
-*/
-%token <sval> t_id
-%token <sval> t_num
-%token <sval> t_lit_string
-/*
-%token <sval> t_bool
-%token <sval> t_else
-%token <sval> t_def
-%token <sval> t_false
-%token <sval> t_for
-%token <sval> t_if
-%token <sval> t_int
-%token <sval> t_read
-%token <sval> t_return
-%token <sval> t_skip
-%token <sval> t_stop
-%token <sval> t_string
-%token <sval> t_true
-%token <sval> t_var
-%token <sval> t_while
-*/
+/* Tokens */
+// constant-strings
+%token T_BOOL T_INT T_STRING
+%token T_IF T_ELSE T_FOR T_WHILE
+%token T_WRITE T_READ
+%token T_DEF T_RETURN T_VAR T_SKIP T_STOP
+%token T_TRUE T_FALSE
+%token T_ABRE_PARENTESES T_FECHA_PARENTESES T_ABRE_COLCHETES T_FECHA_COLCHETES T_ABRE_CHAVES T_FECHA_CHAVES
+%token T_VIRGULA T_PONTO_VIRGULA
+%token T_ADICAO T_SUBTRACAO T_MULTIPLICACAO T_DIVISAO T_MODULO
+%token T_EQ_LOGICA T_DIF_LOGICA T_MAIOR T_MAIOR_IGUAL T_MENOR T_MENOR_IGUAL 
+%token T_OR T_AND T_NOT
+%token T_ATRIBUICAO T_ATRIB_SOMA T_ATRIB_SUB T_ATRIB_MULT T_ATRIB_DIV T_ATRIB_MOD T_COND_OP_TER T_DOIS_PON
+
+// tokens que assumem valores
+// %token <TIPO> <NOME>
+%token <sval> T_ID
+%token <sval> T_NUM
+%token <sval> T_LIT_STRING
+
+%right 
 
 %%
-	/* Gramatica */ 
-    identificador: 
-		t_id identificador {cout << "Variavel identificada: " << $1 << endl;}
-		| t_id {cout << "Variavel identificada: " << $1 << endl;}
-		;
+	/* Gramatica */
+programa:
+	declaracao {/**/}
+	;
+
+declaracao:
+	decVar
+	| decSub
+	;
+
+decVar:
+	T_VAR listaSpecVars T_DOIS_PON tipo T_PONTO_VIRGULA
+	;
+
+tipo:
+	T_BOOL
+	| T_INT
+	| T_STRING
+	;
+
+listaSpecVars:
+	specVar
+	| specVar T_VIRGULA listaSpecVars
+	;
+
+specVar:
+	T_ID // specVarSimples
+	| T_ID T_ATRIBUICAO valor // specVarSimplesIni
+	| T_ID T_ABRE_COLCHETES T_NUM T_FECHA_COLCHETES // specVarArranjo
+	| T_ID T_ABRE_COLCHETES T_NUM T_FECHA_COLCHETES T_ATRIBUICAO T_ABRE_CHAVES decArran T_FECHA_CHAVES // specVarArranjoIni
+	;
+
+decArran:
+	valor
+	| valor T_VIRGULA decArran
+	;
+
+valor:
+	T_TRUE
+	| T_FALSE
+	| T_LIT_STRING
+	| T_NUM
+	;
+
+decSub:
+	T_DEF T_ID T_ABRE_PARENTESES listaParametros T_FECHA_PARENTESES bloco // decProc
+	| T_DEF T_ID T_ABRE_PARENTESES listaParametros T_FECHA_PARENTESES T_DOIS_PON tipo bloco // decFun
+	;
+
+listaParametros:
+	specParms
+	| specParms T_PONTO_VIRGULA listaParametros
+	;
+
+specParms:
+	param T_DOIS_PON tipo
+	| param T_VIRGULA specParms
+	;
+
+param:
+	T_ID
+	| T_ID T_ABRE_COLCHETES T_FECHA_COLCHETES
+	;
+
+comando:
+	cmdSimples
+	| bloco
+	;
+
+cmdSimples:
+	cmdAtrib
+	| cmdIf
+	| cmdWhile
+	| cmdFor
+	| cmdStop
+	| cmdSkip
+	| cmdReturn
+	| cmdChamadaProc
+	| cmdRead
+	| cmdWrite
+	;
+
+cmdAtrib:
+	T_ID tiposAtrib expressao T_PONTO_VIRGULA
+	;
+
+tiposAtrib:
+	atribAgreg
+	| T_ATRIBUICAO
+	;
+
+atribAgreg:
+	T_ATRIB_DIV
+	| T_ATRIB_MOD
+	| T_ATRIB_MULT
+	| T_ATRIB_SOMA
+	| T_ATRIB_SUB
+	;
+
+cmdIf:
+	T_IF T_ABRE_PARENTESES expressao T_FECHA_PARENTESES comando
+	| T_IF T_ABRE_PARENTESES expressao T_FECHA_PARENTESES comando T_ELSE comando
+	;
+
+cmdWhile:
+	T_WHILE T_ABRE_PARENTESES expressao T_FECHA_PARENTESES comando
+	;
+
+cmdFor:
+	T_FOR T_ABRE_PARENTESES atrib-ini T_PONTO_VIRGULA expressao T_PONTO_VIRGULA atrib-passo T_FECHA_PARENTESES comando
+	;
+
+atrib-ini:
+	T_ID T_ATRIBUICAO T_NUM
+	;
+
+atrib-passo:
+	T_ID atribAgreg T_NUM
+	;
+
+cmdStop:
+	T_STOP T_PONTO_VIRGULA
+	;
+
+cmdSkip:
+	T_SKIP T_PONTO_VIRGULA
+	;
+
+cmdReturn:
+	T_RETURN T_PONTO_VIRGULA
+	| T_RETURN expressao T_PONTO_VIRGULA
+	;
+
+cmdChamadaProc:
+	T_ID T_ABRE_PARENTESES atribProc T_FECHA_PARENTESES T_PONTO_VIRGULA
+	;
+
+atribProc:/*vazio*/
+	| cnjExpr
+	;
+
+cnjExpr:
+	expressao
+	| expressao T_VIRGULA cnjExpr
+	;
+
+cmdRead:
+	T_READ variavel T_PONTO_VIRGULA
+	;
+
+cmdWrite:
+	T_WRITE cnjExpr T_PONTO_VIRGULA
+	;
+
+bloco:
+	T_ABRE_CHAVES declaracoes comandos T_FECHA_CHAVES
+	;
+
+declaracoes: /*vazio*/
+	| declaracao
+	| declaracao declaracoes
+	;
+
+comandos: /*vazio*/
+	| comando
+	| comando comandos
+	;
+
 %%
 
 /* Codificacao C++ */

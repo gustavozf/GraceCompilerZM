@@ -45,9 +45,55 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    t_id = 258,
-    t_num = 259,
-    t_lit_string = 260
+    T_BOOL = 258,
+    T_INT = 259,
+    T_STRING = 260,
+    T_IF = 261,
+    T_ELSE = 262,
+    T_FOR = 263,
+    T_WHILE = 264,
+    T_WRITE = 265,
+    T_READ = 266,
+    T_DEF = 267,
+    T_RETURN = 268,
+    T_VAR = 269,
+    T_SKIP = 270,
+    T_STOP = 271,
+    T_TRUE = 272,
+    T_FALSE = 273,
+    T_ABRE_PARENTESES = 274,
+    T_FECHA_PARENTESES = 275,
+    T_ABRE_COLCHETES = 276,
+    T_FECHA_COLCHETES = 277,
+    T_ABRE_CHAVES = 278,
+    T_FECHA_CHAVES = 279,
+    T_VIRGULA = 280,
+    T_PONTO_VIRGULA = 281,
+    T_ADICAO = 282,
+    T_SUBTRACAO = 283,
+    T_MULTIPLICACAO = 284,
+    T_DIVISAO = 285,
+    T_MODULO = 286,
+    T_EQ_LOGICA = 287,
+    T_DIF_LOGICA = 288,
+    T_MAIOR = 289,
+    T_MAIOR_IGUAL = 290,
+    T_MENOR = 291,
+    T_MENOR_IGUAL = 292,
+    T_OR = 293,
+    T_AND = 294,
+    T_NOT = 295,
+    T_ATRIBUICAO = 296,
+    T_ATRIB_SOMA = 297,
+    T_ATRIB_SUB = 298,
+    T_ATRIB_MULT = 299,
+    T_ATRIB_DIV = 300,
+    T_ATRIB_MOD = 301,
+    T_COND_OP_TER = 302,
+    T_DOIS_PON = 303,
+    T_ID = 304,
+    T_NUM = 305,
+    T_LIT_STRING = 306
   };
 #endif
 
@@ -62,7 +108,7 @@ union YYSTYPE
 	float fval; // Float
 	char *sval; // String
 
-#line 66 "ns.tab.h" /* yacc.c:1909  */
+#line 112 "ns.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

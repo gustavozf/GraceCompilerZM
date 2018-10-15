@@ -40,7 +40,7 @@ void yyerror(const char *s);
 %token T_ADICAO T_SUBTRACAO T_MULTIPLICACAO T_DIVISAO T_MODULO
 %token T_EQ_LOGICA T_DIF_LOGICA T_MAIOR T_MAIOR_IGUAL T_MENOR T_MENOR_IGUAL 
 %token T_OR T_AND T_NOT
-%token T_ATRIBUICAO T_ATRIB_SOMA T_ATRIB_SUB T_ATRIB_MULT T_ATRIB_DIV T_ATRIB_MOD T_COND_OP_TER T_DOIS_PON
+%token T_ATRIBUICAO T_ATRIB_SOMA T_ATRIB_SUB T_ATRIB_MULT T_ATRIB_DIV T_ATRIB_MOD T_COND_OP_TER T_DOIS_PON  
 
 // tokens que assumem valores
 // %token <TIPO> <NOME>
@@ -48,7 +48,15 @@ void yyerror(const char *s);
 %token <sval> T_NUM
 %token <sval> T_LIT_STRING
 
-%right 
+%right T_NOT
+%left T_MULTIPLICACAO T_DIVISAO T_MODULO 
+%left T_ADICAO T_SUBTRACAO
+%left T_MENOR T_MENOR_IGUAL
+%left T_MAIOR T_MAIOR_IGUAL
+%left T_EQ_LOGICA T_DIF_LOGICA
+%left T_AND
+%left T_OR
+%right T_COND_OP_TER T_DOIS_PON
 
 %%
 	/* Gramatica */
@@ -69,6 +77,7 @@ tipo:
 	T_BOOL
 	| T_INT
 	| T_STRING
+	| T_STRING T_ABRE_COLCHETES T_NUM T_FECHA_COLCHETES
 	;
 
 listaSpecVars:
@@ -217,6 +226,46 @@ declaracoes: /*vazio*/
 comandos: /*vazio*/
 	| comando
 	| comando comandos
+	;
+
+opTern:
+	expressao T_COND_OP_TER expressao T_DOIS_PON expressao
+	;
+
+expressao:
+	expression
+	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES
+	| expressao operador expressao
+	;
+
+operador:
+	T_NOT
+	| T_MULTIPLICACAO
+	| T_DIVISAO
+	| T_MODULO 
+	| T_ADICAO
+	| T_SUBTRACAO
+	| T_MENOR
+	| T_MENOR_IGUAL
+	| T_MAIOR
+	| T_MAIOR_IGUAL
+	| T_EQ_LOGICA
+	| T_DIF_LOGICA
+	| T_AND
+	| T_OR
+	| T_COND_OP_TER
+	| T_DOIS_PON
+	;
+
+expression:
+	valor
+	| usoVar
+	| T_ID T_ABRE_PARENTESES atribProc T_FECHA_PARENTESES
+	;
+
+usoVar:
+	T_ID
+	| T_ID T_ABRE_COLCHETES expressao T_FECHA_COLCHETES
 	;
 
 %%

@@ -547,7 +547,7 @@ char *yytext;
 
 using namespace std;
 
-// Coisas do Flex que o Biso precisa
+// Coisas do Flex que o Bison precisa
 extern int yylex();
 int num_linhas = 1;
 int num_carac = 1;

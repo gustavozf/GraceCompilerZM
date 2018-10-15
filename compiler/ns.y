@@ -207,7 +207,7 @@ cnjExpr:
 	;
 
 cmdRead:
-	T_READ variavel T_PONTO_VIRGULA
+	T_READ usoVar T_PONTO_VIRGULA
 	;
 
 cmdWrite:
@@ -236,6 +236,7 @@ expressao:
 	expression
 	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES
 	| expressao operador expressao
+	| opTern
 	;
 
 operador:

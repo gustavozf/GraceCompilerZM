@@ -95,7 +95,8 @@ void yyerror(const char *s);
 %%
 	/* Gramatica */
 programa:
-	declaracao {/**/}
+	programa declaracao {/**/}
+	| declaracao
 	;
 
 declaracao:
@@ -103,32 +104,33 @@ declaracao:
 	| decSub
 	;
 
+// ------------------------------- Declaracao de Variaveis
 decVar:
-	T_VAR listaSpecVars T_DOIS_PON tipo T_PONTO_VIRGULA
+	T_VAR listaSpecVars ":" tipo ";"
 	;
 
 tipo:
 	T_BOOL
 	| T_INT
 	| T_STRING
-	| T_STRING T_ABRE_COLCHETES T_NUM T_FECHA_COLCHETES
+	| T_STRING "[" T_NUM "]"
 	;
 
 listaSpecVars:
-	specVar
-	| specVar T_VIRGULA listaSpecVars
+	| listaSpecVars "," specVar
+	| specVar
 	;
 
 specVar:
 	T_ID // specVarSimples
-	| T_ID T_ATRIBUICAO valor // specVarSimplesIni
-	| T_ID T_ABRE_COLCHETES T_NUM T_FECHA_COLCHETES // specVarArranjo
-	| T_ID T_ABRE_COLCHETES T_NUM T_FECHA_COLCHETES T_ATRIBUICAO T_ABRE_CHAVES decArran T_FECHA_CHAVES // specVarArranjoIni
+	| T_ID "=" valor // specVarSimplesIni
+	| T_ID "[" T_NUM "]" // specVarArranjo
+	| T_ID "[" T_NUM "]" "=" "{" decArran "}" // specVarArranjoIni
 	;
 
 decArran:
-	valor
-	| valor T_VIRGULA decArran
+	decArran "," valor
+	| valor
 	;
 
 valor:
@@ -138,26 +140,42 @@ valor:
 	| T_NUM
 	;
 
+// -------------------------------- Declaracao de Subprocessos
 decSub:
-	T_DEF T_ID T_ABRE_PARENTESES listaParametros T_FECHA_PARENTESES bloco // decProc
-	| T_DEF T_ID T_ABRE_PARENTESES listaParametros T_FECHA_PARENTESES T_DOIS_PON tipo bloco // decFun
+	decProc
+	| decFun
 	;
+
+decProc:
+	T_DEF T_ID "(" listaParametros ")" bloco
+	| T_DEF T_ID "(" ")" bloco
+	;
+
+decFun:
+	T_DEF T_ID "(" listaParametros ")" ":" tipo bloco 
+	| T_DEF T_ID "(" ")" ":" tipo bloco
+	; 
 
 listaParametros:
-	specParms
-	| specParms T_PONTO_VIRGULA listaParametros
+	listaParametros ";" specParams
+	| specParams
 	;
 
-specParms:
-	param T_DOIS_PON tipo
-	| param T_VIRGULA specParms
+specParams:
+	specParamsN ":" tipo
+	;
+
+specParamsN:
+	specParamsN "," param 
+	| param 
 	;
 
 param:
 	T_ID
-	| T_ID T_ABRE_COLCHETES T_FECHA_COLCHETES
+	| T_ID "[" "]"
 	;
 
+// ------------------------ Comandos
 comando:
 	cmdSimples
 	| bloco
@@ -176,38 +194,40 @@ cmdSimples:
 	| cmdWrite
 	;
 
+// ------------------------------- Atribuicoes
 cmdAtrib:
-	T_ID tiposAtrib expressao T_PONTO_VIRGULA
+	variavel tiposAtrib expressao ";"
 	;
 
 tiposAtrib:
 	atribAgreg
-	| T_ATRIBUICAO
+	| "="
 	;
 
 atribAgreg:
-	T_ATRIB_DIV
-	| T_ATRIB_MOD
-	| T_ATRIB_MULT
-	| T_ATRIB_SOMA
-	| T_ATRIB_SUB
+	"/="
+	| "%="
+	| "*="
+	| "+="
+	| "-="
 	;
 
+// ------------------------------ Estruturas Basicas
 cmdIf:
-	T_IF T_ABRE_PARENTESES expressao T_FECHA_PARENTESES comando
-	| T_IF T_ABRE_PARENTESES expressao T_FECHA_PARENTESES comando T_ELSE comando
+	T_IF "(" expressao ")" comando
+	| T_IF "(" expressao ")" comando T_ELSE comando
 	;
 
 cmdWhile:
-	T_WHILE T_ABRE_PARENTESES expressao T_FECHA_PARENTESES comando
+	T_WHILE "(" expressao ")" comando
 	;
 
 cmdFor:
-	T_FOR T_ABRE_PARENTESES atrib-ini T_PONTO_VIRGULA expressao T_PONTO_VIRGULA atrib-passo T_FECHA_PARENTESES comando
+	T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando
 	;
 
 atrib-ini:
-	T_ID T_ATRIBUICAO T_NUM
+	T_ID "=" T_NUM
 	;
 
 atrib-passo:
@@ -215,92 +235,93 @@ atrib-passo:
 	;
 
 cmdStop:
-	T_STOP T_PONTO_VIRGULA
+	T_STOP ";"
 	;
 
 cmdSkip:
-	T_SKIP T_PONTO_VIRGULA
+	T_SKIP ";"
 	;
 
 cmdReturn:
-	T_RETURN T_PONTO_VIRGULA
-	| T_RETURN expressao T_PONTO_VIRGULA
+	T_RETURN ";"
+	| T_RETURN expressao ";"
 	;
 
+// ------------------------- Chamada Procedimento
 cmdChamadaProc:
-	T_ID T_ABRE_PARENTESES atribProc T_FECHA_PARENTESES T_PONTO_VIRGULA
+	T_ID "(" atribProc ")" ";"
 	;
 
-atribProc:/*vazio*/
+atribProc:
+	/*vazio*/
 	| cnjExpr
 	;
 
 cnjExpr:
-	expressao
-	| expressao T_VIRGULA cnjExpr
+	cnjExpr "," expressao
+	| expressao
 	;
 
 cmdRead:
-	T_READ usoVar T_PONTO_VIRGULA
+	T_READ variavel ";"
 	;
 
 cmdWrite:
-	T_WRITE cnjExpr T_PONTO_VIRGULA
+	T_WRITE cnjExpr ";"
 	;
 
+// ---------------------------- Blocos
 bloco:
-	T_ABRE_CHAVES declaracoes comandos T_FECHA_CHAVES
+	"{" declaracoes comandos "}"
 	;
 
-declaracoes: /*vazio*/
+declaracoes: 
+	/*vazio*/
+	| declaracoes declaracao
 	| declaracao
-	| declaracao declaracoes
 	;
 
-comandos: /*vazio*/
+comandos: 
+	/*vazio*/
+	| comandos comando
 	| comando
-	| comando comandos
 	;
 
+// ----------------------------------- Expressoes
+// PAREI DE VERIFICAR AQUI
 opTern:
-	expressao T_COND_OP_TER expressao T_DOIS_PON expressao
+	expressao "?" expressao ":" expressao
 	;
 
 expressao:
 	tipoExpressao
-	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES
-	| expressao operador expressao  
+	| "(" expressao ")"
+	| "!" expressao
+	| expressao "*" expressao  
+	| expressao "/" expressao
+	| expressao "%" expressao
+	| expressao "+" expressao
+	| expressao "-" expressao
+	| expressao "<" expressao
+	| expressao "<=" expressao
+	| expressao ">" expressao
+	| expressao ">=" expressao
+	| expressao "==" expressao
+	| expressao "!=" expressao
+	| expressao "&&" expressao
+	| expressao "||" expressao
 	| opTern
-	;
-
-operador:
-	T_NOT
-	| T_MULTIPLICACAO
-	| T_DIVISAO
-	| T_MODULO 
-	| T_ADICAO
-	| T_SUBTRACAO
-	| T_MENOR
-	| T_MENOR_IGUAL
-	| T_MAIOR
-	| T_MAIOR_IGUAL
-	| T_EQ_LOGICA
-	| T_DIF_LOGICA
-	| T_AND
-	| T_OR
-	| T_COND_OP_TER
-	| T_DOIS_PON
 	;
 
 tipoExpressao:
 	valor
-	| usoVar
-	| T_ID T_ABRE_PARENTESES atribProc T_FECHA_PARENTESES
+	| variavel
+	| T_ID "(" atribProc ")"
 	;
 
-usoVar:
+variavel:
 	T_ID
-	| T_ID T_ABRE_COLCHETES expressao T_FECHA_COLCHETES
+	| T_ID "[" expressao "]"
 	;
 
 %%

@@ -233,9 +233,9 @@ opTern:
 	;
 
 expressao:
-	expression
+	tipoExpressao
 	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES
-	| expressao operador expressao
+	| expressao operador expressao  
 	| opTern
 	;
 
@@ -258,7 +258,7 @@ operador:
 	| T_DOIS_PON
 	;
 
-expression:
+tipoExpressao:
 	valor
 	| usoVar
 	| T_ID T_ABRE_PARENTESES atribProc T_FECHA_PARENTESES

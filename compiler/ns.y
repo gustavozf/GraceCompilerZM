@@ -3,7 +3,6 @@
 #include <iostream>
 #include <cstdio>
 #include <string>
-#include <map>
 
 using namespace std;
 
@@ -30,17 +29,52 @@ void yyerror(const char *s);
 
 /* Tokens */
 // constant-strings
-%token T_BOOL T_INT T_STRING
-%token T_IF T_ELSE T_FOR T_WHILE
-%token T_WRITE T_READ
-%token T_DEF T_RETURN T_VAR T_SKIP T_STOP
-%token T_TRUE T_FALSE
-%token T_ABRE_PARENTESES T_FECHA_PARENTESES T_ABRE_COLCHETES T_FECHA_COLCHETES T_ABRE_CHAVES T_FECHA_CHAVES
-%token T_VIRGULA T_PONTO_VIRGULA
-%token T_ADICAO T_SUBTRACAO T_MULTIPLICACAO T_DIVISAO T_MODULO
-%token T_EQ_LOGICA T_DIF_LOGICA T_MAIOR T_MAIOR_IGUAL T_MENOR T_MENOR_IGUAL 
-%token T_OR T_AND T_NOT
-%token T_ATRIBUICAO T_ATRIB_SOMA T_ATRIB_SUB T_ATRIB_MULT T_ATRIB_DIV T_ATRIB_MOD T_COND_OP_TER T_DOIS_PON  
+%token T_BOOL
+%token T_INT
+%token T_STRING
+%token T_IF
+%token T_ELSE
+%token T_FOR
+%token T_WHILE
+%token T_WRITE
+%token T_READ
+%token T_DEF
+%token T_RETURN
+%token T_VAR
+%token T_SKIP
+%token T_STOP
+%token T_TRUE
+%token T_FALSE
+%token T_ABRE_PARENTESES  "("
+%token T_FECHA_PARENTESES ")"
+%token T_ABRE_COLCHETES   "["
+%token T_FECHA_COLCHETES  "]"
+%token T_ABRE_CHAVES      "{"
+%token T_FECHA_CHAVES     "}"
+%token T_VIRGULA          ","
+%token T_PONTO_VIRGULA    ";"
+%token T_ADICAO           "+"
+%token T_SUBTRACAO        "-"
+%token T_MULTIPLICACAO    "*"
+%token T_DIVISAO          "/"
+%token T_MODULO           "%"
+%token T_EQ_LOGICA        "=="
+%token T_DIF_LOGICA       "!="
+%token T_MAIOR 		      ">"
+%token T_MAIOR_IGUAL      ">="
+%token T_MENOR            "<"
+%token T_MENOR_IGUAL      "<="
+%token T_OR               "||"
+%token T_AND              "&&"
+%token T_NOT              "!"
+%token T_ATRIBUICAO       "="
+%token T_ATRIB_SOMA       "+="
+%token T_ATRIB_SUB        "-="
+%token T_ATRIB_MULT       "*="
+%token T_ATRIB_DIV        "/="
+%token T_ATRIB_MOD        "%="
+%token T_COND_OP_TER      "?"
+%token T_DOIS_PON         ":"
 
 // tokens que assumem valores
 // %token <TIPO> <NOME>

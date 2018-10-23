@@ -102,7 +102,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "ns.y" /* yacc.c:1909  */
+#line 24 "ns.y" /* yacc.c:1909  */
 
 	int ival;   // Inteiro
 	float fval; // Float

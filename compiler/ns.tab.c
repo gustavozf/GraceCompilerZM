@@ -68,7 +68,6 @@
 #include <iostream>
 #include <cstdio>
 #include <string>
-#include <map>
 
 using namespace std;
 
@@ -83,7 +82,7 @@ extern int num_carac;
 // Tratar Erros (aparentemente obrigatorio)
 void yyerror(const char *s);
 
-#line 87 "ns.tab.c" /* yacc.c:339  */
+#line 86 "ns.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -175,13 +174,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "ns.y" /* yacc.c:355  */
+#line 24 "ns.y" /* yacc.c:355  */
 
 	int ival;   // Inteiro
 	float fval; // Float
 	char *sval; // String
 
-#line 185 "ns.tab.c" /* yacc.c:355  */
+#line 184 "ns.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -198,7 +197,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 202 "ns.tab.c" /* yacc.c:358  */
+#line 201 "ns.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -500,16 +499,16 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    64,    64,    68,    69,    73,    77,    78,    79,    80,
-      84,    85,    89,    90,    91,    92,    96,    97,   101,   102,
-     103,   104,   108,   109,   113,   114,   118,   119,   123,   124,
-     128,   129,   133,   134,   135,   136,   137,   138,   139,   140,
-     141,   142,   146,   150,   151,   155,   156,   157,   158,   159,
-     163,   164,   168,   172,   176,   180,   184,   188,   192,   193,
-     197,   200,   201,   205,   206,   210,   214,   218,   221,   222,
-     223,   226,   227,   228,   232,   236,   237,   238,   239,   243,
-     244,   245,   246,   247,   248,   249,   250,   251,   252,   253,
-     254,   255,   256,   257,   258,   262,   263,   264,   268,   269
+       0,    98,    98,   102,   103,   107,   111,   112,   113,   114,
+     118,   119,   123,   124,   125,   126,   130,   131,   135,   136,
+     137,   138,   142,   143,   147,   148,   152,   153,   157,   158,
+     162,   163,   167,   168,   169,   170,   171,   172,   173,   174,
+     175,   176,   180,   184,   185,   189,   190,   191,   192,   193,
+     197,   198,   202,   206,   210,   214,   218,   222,   226,   227,
+     231,   234,   235,   239,   240,   244,   248,   252,   255,   256,
+     257,   260,   261,   262,   266,   270,   271,   272,   273,   277,
+     278,   279,   280,   281,   282,   283,   284,   285,   286,   287,
+     288,   289,   290,   291,   292,   296,   297,   298,   302,   303
 };
 #endif
 
@@ -520,16 +519,13 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "T_BOOL", "T_INT", "T_STRING", "T_IF",
   "T_ELSE", "T_FOR", "T_WHILE", "T_WRITE", "T_READ", "T_DEF", "T_RETURN",
-  "T_VAR", "T_SKIP", "T_STOP", "T_TRUE", "T_FALSE", "T_ABRE_PARENTESES",
-  "T_FECHA_PARENTESES", "T_ABRE_COLCHETES", "T_FECHA_COLCHETES",
-  "T_ABRE_CHAVES", "T_FECHA_CHAVES", "T_VIRGULA", "T_PONTO_VIRGULA",
-  "T_ADICAO", "T_SUBTRACAO", "T_MULTIPLICACAO", "T_DIVISAO", "T_MODULO",
-  "T_EQ_LOGICA", "T_DIF_LOGICA", "T_MAIOR", "T_MAIOR_IGUAL", "T_MENOR",
-  "T_MENOR_IGUAL", "T_OR", "T_AND", "T_NOT", "T_ATRIBUICAO",
-  "T_ATRIB_SOMA", "T_ATRIB_SUB", "T_ATRIB_MULT", "T_ATRIB_DIV",
-  "T_ATRIB_MOD", "T_COND_OP_TER", "T_DOIS_PON", "T_ID", "T_NUM",
-  "T_LIT_STRING", "$accept", "programa", "declaracao", "decVar", "tipo",
-  "listaSpecVars", "specVar", "decArran", "valor", "decSub",
+  "T_VAR", "T_SKIP", "T_STOP", "T_TRUE", "T_FALSE", "\"(\"", "\")\"",
+  "\"[\"", "\"]\"", "\"{\"", "\"}\"", "\",\"", "\";\"", "\"+\"", "\"-\"",
+  "\"*\"", "\"/\"", "\"%\"", "\"==\"", "\"!=\"", "\">\"", "\">=\"",
+  "\"<\"", "\"<=\"", "\"||\"", "\"&&\"", "\"!\"", "\"=\"", "\"+=\"",
+  "\"-=\"", "\"*=\"", "\"/=\"", "\"%=\"", "\"?\"", "\":\"", "T_ID",
+  "T_NUM", "T_LIT_STRING", "$accept", "programa", "declaracao", "decVar",
+  "tipo", "listaSpecVars", "specVar", "decArran", "valor", "decSub",
   "listaParametros", "specParms", "param", "comando", "cmdSimples",
   "cmdAtrib", "tiposAtrib", "atribAgreg", "cmdIf", "cmdWhile", "cmdFor",
   "atrib-ini", "atrib-passo", "cmdStop", "cmdSkip", "cmdReturn",
@@ -1435,13 +1431,13 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 64 "ns.y" /* yacc.c:1646  */
+#line 98 "ns.y" /* yacc.c:1646  */
     {/**/}
-#line 1441 "ns.tab.c" /* yacc.c:1646  */
+#line 1437 "ns.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1445 "ns.tab.c" /* yacc.c:1646  */
+#line 1441 "ns.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1669,7 +1665,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 272 "ns.y" /* yacc.c:1906  */
+#line 306 "ns.y" /* yacc.c:1906  */
 
 
 /* Codificacao C++ */

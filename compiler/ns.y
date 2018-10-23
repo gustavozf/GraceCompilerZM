@@ -82,6 +82,7 @@ void yyerror(const char *s);
 %token <sval> T_NUM
 %token <sval> T_LIT_STRING
 
+%right T_NEG_UNAR
 %right T_NOT
 %left T_MULTIPLICACAO T_DIVISAO T_MODULO 
 %left T_ADICAO T_SUBTRACAO
@@ -296,6 +297,7 @@ opTern:
 expressao:
 	tipoExpressao
 	| "(" expressao ")"
+	| "-" expressao %prec T_NEG_UNAR
 	| "!" expressao
 	| expressao "*" expressao  
 	| expressao "/" expressao

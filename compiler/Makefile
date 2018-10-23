@@ -7,7 +7,7 @@ CC = g++
 # ===============================================
 
 all: $(NOME).tab.c lex.yy.c
-	$(CC) $(NOME).tab.c lex.yy.c -lfl -o $(NOME)Comp
+	$(CC) $(NOME).tab.c lex.yy.c -ll -o $(NOME)Comp
 
 # Flex (Analisador Lexico)
 lex.yy.c: $(NOME).l
@@ -15,7 +15,7 @@ lex.yy.c: $(NOME).l
 
 # Bison (Analisador Sintatico)
 $(NOME).tab.c: $(NOME).y
-	bison -d $(NOME).y
+	bison -d --verbose $(NOME).y
 
 # Para remover os arquivos
 .PHONY: clean

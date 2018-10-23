@@ -18,6 +18,8 @@ extern int num_carac;
 void yyerror(const char *s);
 %}
 
+%error-verbose
+
 /* Uniao que representa o valores basicos possiveis.
    Utilizada pela ferramenta
 */
@@ -215,8 +217,12 @@ atribAgreg:
 
 // ------------------------------ Estruturas Basicas
 cmdIf:
-	T_IF "(" expressao ")" comando
-	| T_IF "(" expressao ")" comando T_ELSE comando
+	T_IF "(" expressao ")" comando cmdElse
+	;
+
+cmdElse:
+	/* Vazio */
+	| T_ELSE comando
 	;
 
 cmdWhile:
@@ -351,7 +357,7 @@ int main(int argc, char *argv[]){
 }
 
 void yyerror(const char *s){
-	cout<< "Erro Sintatico: " << s <<" (l: "<<num_linhas<< ", c: "<<num_carac<<")\n";
+	cout<< "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): "<< s <<"\n";
 
 	exit(-1);
 }

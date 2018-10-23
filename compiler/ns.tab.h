@@ -93,7 +93,8 @@ extern int yydebug;
     T_DOIS_PON = 303,
     T_ID = 304,
     T_NUM = 305,
-    T_LIT_STRING = 306
+    T_LIT_STRING = 306,
+    T_NEG_UNAR = 307
   };
 #endif
 
@@ -102,13 +103,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 24 "ns.y" /* yacc.c:1909  */
+#line 26 "ns.y" /* yacc.c:1909  */
 
 	int ival;   // Inteiro
 	float fval; // Float
 	char *sval; // String
 
-#line 112 "ns.tab.h" /* yacc.c:1909  */
+#line 113 "ns.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

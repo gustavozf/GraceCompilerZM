@@ -27,54 +27,54 @@ int num_carac = 1;
 [ \t] {} 
 
 	/* Palavras Reservadas */
-"bool"   { return T_BOOL;   } 
-"def"    { return T_DEF;    } 
-"else"   { return T_ELSE;   } 
-"false"  { return T_FALSE;  } 
-"for"    { return T_FOR;    } 
-"if"     { return T_IF;     } 
-"int"    { return T_INT;    } 
-"read"   { return T_READ;   } 
-"return" { return T_RETURN; } 
-"skip"   { return T_SKIP;   } 
-"stop"   { return T_STOP;   } 
-"string" { return T_STRING; } 
-"true"   { return T_TRUE;   } 
-"var"    { return T_VAR;    } 
-"while"  { return T_WHILE;  }
-"write"  { return T_WRITE;  } 
+"bool"   { num_carac += 4; return T_BOOL;   } 
+"def"    { num_carac += 3; return T_DEF;    } 
+"else"   { num_carac += 4; return T_ELSE;   } 
+"false"  { num_carac += 5; return T_FALSE;  } 
+"for"    { num_carac += 3; return T_FOR;    } 
+"if"     { num_carac += 2; return T_IF;     } 
+"int"    { num_carac += 3; return T_INT;    } 
+"read"   { num_carac += 4; return T_READ;   } 
+"return" { num_carac += 6; return T_RETURN; } 
+"skip"   { num_carac += 4; return T_SKIP;   } 
+"stop"   { num_carac += 4; return T_STOP;   } 
+"string" { num_carac += 6; return T_STRING; } 
+"true"   { num_carac += 4; return T_TRUE;   } 
+"var"    { num_carac += 3; return T_VAR;    } 
+"while"  { num_carac += 5; return T_WHILE;  }
+"write"  { num_carac += 5; return T_WRITE;  } 
 
 	/* Simbolo */
-\(    { return T_ABRE_PARENTESES;  }
-\)    { return T_FECHA_PARENTESES; }
-\[    { return T_ABRE_COLCHETES;   }
-\]    { return T_FECHA_COLCHETES;  } 
-"{"   { return T_ABRE_CHAVES;      }
-"}"   { return T_FECHA_CHAVES;     }
-","   { return T_VIRGULA;          }
-";"   { return T_PONTO_VIRGULA;    }
-"+"   { return T_ADICAO;           }
-"-"   { return T_SUBTRACAO;        }
-"*"   { return T_MULTIPLICACAO;    }
-"/"   { return T_DIVISAO;          }
-"%"   { return T_MODULO;           }
-"=="  { return T_EQ_LOGICA;        }
-"!="  { return T_DIF_LOGICA;       }
-">"   { return T_MAIOR;            }
-">="  { return T_MAIOR_IGUAL;      }
-"<"   { return T_MENOR;            }
-"<="  { return T_MENOR_IGUAL;      }
-"||"  { return T_OR;               }
-"&&"  { return T_AND;              }
-"!"   { return T_NOT;              }
-"="   { return T_ATRIBUICAO;       }
-"+="  { return T_ATRIB_SOMA;       }
-"-="  { return T_ATRIB_SUB;        }
-"*="  { return T_ATRIB_MULT;       }
-"/="  { return T_ATRIB_DIV;        }
-"%="  { return T_ATRIB_MOD;        }
-"?"   { return T_COND_OP_TER;      }
-":"   { return T_DOIS_PON;         }
+\(    { num_carac += 1; return T_ABRE_PARENTESES;  }
+\)    { num_carac += 1; return T_FECHA_PARENTESES; }
+\[    { num_carac += 1; return T_ABRE_COLCHETES;   }
+\]    { num_carac += 1; return T_FECHA_COLCHETES;  } 
+"{"   { num_carac += 1; return T_ABRE_CHAVES;      }
+"}"   { num_carac += 1; return T_FECHA_CHAVES;     }
+","   { num_carac += 1; return T_VIRGULA;          }
+";"   { num_carac += 1; return T_PONTO_VIRGULA;    }
+"+"   { num_carac += 1; return T_ADICAO;           }
+"-"   { num_carac += 1; return T_SUBTRACAO;        }
+"*"   { num_carac += 1; return T_MULTIPLICACAO;    }
+"/"   { num_carac += 1; return T_DIVISAO;          }
+"%"   { num_carac += 1; return T_MODULO;           }
+"=="  { num_carac += 2; return T_EQ_LOGICA;        }
+"!="  { num_carac += 2; return T_DIF_LOGICA;       }
+">"   { num_carac += 1; return T_MAIOR;            }
+">="  { num_carac += 2; return T_MAIOR_IGUAL;      }
+"<"   { num_carac += 1; return T_MENOR;            }
+"<="  { num_carac += 2; return T_MENOR_IGUAL;      }
+"||"  { num_carac += 2; return T_OR;               }
+"&&"  { num_carac += 2; return T_AND;              }
+"!"   { num_carac += 1; return T_NOT;              }
+"="   { num_carac += 1; return T_ATRIBUICAO;       }
+"+="  { num_carac += 2; return T_ATRIB_SOMA;       }
+"-="  { num_carac += 2; return T_ATRIB_SUB;        }
+"*="  { num_carac += 2; return T_ATRIB_MULT;       }
+"/="  { num_carac += 2; return T_ATRIB_DIV;        }
+"%="  { num_carac += 2; return T_ATRIB_MOD;        }
+"?"   { num_carac += 1; return T_COND_OP_TER;      }
+":"   { num_carac += 1; return T_DOIS_PON;         }
 
 
 	/* trata um comentario */

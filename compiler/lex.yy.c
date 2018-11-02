@@ -821,233 +821,233 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 31 "ns.l"
-{ return T_BOOL;   } 
+{ num_carac += 4; return T_BOOL;   } 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 32 "ns.l"
-{ return T_DEF;    } 
+{ num_carac += 3; return T_DEF;    } 
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 33 "ns.l"
-{ return T_ELSE;   } 
+{ num_carac += 4; return T_ELSE;   } 
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 34 "ns.l"
-{ return T_FALSE;  } 
+{ num_carac += 5; return T_FALSE;  } 
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 35 "ns.l"
-{ return T_FOR;    } 
+{ num_carac += 3; return T_FOR;    } 
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 36 "ns.l"
-{ return T_IF;     } 
+{ num_carac += 2; return T_IF;     } 
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 37 "ns.l"
-{ return T_INT;    } 
+{ num_carac += 3; return T_INT;    } 
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 38 "ns.l"
-{ return T_READ;   } 
+{ num_carac += 4; return T_READ;   } 
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 39 "ns.l"
-{ return T_RETURN; } 
+{ num_carac += 6; return T_RETURN; } 
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 40 "ns.l"
-{ return T_SKIP;   } 
+{ num_carac += 4; return T_SKIP;   } 
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 41 "ns.l"
-{ return T_STOP;   } 
+{ num_carac += 4; return T_STOP;   } 
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 42 "ns.l"
-{ return T_STRING; } 
+{ num_carac += 6; return T_STRING; } 
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 43 "ns.l"
-{ return T_TRUE;   } 
+{ num_carac += 4; return T_TRUE;   } 
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 44 "ns.l"
-{ return T_VAR;    } 
+{ num_carac += 3; return T_VAR;    } 
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 45 "ns.l"
-{ return T_WHILE;  }
+{ num_carac += 5; return T_WHILE;  }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 46 "ns.l"
-{ return T_WRITE;  } 
+{ num_carac += 5; return T_WRITE;  } 
 	YY_BREAK
 /* Simbolo */
 case 18:
 YY_RULE_SETUP
 #line 49 "ns.l"
-{ return T_ABRE_PARENTESES;  }
+{ num_carac += 1; return T_ABRE_PARENTESES;  }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 50 "ns.l"
-{ return T_FECHA_PARENTESES; }
+{ num_carac += 1; return T_FECHA_PARENTESES; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 51 "ns.l"
-{ return T_ABRE_COLCHETES;   }
+{ num_carac += 1; return T_ABRE_COLCHETES;   }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 52 "ns.l"
-{ return T_FECHA_COLCHETES;  } 
+{ num_carac += 1; return T_FECHA_COLCHETES;  } 
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 53 "ns.l"
-{ return T_ABRE_CHAVES;      }
+{ num_carac += 1; return T_ABRE_CHAVES;      }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 54 "ns.l"
-{ return T_FECHA_CHAVES;     }
+{ num_carac += 1; return T_FECHA_CHAVES;     }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 55 "ns.l"
-{ return T_VIRGULA;          }
+{ num_carac += 1; return T_VIRGULA;          }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 56 "ns.l"
-{ return T_PONTO_VIRGULA;    }
+{ num_carac += 1; return T_PONTO_VIRGULA;    }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 57 "ns.l"
-{ return T_ADICAO;           }
+{ num_carac += 1; return T_ADICAO;           }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 58 "ns.l"
-{ return T_SUBTRACAO;        }
+{ num_carac += 1; return T_SUBTRACAO;        }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 59 "ns.l"
-{ return T_MULTIPLICACAO;    }
+{ num_carac += 1; return T_MULTIPLICACAO;    }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 60 "ns.l"
-{ return T_DIVISAO;          }
+{ num_carac += 1; return T_DIVISAO;          }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 61 "ns.l"
-{ return T_MODULO;           }
+{ num_carac += 1; return T_MODULO;           }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 62 "ns.l"
-{ return T_EQ_LOGICA;        }
+{ num_carac += 2; return T_EQ_LOGICA;        }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 63 "ns.l"
-{ return T_DIF_LOGICA;       }
+{ num_carac += 2; return T_DIF_LOGICA;       }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 64 "ns.l"
-{ return T_MAIOR;            }
+{ num_carac += 1; return T_MAIOR;            }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 65 "ns.l"
-{ return T_MAIOR_IGUAL;      }
+{ num_carac += 2; return T_MAIOR_IGUAL;      }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 66 "ns.l"
-{ return T_MENOR;            }
+{ num_carac += 1; return T_MENOR;            }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
 #line 67 "ns.l"
-{ return T_MENOR_IGUAL;      }
+{ num_carac += 2; return T_MENOR_IGUAL;      }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 68 "ns.l"
-{ return T_OR;               }
+{ num_carac += 2; return T_OR;               }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 69 "ns.l"
-{ return T_AND;              }
+{ num_carac += 2; return T_AND;              }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 70 "ns.l"
-{ return T_NOT;              }
+{ num_carac += 1; return T_NOT;              }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 71 "ns.l"
-{ return T_ATRIBUICAO;       }
+{ num_carac += 1; return T_ATRIBUICAO;       }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 72 "ns.l"
-{ return T_ATRIB_SOMA;       }
+{ num_carac += 2; return T_ATRIB_SOMA;       }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 73 "ns.l"
-{ return T_ATRIB_SUB;        }
+{ num_carac += 2; return T_ATRIB_SUB;        }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 74 "ns.l"
-{ return T_ATRIB_MULT;       }
+{ num_carac += 2; return T_ATRIB_MULT;       }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 75 "ns.l"
-{ return T_ATRIB_DIV;        }
+{ num_carac += 2; return T_ATRIB_DIV;        }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
 #line 76 "ns.l"
-{ return T_ATRIB_MOD;        }
+{ num_carac += 2; return T_ATRIB_MOD;        }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 77 "ns.l"
-{ return T_COND_OP_TER;      }
+{ num_carac += 1; return T_COND_OP_TER;      }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 78 "ns.l"
-{ return T_DOIS_PON;         }
+{ num_carac += 1; return T_DOIS_PON;         }
 	YY_BREAK
 /* trata um comentario */
 case 48:

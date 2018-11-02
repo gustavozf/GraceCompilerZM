@@ -125,15 +125,15 @@ listaSpecVars:
 	;
 
 specVar:
-	T_ID // specVarSimples
-	| T_ID "=" valor // specVarSimplesIni
-	| T_ID "[" T_NUM "]" // specVarArranjo
-	| T_ID "[" T_NUM "]" "=" "{" decArran "}" // specVarArranjoIni
+	T_ID 										  // specVarSimples
+	| T_ID "=" expressao 						  // specVarSimplesIni
+	| T_ID "[" expressao "]" 					  // specVarArranjo
+	| T_ID "[" expressao "]" "=" "{" decArran "}" // specVarArranjoIni
 	;
 
 decArran:
-	decArran "," valor
-	| valor
+	decArran "," expressao
+	| expressao
 	;
 
 valor:
@@ -324,7 +324,7 @@ expressao:
 tipoExpressao:
 	valor
 	| variavel
-	| T_ID "(" atribProc ")"
+	| T_ID "(" atribProc ")" // FUNCAO
 	;
 
 variavel:

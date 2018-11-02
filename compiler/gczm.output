@@ -1,6 +1,4 @@
-Estado 45 conflitos: 2 de deslocamento/redução
-Estado 76 conflitos: 10 de deslocamento/redução
-Estado 182 conflitos: 1 de deslocamento/redução
+Estado 184 conflitos: 1 de deslocamento/redução
 
 
 Gramática
@@ -18,7 +16,7 @@ Gramática
     6 tipo: T_BOOL
     7     | T_INT
     8     | T_STRING
-    9     | T_STRING "[" T_NUM "]"
+    9     | T_STRING "[" expressao "]"
 
    10 listaSpecVars: %empty
    11              | listaSpecVars "," specVar
@@ -114,14 +112,14 @@ Gramática
 
    73 cmdWrite: T_WRITE cnjExpr ";"
 
-   74 bloco: "{" declaracoes comandos "}"
+   74 bloco: "{" declaracoes "}"
+   75      | "{" comandos "}"
+   76      | "{" declaracoes comandos "}"
 
-   75 declaracoes: %empty
-   76            | declaracoes declaracao
-   77            | declaracao
+   77 declaracoes: declaracoes declaracao
+   78            | declaracao
 
-   78 comandos: %empty
-   79         | comandos comando
+   79 comandos: comandos comando
    80         | comando
 
    81 opTern: expressao "?" expressao ":" expressao
@@ -177,8 +175,8 @@ T_FALSE (273) 20
 ")" (275) 25 26 27 28 56 59 60 67 83 102
 "[" (276) 9 15 16 35 104
 "]" (277) 9 15 16 35 104
-"{" (278) 16 74
-"}" (279) 16 74
+"{" (278) 16 74 75 76
+"}" (279) 16 74 75 76
 "," (280) 11 17 32 70
 ";" (281) 5 29 48 60 63 64 65 66 67 72 73
 "+" (282) 89
@@ -204,7 +202,7 @@ T_FALSE (273) 20
 "?" (302) 81
 ":" (303) 5 27 28 31 81
 T_ID (304) 13 14 15 16 25 26 27 28 34 35 61 62 67 102 103 104
-T_NUM (305) 9 22 61 62
+T_NUM (305) 22 61 62
 T_LIT_STRING (306) 21
 T_NEG_UNAR (307)
 
@@ -216,7 +214,7 @@ $accept (53)
 programa (54)
     à esquerda: 1 2, à direita: 0 1
 declaracao (55)
-    à esquerda: 3 4, à direita: 1 2 76 77
+    à esquerda: 3 4, à direita: 1 2 77 78
 decVar (56)
     à esquerda: 5, à direita: 3
 tipo (57)
@@ -282,17 +280,17 @@ cmdRead (86)
 cmdWrite (87)
     à esquerda: 73, à direita: 47
 bloco (88)
-    à esquerda: 74, à direita: 25 26 27 28 37
+    à esquerda: 74 75 76, à direita: 25 26 27 28 37
 declaracoes (89)
-    à esquerda: 75 76 77, à direita: 74 76
+    à esquerda: 77 78, à direita: 74 76 77
 comandos (90)
-    à esquerda: 78 79 80, à direita: 74 79
+    à esquerda: 79 80, à direita: 75 76 79
 opTern (91)
     à esquerda: 81, à direita: 99
 expressao (92)
     à esquerda: 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98
-    99, à direita: 14 15 16 17 18 48 56 59 60 66 70 71 81 83 84 85
-    86 87 88 89 90 91 92 93 94 95 96 97 98 104
+    99, à direita: 9 14 15 16 17 18 48 56 59 60 66 70 71 81 83 84
+    85 86 87 88 89 90 91 92 93 94 95 96 97 98 104
 tipoExpressao (93)
     à esquerda: 100 101 102, à direita: 82
 variavel (94)
@@ -795,7 +793,7 @@ Estado 42
 Estado 43
 
     8 tipo: T_STRING .
-    9     | T_STRING . "[" T_NUM "]"
+    9     | T_STRING . "[" expressao "]"
 
     "["  deslocar, e ir ao estado 73
 
@@ -811,21 +809,44 @@ Estado 44
 
 Estado 45
 
-   74 bloco: "{" . declaracoes comandos "}"
+   74 bloco: "{" . declaracoes "}"
+   75      | "{" . comandos "}"
+   76      | "{" . declaracoes comandos "}"
 
-    T_DEF  deslocar, e ir ao estado 1
-    T_VAR  deslocar, e ir ao estado 2
+    T_IF      deslocar, e ir ao estado 75
+    T_FOR     deslocar, e ir ao estado 76
+    T_WHILE   deslocar, e ir ao estado 77
+    T_WRITE   deslocar, e ir ao estado 78
+    T_READ    deslocar, e ir ao estado 79
+    T_DEF     deslocar, e ir ao estado 1
+    T_RETURN  deslocar, e ir ao estado 80
+    T_VAR     deslocar, e ir ao estado 2
+    T_SKIP    deslocar, e ir ao estado 81
+    T_STOP    deslocar, e ir ao estado 82
+    "{"       deslocar, e ir ao estado 45
+    T_ID      deslocar, e ir ao estado 83
 
-    T_DEF     [reduzir usando a regra 75 (declaracoes)]
-    T_VAR     [reduzir usando a regra 75 (declaracoes)]
-    $padrão  reduzir usando a regra 75 (declaracoes)
-
-    declaracao   ir ao estado 75
-    decVar       ir ao estado 5
-    decSub       ir ao estado 6
-    decProc      ir ao estado 7
-    decFun       ir ao estado 8
-    declaracoes  ir ao estado 76
+    declaracao      ir ao estado 84
+    decVar          ir ao estado 5
+    decSub          ir ao estado 6
+    decProc         ir ao estado 7
+    decFun          ir ao estado 8
+    comando         ir ao estado 85
+    cmdSimples      ir ao estado 86
+    cmdAtrib        ir ao estado 87
+    cmdIf           ir ao estado 88
+    cmdWhile        ir ao estado 89
+    cmdFor          ir ao estado 90
+    cmdStop         ir ao estado 91
+    cmdSkip         ir ao estado 92
+    cmdReturn       ir ao estado 93
+    cmdChamadaProc  ir ao estado 94
+    cmdRead         ir ao estado 95
+    cmdWrite        ir ao estado 96
+    bloco           ir ao estado 97
+    declaracoes     ir ao estado 98
+    comandos        ir ao estado 99
+    variavel        ir ao estado 100
 
 
 Estado 46
@@ -836,7 +857,7 @@ Estado 46
     T_INT     deslocar, e ir ao estado 42
     T_STRING  deslocar, e ir ao estado 43
 
-    tipo  ir ao estado 77
+    tipo  ir ao estado 101
 
 
 Estado 47
@@ -850,7 +871,7 @@ Estado 48
 
    35 param: T_ID "[" . "]"
 
-    "]"  deslocar, e ir ao estado 78
+    "]"  deslocar, e ir ao estado 102
 
 
 Estado 49
@@ -859,9 +880,9 @@ Estado 49
    27 decFun: T_DEF T_ID "(" listaParametros ")" . ":" tipo bloco
 
     "{"  deslocar, e ir ao estado 45
-    ":"  deslocar, e ir ao estado 79
+    ":"  deslocar, e ir ao estado 103
 
-    bloco  ir ao estado 80
+    bloco  ir ao estado 104
 
 
 Estado 50
@@ -870,7 +891,7 @@ Estado 50
 
     T_ID  deslocar, e ir ao estado 21
 
-    specParams   ir ao estado 81
+    specParams   ir ao estado 105
     specParamsN  ir ao estado 24
     param        ir ao estado 25
 
@@ -881,7 +902,7 @@ Estado 51
 
     T_ID  deslocar, e ir ao estado 21
 
-    param  ir ao estado 82
+    param  ir ao estado 106
 
 
 Estado 52
@@ -892,7 +913,7 @@ Estado 52
     T_INT     deslocar, e ir ao estado 42
     T_STRING  deslocar, e ir ao estado 43
 
-    tipo  ir ao estado 83
+    tipo  ir ao estado 107
 
 
 Estado 53
@@ -913,7 +934,7 @@ Estado 53
    97          | expressao . "&&" expressao
    98          | expressao . "||" expressao
 
-    ")"   deslocar, e ir ao estado 84
+    ")"   deslocar, e ir ao estado 108
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
     "*"   deslocar, e ir ao estado 61
@@ -1018,10 +1039,10 @@ Estado 56
     $padrão  reduzir usando a regra 68 (atribProc)
 
     valor          ir ao estado 34
-    atribProc      ir ao estado 85
-    cnjExpr        ir ao estado 86
+    atribProc      ir ao estado 109
+    cnjExpr        ir ao estado 110
     opTern         ir ao estado 35
-    expressao      ir ao estado 87
+    expressao      ir ao estado 111
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1041,7 +1062,7 @@ Estado 57
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 88
+    expressao      ir ao estado 112
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1051,7 +1072,7 @@ Estado 58
    15 specVar: T_ID "[" expressao "]" .
    16        | T_ID "[" expressao "]" . "=" "{" decArran "}"
 
-    "="  deslocar, e ir ao estado 89
+    "="  deslocar, e ir ao estado 113
 
     $padrão  reduzir usando a regra 15 (specVar)
 
@@ -1071,7 +1092,7 @@ Estado 59
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 90
+    expressao      ir ao estado 114
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1091,7 +1112,7 @@ Estado 60
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 91
+    expressao      ir ao estado 115
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1111,7 +1132,7 @@ Estado 61
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 92
+    expressao      ir ao estado 116
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1131,7 +1152,7 @@ Estado 62
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 93
+    expressao      ir ao estado 117
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1151,7 +1172,7 @@ Estado 63
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 94
+    expressao      ir ao estado 118
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1171,7 +1192,7 @@ Estado 64
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 95
+    expressao      ir ao estado 119
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1191,7 +1212,7 @@ Estado 65
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 96
+    expressao      ir ao estado 120
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1211,7 +1232,7 @@ Estado 66
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 97
+    expressao      ir ao estado 121
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1231,7 +1252,7 @@ Estado 67
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 98
+    expressao      ir ao estado 122
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1251,7 +1272,7 @@ Estado 68
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 99
+    expressao      ir ao estado 123
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1271,7 +1292,7 @@ Estado 69
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 100
+    expressao      ir ao estado 124
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1291,7 +1312,7 @@ Estado 70
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 101
+    expressao      ir ao estado 125
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1311,7 +1332,7 @@ Estado 71
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 102
+    expressao      ir ao estado 126
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
@@ -1331,16 +1352,29 @@ Estado 72
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 103
+    expressao      ir ao estado 127
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
 
 Estado 73
 
-    9 tipo: T_STRING "[" . T_NUM "]"
+    9 tipo: T_STRING "[" . expressao "]"
 
-    T_NUM  deslocar, e ir ao estado 104
+    T_TRUE        deslocar, e ir ao estado 26
+    T_FALSE       deslocar, e ir ao estado 27
+    "("           deslocar, e ir ao estado 28
+    "-"           deslocar, e ir ao estado 29
+    "!"           deslocar, e ir ao estado 30
+    T_ID          deslocar, e ir ao estado 31
+    T_NUM         deslocar, e ir ao estado 32
+    T_LIT_STRING  deslocar, e ir ao estado 33
+
+    valor          ir ao estado 34
+    opTern         ir ao estado 35
+    expressao      ir ao estado 128
+    tipoExpressao  ir ao estado 37
+    variavel       ir ao estado 38
 
 
 Estado 74
@@ -1352,80 +1386,308 @@ Estado 74
 
 Estado 75
 
-   77 declaracoes: declaracao .
+   56 cmdIf: T_IF . "(" expressao ")" comando cmdElse
 
-    $padrão  reduzir usando a regra 77 (declaracoes)
+    "("  deslocar, e ir ao estado 129
 
 
 Estado 76
 
-   74 bloco: "{" declaracoes . comandos "}"
-   76 declaracoes: declaracoes . declaracao
+   60 cmdFor: T_FOR . "(" atrib-ini ";" expressao ";" atrib-passo ")" comando
 
-    T_IF      deslocar, e ir ao estado 105
-    T_FOR     deslocar, e ir ao estado 106
-    T_WHILE   deslocar, e ir ao estado 107
-    T_WRITE   deslocar, e ir ao estado 108
-    T_READ    deslocar, e ir ao estado 109
+    "("  deslocar, e ir ao estado 130
+
+
+Estado 77
+
+   59 cmdWhile: T_WHILE . "(" expressao ")" comando
+
+    "("  deslocar, e ir ao estado 131
+
+
+Estado 78
+
+   73 cmdWrite: T_WRITE . cnjExpr ";"
+
+    T_TRUE        deslocar, e ir ao estado 26
+    T_FALSE       deslocar, e ir ao estado 27
+    "("           deslocar, e ir ao estado 28
+    "-"           deslocar, e ir ao estado 29
+    "!"           deslocar, e ir ao estado 30
+    T_ID          deslocar, e ir ao estado 31
+    T_NUM         deslocar, e ir ao estado 32
+    T_LIT_STRING  deslocar, e ir ao estado 33
+
+    valor          ir ao estado 34
+    cnjExpr        ir ao estado 132
+    opTern         ir ao estado 35
+    expressao      ir ao estado 111
+    tipoExpressao  ir ao estado 37
+    variavel       ir ao estado 38
+
+
+Estado 79
+
+   72 cmdRead: T_READ . variavel ";"
+
+    T_ID  deslocar, e ir ao estado 133
+
+    variavel  ir ao estado 134
+
+
+Estado 80
+
+   65 cmdReturn: T_RETURN . ";"
+   66          | T_RETURN . expressao ";"
+
+    T_TRUE        deslocar, e ir ao estado 26
+    T_FALSE       deslocar, e ir ao estado 27
+    "("           deslocar, e ir ao estado 28
+    ";"           deslocar, e ir ao estado 135
+    "-"           deslocar, e ir ao estado 29
+    "!"           deslocar, e ir ao estado 30
+    T_ID          deslocar, e ir ao estado 31
+    T_NUM         deslocar, e ir ao estado 32
+    T_LIT_STRING  deslocar, e ir ao estado 33
+
+    valor          ir ao estado 34
+    opTern         ir ao estado 35
+    expressao      ir ao estado 136
+    tipoExpressao  ir ao estado 37
+    variavel       ir ao estado 38
+
+
+Estado 81
+
+   64 cmdSkip: T_SKIP . ";"
+
+    ";"  deslocar, e ir ao estado 137
+
+
+Estado 82
+
+   63 cmdStop: T_STOP . ";"
+
+    ";"  deslocar, e ir ao estado 138
+
+
+Estado 83
+
+   67 cmdChamadaProc: T_ID . "(" atribProc ")" ";"
+  103 variavel: T_ID .
+  104         | T_ID . "[" expressao "]"
+
+    "("  deslocar, e ir ao estado 139
+    "["  deslocar, e ir ao estado 57
+
+    $padrão  reduzir usando a regra 103 (variavel)
+
+
+Estado 84
+
+   78 declaracoes: declaracao .
+
+    $padrão  reduzir usando a regra 78 (declaracoes)
+
+
+Estado 85
+
+   80 comandos: comando .
+
+    $padrão  reduzir usando a regra 80 (comandos)
+
+
+Estado 86
+
+   36 comando: cmdSimples .
+
+    $padrão  reduzir usando a regra 36 (comando)
+
+
+Estado 87
+
+   38 cmdSimples: cmdAtrib .
+
+    $padrão  reduzir usando a regra 38 (cmdSimples)
+
+
+Estado 88
+
+   39 cmdSimples: cmdIf .
+
+    $padrão  reduzir usando a regra 39 (cmdSimples)
+
+
+Estado 89
+
+   40 cmdSimples: cmdWhile .
+
+    $padrão  reduzir usando a regra 40 (cmdSimples)
+
+
+Estado 90
+
+   41 cmdSimples: cmdFor .
+
+    $padrão  reduzir usando a regra 41 (cmdSimples)
+
+
+Estado 91
+
+   42 cmdSimples: cmdStop .
+
+    $padrão  reduzir usando a regra 42 (cmdSimples)
+
+
+Estado 92
+
+   43 cmdSimples: cmdSkip .
+
+    $padrão  reduzir usando a regra 43 (cmdSimples)
+
+
+Estado 93
+
+   44 cmdSimples: cmdReturn .
+
+    $padrão  reduzir usando a regra 44 (cmdSimples)
+
+
+Estado 94
+
+   45 cmdSimples: cmdChamadaProc .
+
+    $padrão  reduzir usando a regra 45 (cmdSimples)
+
+
+Estado 95
+
+   46 cmdSimples: cmdRead .
+
+    $padrão  reduzir usando a regra 46 (cmdSimples)
+
+
+Estado 96
+
+   47 cmdSimples: cmdWrite .
+
+    $padrão  reduzir usando a regra 47 (cmdSimples)
+
+
+Estado 97
+
+   37 comando: bloco .
+
+    $padrão  reduzir usando a regra 37 (comando)
+
+
+Estado 98
+
+   74 bloco: "{" declaracoes . "}"
+   76      | "{" declaracoes . comandos "}"
+   77 declaracoes: declaracoes . declaracao
+
+    T_IF      deslocar, e ir ao estado 75
+    T_FOR     deslocar, e ir ao estado 76
+    T_WHILE   deslocar, e ir ao estado 77
+    T_WRITE   deslocar, e ir ao estado 78
+    T_READ    deslocar, e ir ao estado 79
     T_DEF     deslocar, e ir ao estado 1
-    T_RETURN  deslocar, e ir ao estado 110
+    T_RETURN  deslocar, e ir ao estado 80
     T_VAR     deslocar, e ir ao estado 2
-    T_SKIP    deslocar, e ir ao estado 111
-    T_STOP    deslocar, e ir ao estado 112
+    T_SKIP    deslocar, e ir ao estado 81
+    T_STOP    deslocar, e ir ao estado 82
     "{"       deslocar, e ir ao estado 45
-    T_ID      deslocar, e ir ao estado 113
+    "}"       deslocar, e ir ao estado 140
+    T_ID      deslocar, e ir ao estado 83
 
-    T_IF      [reduzir usando a regra 78 (comandos)]
-    T_FOR     [reduzir usando a regra 78 (comandos)]
-    T_WHILE   [reduzir usando a regra 78 (comandos)]
-    T_WRITE   [reduzir usando a regra 78 (comandos)]
-    T_READ    [reduzir usando a regra 78 (comandos)]
-    T_RETURN  [reduzir usando a regra 78 (comandos)]
-    T_SKIP    [reduzir usando a regra 78 (comandos)]
-    T_STOP    [reduzir usando a regra 78 (comandos)]
-    "{"       [reduzir usando a regra 78 (comandos)]
-    T_ID      [reduzir usando a regra 78 (comandos)]
-    $padrão  reduzir usando a regra 78 (comandos)
-
-    declaracao      ir ao estado 114
+    declaracao      ir ao estado 141
     decVar          ir ao estado 5
     decSub          ir ao estado 6
     decProc         ir ao estado 7
     decFun          ir ao estado 8
-    comando         ir ao estado 115
-    cmdSimples      ir ao estado 116
-    cmdAtrib        ir ao estado 117
-    cmdIf           ir ao estado 118
-    cmdWhile        ir ao estado 119
-    cmdFor          ir ao estado 120
-    cmdStop         ir ao estado 121
-    cmdSkip         ir ao estado 122
-    cmdReturn       ir ao estado 123
-    cmdChamadaProc  ir ao estado 124
-    cmdRead         ir ao estado 125
-    cmdWrite        ir ao estado 126
-    bloco           ir ao estado 127
-    comandos        ir ao estado 128
-    variavel        ir ao estado 129
+    comando         ir ao estado 85
+    cmdSimples      ir ao estado 86
+    cmdAtrib        ir ao estado 87
+    cmdIf           ir ao estado 88
+    cmdWhile        ir ao estado 89
+    cmdFor          ir ao estado 90
+    cmdStop         ir ao estado 91
+    cmdSkip         ir ao estado 92
+    cmdReturn       ir ao estado 93
+    cmdChamadaProc  ir ao estado 94
+    cmdRead         ir ao estado 95
+    cmdWrite        ir ao estado 96
+    bloco           ir ao estado 97
+    comandos        ir ao estado 142
+    variavel        ir ao estado 100
 
 
-Estado 77
+Estado 99
+
+   75 bloco: "{" comandos . "}"
+   79 comandos: comandos . comando
+
+    T_IF      deslocar, e ir ao estado 75
+    T_FOR     deslocar, e ir ao estado 76
+    T_WHILE   deslocar, e ir ao estado 77
+    T_WRITE   deslocar, e ir ao estado 78
+    T_READ    deslocar, e ir ao estado 79
+    T_RETURN  deslocar, e ir ao estado 80
+    T_SKIP    deslocar, e ir ao estado 81
+    T_STOP    deslocar, e ir ao estado 82
+    "{"       deslocar, e ir ao estado 45
+    "}"       deslocar, e ir ao estado 143
+    T_ID      deslocar, e ir ao estado 83
+
+    comando         ir ao estado 144
+    cmdSimples      ir ao estado 86
+    cmdAtrib        ir ao estado 87
+    cmdIf           ir ao estado 88
+    cmdWhile        ir ao estado 89
+    cmdFor          ir ao estado 90
+    cmdStop         ir ao estado 91
+    cmdSkip         ir ao estado 92
+    cmdReturn       ir ao estado 93
+    cmdChamadaProc  ir ao estado 94
+    cmdRead         ir ao estado 95
+    cmdWrite        ir ao estado 96
+    bloco           ir ao estado 97
+    variavel        ir ao estado 100
+
+
+Estado 100
+
+   48 cmdAtrib: variavel . tiposAtrib expressao ";"
+
+    "="   deslocar, e ir ao estado 145
+    "+="  deslocar, e ir ao estado 146
+    "-="  deslocar, e ir ao estado 147
+    "*="  deslocar, e ir ao estado 148
+    "/="  deslocar, e ir ao estado 149
+    "%="  deslocar, e ir ao estado 150
+
+    tiposAtrib  ir ao estado 151
+    atribAgreg  ir ao estado 152
+
+
+Estado 101
 
    28 decFun: T_DEF T_ID "(" ")" ":" tipo . bloco
 
     "{"  deslocar, e ir ao estado 45
 
-    bloco  ir ao estado 130
+    bloco  ir ao estado 153
 
 
-Estado 78
+Estado 102
 
    35 param: T_ID "[" "]" .
 
     $padrão  reduzir usando a regra 35 (param)
 
 
-Estado 79
+Estado 103
 
    27 decFun: T_DEF T_ID "(" listaParametros ")" ":" . tipo bloco
 
@@ -1433,62 +1695,62 @@ Estado 79
     T_INT     deslocar, e ir ao estado 42
     T_STRING  deslocar, e ir ao estado 43
 
-    tipo  ir ao estado 131
+    tipo  ir ao estado 154
 
 
-Estado 80
+Estado 104
 
    25 decProc: T_DEF T_ID "(" listaParametros ")" bloco .
 
     $padrão  reduzir usando a regra 25 (decProc)
 
 
-Estado 81
+Estado 105
 
    29 listaParametros: listaParametros ";" specParams .
 
     $padrão  reduzir usando a regra 29 (listaParametros)
 
 
-Estado 82
+Estado 106
 
    32 specParamsN: specParamsN "," param .
 
     $padrão  reduzir usando a regra 32 (specParamsN)
 
 
-Estado 83
+Estado 107
 
    31 specParams: specParamsN ":" tipo .
 
     $padrão  reduzir usando a regra 31 (specParams)
 
 
-Estado 84
+Estado 108
 
    83 expressao: "(" expressao ")" .
 
     $padrão  reduzir usando a regra 83 (expressao)
 
 
-Estado 85
+Estado 109
 
   102 tipoExpressao: T_ID "(" atribProc . ")"
 
-    ")"  deslocar, e ir ao estado 132
+    ")"  deslocar, e ir ao estado 155
 
 
-Estado 86
+Estado 110
 
    69 atribProc: cnjExpr .
    70 cnjExpr: cnjExpr . "," expressao
 
-    ","  deslocar, e ir ao estado 133
+    ","  deslocar, e ir ao estado 156
 
     $padrão  reduzir usando a regra 69 (atribProc)
 
 
-Estado 87
+Estado 111
 
    71 cnjExpr: expressao .
    81 opTern: expressao . "?" expressao ":" expressao
@@ -1524,7 +1786,7 @@ Estado 87
     $padrão  reduzir usando a regra 71 (cnjExpr)
 
 
-Estado 88
+Estado 112
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1542,7 +1804,7 @@ Estado 88
    98          | expressao . "||" expressao
   104 variavel: T_ID "[" expressao . "]"
 
-    "]"   deslocar, e ir ao estado 134
+    "]"   deslocar, e ir ao estado 157
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
     "*"   deslocar, e ir ao estado 61
@@ -1559,14 +1821,14 @@ Estado 88
     "?"   deslocar, e ir ao estado 72
 
 
-Estado 89
+Estado 113
 
    16 specVar: T_ID "[" expressao "]" "=" . "{" decArran "}"
 
-    "{"  deslocar, e ir ao estado 135
+    "{"  deslocar, e ir ao estado 158
 
 
-Estado 90
+Estado 114
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1597,7 +1859,7 @@ Estado 90
     $padrão  reduzir usando a regra 89 (expressao)
 
 
-Estado 91
+Estado 115
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1628,7 +1890,7 @@ Estado 91
     $padrão  reduzir usando a regra 90 (expressao)
 
 
-Estado 92
+Estado 116
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1661,7 +1923,7 @@ Estado 92
     $padrão  reduzir usando a regra 86 (expressao)
 
 
-Estado 93
+Estado 117
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1694,7 +1956,7 @@ Estado 93
     $padrão  reduzir usando a regra 87 (expressao)
 
 
-Estado 94
+Estado 118
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1727,7 +1989,7 @@ Estado 94
     $padrão  reduzir usando a regra 88 (expressao)
 
 
-Estado 95
+Estado 119
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1752,7 +2014,7 @@ Estado 95
     $padrão  reduzir usando a regra 95 (expressao)
 
 
-Estado 96
+Estado 120
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1777,7 +2039,7 @@ Estado 96
     $padrão  reduzir usando a regra 96 (expressao)
 
 
-Estado 97
+Estado 121
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1804,7 +2066,7 @@ Estado 97
     $padrão  reduzir usando a regra 93 (expressao)
 
 
-Estado 98
+Estado 122
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1831,7 +2093,7 @@ Estado 98
     $padrão  reduzir usando a regra 94 (expressao)
 
 
-Estado 99
+Estado 123
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1860,7 +2122,7 @@ Estado 99
     $padrão  reduzir usando a regra 91 (expressao)
 
 
-Estado 100
+Estado 124
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1889,7 +2151,7 @@ Estado 100
     $padrão  reduzir usando a regra 92 (expressao)
 
 
-Estado 101
+Estado 125
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1912,7 +2174,7 @@ Estado 101
     $padrão  reduzir usando a regra 98 (expressao)
 
 
-Estado 102
+Estado 126
 
    81 opTern: expressao . "?" expressao ":" expressao
    86 expressao: expressao . "*" expressao
@@ -1936,7 +2198,7 @@ Estado 102
     $padrão  reduzir usando a regra 97 (expressao)
 
 
-Estado 103
+Estado 127
 
    81 opTern: expressao . "?" expressao ":" expressao
    81       | expressao "?" expressao . ":" expressao
@@ -1968,362 +2230,76 @@ Estado 103
     "||"  deslocar, e ir ao estado 70
     "&&"  deslocar, e ir ao estado 71
     "?"   deslocar, e ir ao estado 72
-    ":"   deslocar, e ir ao estado 136
-
-
-Estado 104
-
-    9 tipo: T_STRING "[" T_NUM . "]"
-
-    "]"  deslocar, e ir ao estado 137
-
-
-Estado 105
-
-   56 cmdIf: T_IF . "(" expressao ")" comando cmdElse
-
-    "("  deslocar, e ir ao estado 138
-
-
-Estado 106
-
-   60 cmdFor: T_FOR . "(" atrib-ini ";" expressao ";" atrib-passo ")" comando
-
-    "("  deslocar, e ir ao estado 139
-
-
-Estado 107
-
-   59 cmdWhile: T_WHILE . "(" expressao ")" comando
-
-    "("  deslocar, e ir ao estado 140
-
-
-Estado 108
-
-   73 cmdWrite: T_WRITE . cnjExpr ";"
-
-    T_TRUE        deslocar, e ir ao estado 26
-    T_FALSE       deslocar, e ir ao estado 27
-    "("           deslocar, e ir ao estado 28
-    "-"           deslocar, e ir ao estado 29
-    "!"           deslocar, e ir ao estado 30
-    T_ID          deslocar, e ir ao estado 31
-    T_NUM         deslocar, e ir ao estado 32
-    T_LIT_STRING  deslocar, e ir ao estado 33
-
-    valor          ir ao estado 34
-    cnjExpr        ir ao estado 141
-    opTern         ir ao estado 35
-    expressao      ir ao estado 87
-    tipoExpressao  ir ao estado 37
-    variavel       ir ao estado 38
-
-
-Estado 109
-
-   72 cmdRead: T_READ . variavel ";"
-
-    T_ID  deslocar, e ir ao estado 142
-
-    variavel  ir ao estado 143
-
-
-Estado 110
-
-   65 cmdReturn: T_RETURN . ";"
-   66          | T_RETURN . expressao ";"
-
-    T_TRUE        deslocar, e ir ao estado 26
-    T_FALSE       deslocar, e ir ao estado 27
-    "("           deslocar, e ir ao estado 28
-    ";"           deslocar, e ir ao estado 144
-    "-"           deslocar, e ir ao estado 29
-    "!"           deslocar, e ir ao estado 30
-    T_ID          deslocar, e ir ao estado 31
-    T_NUM         deslocar, e ir ao estado 32
-    T_LIT_STRING  deslocar, e ir ao estado 33
-
-    valor          ir ao estado 34
-    opTern         ir ao estado 35
-    expressao      ir ao estado 145
-    tipoExpressao  ir ao estado 37
-    variavel       ir ao estado 38
-
-
-Estado 111
-
-   64 cmdSkip: T_SKIP . ";"
-
-    ";"  deslocar, e ir ao estado 146
-
-
-Estado 112
-
-   63 cmdStop: T_STOP . ";"
-
-    ";"  deslocar, e ir ao estado 147
-
-
-Estado 113
-
-   67 cmdChamadaProc: T_ID . "(" atribProc ")" ";"
-  103 variavel: T_ID .
-  104         | T_ID . "[" expressao "]"
-
-    "("  deslocar, e ir ao estado 148
-    "["  deslocar, e ir ao estado 57
-
-    $padrão  reduzir usando a regra 103 (variavel)
-
-
-Estado 114
-
-   76 declaracoes: declaracoes declaracao .
-
-    $padrão  reduzir usando a regra 76 (declaracoes)
-
-
-Estado 115
-
-   80 comandos: comando .
-
-    $padrão  reduzir usando a regra 80 (comandos)
-
-
-Estado 116
-
-   36 comando: cmdSimples .
-
-    $padrão  reduzir usando a regra 36 (comando)
-
-
-Estado 117
-
-   38 cmdSimples: cmdAtrib .
-
-    $padrão  reduzir usando a regra 38 (cmdSimples)
-
-
-Estado 118
-
-   39 cmdSimples: cmdIf .
-
-    $padrão  reduzir usando a regra 39 (cmdSimples)
-
-
-Estado 119
-
-   40 cmdSimples: cmdWhile .
-
-    $padrão  reduzir usando a regra 40 (cmdSimples)
-
-
-Estado 120
-
-   41 cmdSimples: cmdFor .
-
-    $padrão  reduzir usando a regra 41 (cmdSimples)
-
-
-Estado 121
-
-   42 cmdSimples: cmdStop .
-
-    $padrão  reduzir usando a regra 42 (cmdSimples)
-
-
-Estado 122
-
-   43 cmdSimples: cmdSkip .
-
-    $padrão  reduzir usando a regra 43 (cmdSimples)
-
-
-Estado 123
-
-   44 cmdSimples: cmdReturn .
-
-    $padrão  reduzir usando a regra 44 (cmdSimples)
-
-
-Estado 124
-
-   45 cmdSimples: cmdChamadaProc .
-
-    $padrão  reduzir usando a regra 45 (cmdSimples)
-
-
-Estado 125
-
-   46 cmdSimples: cmdRead .
-
-    $padrão  reduzir usando a regra 46 (cmdSimples)
-
-
-Estado 126
-
-   47 cmdSimples: cmdWrite .
-
-    $padrão  reduzir usando a regra 47 (cmdSimples)
-
-
-Estado 127
-
-   37 comando: bloco .
-
-    $padrão  reduzir usando a regra 37 (comando)
+    ":"   deslocar, e ir ao estado 159
 
 
 Estado 128
 
-   74 bloco: "{" declaracoes comandos . "}"
-   79 comandos: comandos . comando
+    9 tipo: T_STRING "[" expressao . "]"
+   81 opTern: expressao . "?" expressao ":" expressao
+   86 expressao: expressao . "*" expressao
+   87          | expressao . "/" expressao
+   88          | expressao . "%" expressao
+   89          | expressao . "+" expressao
+   90          | expressao . "-" expressao
+   91          | expressao . "<" expressao
+   92          | expressao . "<=" expressao
+   93          | expressao . ">" expressao
+   94          | expressao . ">=" expressao
+   95          | expressao . "==" expressao
+   96          | expressao . "!=" expressao
+   97          | expressao . "&&" expressao
+   98          | expressao . "||" expressao
 
-    T_IF      deslocar, e ir ao estado 105
-    T_FOR     deslocar, e ir ao estado 106
-    T_WHILE   deslocar, e ir ao estado 107
-    T_WRITE   deslocar, e ir ao estado 108
-    T_READ    deslocar, e ir ao estado 109
-    T_RETURN  deslocar, e ir ao estado 110
-    T_SKIP    deslocar, e ir ao estado 111
-    T_STOP    deslocar, e ir ao estado 112
-    "{"       deslocar, e ir ao estado 45
-    "}"       deslocar, e ir ao estado 149
-    T_ID      deslocar, e ir ao estado 113
-
-    comando         ir ao estado 150
-    cmdSimples      ir ao estado 116
-    cmdAtrib        ir ao estado 117
-    cmdIf           ir ao estado 118
-    cmdWhile        ir ao estado 119
-    cmdFor          ir ao estado 120
-    cmdStop         ir ao estado 121
-    cmdSkip         ir ao estado 122
-    cmdReturn       ir ao estado 123
-    cmdChamadaProc  ir ao estado 124
-    cmdRead         ir ao estado 125
-    cmdWrite        ir ao estado 126
-    bloco           ir ao estado 127
-    variavel        ir ao estado 129
+    "]"   deslocar, e ir ao estado 160
+    "+"   deslocar, e ir ao estado 59
+    "-"   deslocar, e ir ao estado 60
+    "*"   deslocar, e ir ao estado 61
+    "/"   deslocar, e ir ao estado 62
+    "%"   deslocar, e ir ao estado 63
+    "=="  deslocar, e ir ao estado 64
+    "!="  deslocar, e ir ao estado 65
+    ">"   deslocar, e ir ao estado 66
+    ">="  deslocar, e ir ao estado 67
+    "<"   deslocar, e ir ao estado 68
+    "<="  deslocar, e ir ao estado 69
+    "||"  deslocar, e ir ao estado 70
+    "&&"  deslocar, e ir ao estado 71
+    "?"   deslocar, e ir ao estado 72
 
 
 Estado 129
 
-   48 cmdAtrib: variavel . tiposAtrib expressao ";"
+   56 cmdIf: T_IF "(" . expressao ")" comando cmdElse
 
-    "="   deslocar, e ir ao estado 151
-    "+="  deslocar, e ir ao estado 152
-    "-="  deslocar, e ir ao estado 153
-    "*="  deslocar, e ir ao estado 154
-    "/="  deslocar, e ir ao estado 155
-    "%="  deslocar, e ir ao estado 156
+    T_TRUE        deslocar, e ir ao estado 26
+    T_FALSE       deslocar, e ir ao estado 27
+    "("           deslocar, e ir ao estado 28
+    "-"           deslocar, e ir ao estado 29
+    "!"           deslocar, e ir ao estado 30
+    T_ID          deslocar, e ir ao estado 31
+    T_NUM         deslocar, e ir ao estado 32
+    T_LIT_STRING  deslocar, e ir ao estado 33
 
-    tiposAtrib  ir ao estado 157
-    atribAgreg  ir ao estado 158
+    valor          ir ao estado 34
+    opTern         ir ao estado 35
+    expressao      ir ao estado 161
+    tipoExpressao  ir ao estado 37
+    variavel       ir ao estado 38
 
 
 Estado 130
 
-   28 decFun: T_DEF T_ID "(" ")" ":" tipo bloco .
+   60 cmdFor: T_FOR "(" . atrib-ini ";" expressao ";" atrib-passo ")" comando
 
-    $padrão  reduzir usando a regra 28 (decFun)
+    T_ID  deslocar, e ir ao estado 162
+
+    atrib-ini  ir ao estado 163
 
 
 Estado 131
 
-   27 decFun: T_DEF T_ID "(" listaParametros ")" ":" tipo . bloco
-
-    "{"  deslocar, e ir ao estado 45
-
-    bloco  ir ao estado 159
-
-
-Estado 132
-
-  102 tipoExpressao: T_ID "(" atribProc ")" .
-
-    $padrão  reduzir usando a regra 102 (tipoExpressao)
-
-
-Estado 133
-
-   70 cnjExpr: cnjExpr "," . expressao
-
-    T_TRUE        deslocar, e ir ao estado 26
-    T_FALSE       deslocar, e ir ao estado 27
-    "("           deslocar, e ir ao estado 28
-    "-"           deslocar, e ir ao estado 29
-    "!"           deslocar, e ir ao estado 30
-    T_ID          deslocar, e ir ao estado 31
-    T_NUM         deslocar, e ir ao estado 32
-    T_LIT_STRING  deslocar, e ir ao estado 33
-
-    valor          ir ao estado 34
-    opTern         ir ao estado 35
-    expressao      ir ao estado 160
-    tipoExpressao  ir ao estado 37
-    variavel       ir ao estado 38
-
-
-Estado 134
-
-  104 variavel: T_ID "[" expressao "]" .
-
-    $padrão  reduzir usando a regra 104 (variavel)
-
-
-Estado 135
-
-   16 specVar: T_ID "[" expressao "]" "=" "{" . decArran "}"
-
-    T_TRUE        deslocar, e ir ao estado 26
-    T_FALSE       deslocar, e ir ao estado 27
-    "("           deslocar, e ir ao estado 28
-    "-"           deslocar, e ir ao estado 29
-    "!"           deslocar, e ir ao estado 30
-    T_ID          deslocar, e ir ao estado 31
-    T_NUM         deslocar, e ir ao estado 32
-    T_LIT_STRING  deslocar, e ir ao estado 33
-
-    decArran       ir ao estado 161
-    valor          ir ao estado 34
-    opTern         ir ao estado 35
-    expressao      ir ao estado 162
-    tipoExpressao  ir ao estado 37
-    variavel       ir ao estado 38
-
-
-Estado 136
-
-   81 opTern: expressao "?" expressao ":" . expressao
-
-    T_TRUE        deslocar, e ir ao estado 26
-    T_FALSE       deslocar, e ir ao estado 27
-    "("           deslocar, e ir ao estado 28
-    "-"           deslocar, e ir ao estado 29
-    "!"           deslocar, e ir ao estado 30
-    T_ID          deslocar, e ir ao estado 31
-    T_NUM         deslocar, e ir ao estado 32
-    T_LIT_STRING  deslocar, e ir ao estado 33
-
-    valor          ir ao estado 34
-    opTern         ir ao estado 35
-    expressao      ir ao estado 163
-    tipoExpressao  ir ao estado 37
-    variavel       ir ao estado 38
-
-
-Estado 137
-
-    9 tipo: T_STRING "[" T_NUM "]" .
-
-    $padrão  reduzir usando a regra 9 (tipo)
-
-
-Estado 138
-
-   56 cmdIf: T_IF "(" . expressao ")" comando cmdElse
+   59 cmdWhile: T_WHILE "(" . expressao ")" comando
 
     T_TRUE        deslocar, e ir ao estado 26
     T_FALSE       deslocar, e ir ao estado 27
@@ -2341,45 +2317,16 @@ Estado 138
     variavel       ir ao estado 38
 
 
-Estado 139
-
-   60 cmdFor: T_FOR "(" . atrib-ini ";" expressao ";" atrib-passo ")" comando
-
-    T_ID  deslocar, e ir ao estado 165
-
-    atrib-ini  ir ao estado 166
-
-
-Estado 140
-
-   59 cmdWhile: T_WHILE "(" . expressao ")" comando
-
-    T_TRUE        deslocar, e ir ao estado 26
-    T_FALSE       deslocar, e ir ao estado 27
-    "("           deslocar, e ir ao estado 28
-    "-"           deslocar, e ir ao estado 29
-    "!"           deslocar, e ir ao estado 30
-    T_ID          deslocar, e ir ao estado 31
-    T_NUM         deslocar, e ir ao estado 32
-    T_LIT_STRING  deslocar, e ir ao estado 33
-
-    valor          ir ao estado 34
-    opTern         ir ao estado 35
-    expressao      ir ao estado 167
-    tipoExpressao  ir ao estado 37
-    variavel       ir ao estado 38
-
-
-Estado 141
+Estado 132
 
    70 cnjExpr: cnjExpr . "," expressao
    73 cmdWrite: T_WRITE cnjExpr . ";"
 
-    ","  deslocar, e ir ao estado 133
-    ";"  deslocar, e ir ao estado 168
+    ","  deslocar, e ir ao estado 156
+    ";"  deslocar, e ir ao estado 165
 
 
-Estado 142
+Estado 133
 
   103 variavel: T_ID .
   104         | T_ID . "[" expressao "]"
@@ -2389,21 +2336,21 @@ Estado 142
     $padrão  reduzir usando a regra 103 (variavel)
 
 
-Estado 143
+Estado 134
 
    72 cmdRead: T_READ variavel . ";"
 
-    ";"  deslocar, e ir ao estado 169
+    ";"  deslocar, e ir ao estado 166
 
 
-Estado 144
+Estado 135
 
    65 cmdReturn: T_RETURN ";" .
 
     $padrão  reduzir usando a regra 65 (cmdReturn)
 
 
-Estado 145
+Estado 136
 
    66 cmdReturn: T_RETURN expressao . ";"
    81 opTern: expressao . "?" expressao ":" expressao
@@ -2421,7 +2368,7 @@ Estado 145
    97          | expressao . "&&" expressao
    98          | expressao . "||" expressao
 
-    ";"   deslocar, e ir ao estado 170
+    ";"   deslocar, e ir ao estado 167
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
     "*"   deslocar, e ir ao estado 61
@@ -2438,21 +2385,21 @@ Estado 145
     "?"   deslocar, e ir ao estado 72
 
 
-Estado 146
+Estado 137
 
    64 cmdSkip: T_SKIP ";" .
 
     $padrão  reduzir usando a regra 64 (cmdSkip)
 
 
-Estado 147
+Estado 138
 
    63 cmdStop: T_STOP ";" .
 
     $padrão  reduzir usando a regra 63 (cmdStop)
 
 
-Estado 148
+Estado 139
 
    67 cmdChamadaProc: T_ID "(" . atribProc ")" ";"
 
@@ -2468,73 +2415,170 @@ Estado 148
     $padrão  reduzir usando a regra 68 (atribProc)
 
     valor          ir ao estado 34
-    atribProc      ir ao estado 171
-    cnjExpr        ir ao estado 86
+    atribProc      ir ao estado 168
+    cnjExpr        ir ao estado 110
     opTern         ir ao estado 35
-    expressao      ir ao estado 87
+    expressao      ir ao estado 111
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
 
-Estado 149
+Estado 140
 
-   74 bloco: "{" declaracoes comandos "}" .
+   74 bloco: "{" declaracoes "}" .
 
     $padrão  reduzir usando a regra 74 (bloco)
 
 
-Estado 150
+Estado 141
+
+   77 declaracoes: declaracoes declaracao .
+
+    $padrão  reduzir usando a regra 77 (declaracoes)
+
+
+Estado 142
+
+   76 bloco: "{" declaracoes comandos . "}"
+   79 comandos: comandos . comando
+
+    T_IF      deslocar, e ir ao estado 75
+    T_FOR     deslocar, e ir ao estado 76
+    T_WHILE   deslocar, e ir ao estado 77
+    T_WRITE   deslocar, e ir ao estado 78
+    T_READ    deslocar, e ir ao estado 79
+    T_RETURN  deslocar, e ir ao estado 80
+    T_SKIP    deslocar, e ir ao estado 81
+    T_STOP    deslocar, e ir ao estado 82
+    "{"       deslocar, e ir ao estado 45
+    "}"       deslocar, e ir ao estado 169
+    T_ID      deslocar, e ir ao estado 83
+
+    comando         ir ao estado 144
+    cmdSimples      ir ao estado 86
+    cmdAtrib        ir ao estado 87
+    cmdIf           ir ao estado 88
+    cmdWhile        ir ao estado 89
+    cmdFor          ir ao estado 90
+    cmdStop         ir ao estado 91
+    cmdSkip         ir ao estado 92
+    cmdReturn       ir ao estado 93
+    cmdChamadaProc  ir ao estado 94
+    cmdRead         ir ao estado 95
+    cmdWrite        ir ao estado 96
+    bloco           ir ao estado 97
+    variavel        ir ao estado 100
+
+
+Estado 143
+
+   75 bloco: "{" comandos "}" .
+
+    $padrão  reduzir usando a regra 75 (bloco)
+
+
+Estado 144
 
    79 comandos: comandos comando .
 
     $padrão  reduzir usando a regra 79 (comandos)
 
 
-Estado 151
+Estado 145
 
    50 tiposAtrib: "=" .
 
     $padrão  reduzir usando a regra 50 (tiposAtrib)
 
 
-Estado 152
+Estado 146
 
    54 atribAgreg: "+=" .
 
     $padrão  reduzir usando a regra 54 (atribAgreg)
 
 
-Estado 153
+Estado 147
 
    55 atribAgreg: "-=" .
 
     $padrão  reduzir usando a regra 55 (atribAgreg)
 
 
-Estado 154
+Estado 148
 
    53 atribAgreg: "*=" .
 
     $padrão  reduzir usando a regra 53 (atribAgreg)
 
 
-Estado 155
+Estado 149
 
    51 atribAgreg: "/=" .
 
     $padrão  reduzir usando a regra 51 (atribAgreg)
 
 
-Estado 156
+Estado 150
 
    52 atribAgreg: "%=" .
 
     $padrão  reduzir usando a regra 52 (atribAgreg)
 
 
-Estado 157
+Estado 151
 
    48 cmdAtrib: variavel tiposAtrib . expressao ";"
+
+    T_TRUE        deslocar, e ir ao estado 26
+    T_FALSE       deslocar, e ir ao estado 27
+    "("           deslocar, e ir ao estado 28
+    "-"           deslocar, e ir ao estado 29
+    "!"           deslocar, e ir ao estado 30
+    T_ID          deslocar, e ir ao estado 31
+    T_NUM         deslocar, e ir ao estado 32
+    T_LIT_STRING  deslocar, e ir ao estado 33
+
+    valor          ir ao estado 34
+    opTern         ir ao estado 35
+    expressao      ir ao estado 170
+    tipoExpressao  ir ao estado 37
+    variavel       ir ao estado 38
+
+
+Estado 152
+
+   49 tiposAtrib: atribAgreg .
+
+    $padrão  reduzir usando a regra 49 (tiposAtrib)
+
+
+Estado 153
+
+   28 decFun: T_DEF T_ID "(" ")" ":" tipo bloco .
+
+    $padrão  reduzir usando a regra 28 (decFun)
+
+
+Estado 154
+
+   27 decFun: T_DEF T_ID "(" listaParametros ")" ":" tipo . bloco
+
+    "{"  deslocar, e ir ao estado 45
+
+    bloco  ir ao estado 171
+
+
+Estado 155
+
+  102 tipoExpressao: T_ID "(" atribProc ")" .
+
+    $padrão  reduzir usando a regra 102 (tipoExpressao)
+
+
+Estado 156
+
+   70 cnjExpr: cnjExpr "," . expressao
 
     T_TRUE        deslocar, e ir ao estado 26
     T_FALSE       deslocar, e ir ao estado 27
@@ -2552,21 +2596,223 @@ Estado 157
     variavel       ir ao estado 38
 
 
+Estado 157
+
+  104 variavel: T_ID "[" expressao "]" .
+
+    $padrão  reduzir usando a regra 104 (variavel)
+
+
 Estado 158
 
-   49 tiposAtrib: atribAgreg .
+   16 specVar: T_ID "[" expressao "]" "=" "{" . decArran "}"
 
-    $padrão  reduzir usando a regra 49 (tiposAtrib)
+    T_TRUE        deslocar, e ir ao estado 26
+    T_FALSE       deslocar, e ir ao estado 27
+    "("           deslocar, e ir ao estado 28
+    "-"           deslocar, e ir ao estado 29
+    "!"           deslocar, e ir ao estado 30
+    T_ID          deslocar, e ir ao estado 31
+    T_NUM         deslocar, e ir ao estado 32
+    T_LIT_STRING  deslocar, e ir ao estado 33
+
+    decArran       ir ao estado 173
+    valor          ir ao estado 34
+    opTern         ir ao estado 35
+    expressao      ir ao estado 174
+    tipoExpressao  ir ao estado 37
+    variavel       ir ao estado 38
 
 
 Estado 159
+
+   81 opTern: expressao "?" expressao ":" . expressao
+
+    T_TRUE        deslocar, e ir ao estado 26
+    T_FALSE       deslocar, e ir ao estado 27
+    "("           deslocar, e ir ao estado 28
+    "-"           deslocar, e ir ao estado 29
+    "!"           deslocar, e ir ao estado 30
+    T_ID          deslocar, e ir ao estado 31
+    T_NUM         deslocar, e ir ao estado 32
+    T_LIT_STRING  deslocar, e ir ao estado 33
+
+    valor          ir ao estado 34
+    opTern         ir ao estado 35
+    expressao      ir ao estado 175
+    tipoExpressao  ir ao estado 37
+    variavel       ir ao estado 38
+
+
+Estado 160
+
+    9 tipo: T_STRING "[" expressao "]" .
+
+    $padrão  reduzir usando a regra 9 (tipo)
+
+
+Estado 161
+
+   56 cmdIf: T_IF "(" expressao . ")" comando cmdElse
+   81 opTern: expressao . "?" expressao ":" expressao
+   86 expressao: expressao . "*" expressao
+   87          | expressao . "/" expressao
+   88          | expressao . "%" expressao
+   89          | expressao . "+" expressao
+   90          | expressao . "-" expressao
+   91          | expressao . "<" expressao
+   92          | expressao . "<=" expressao
+   93          | expressao . ">" expressao
+   94          | expressao . ">=" expressao
+   95          | expressao . "==" expressao
+   96          | expressao . "!=" expressao
+   97          | expressao . "&&" expressao
+   98          | expressao . "||" expressao
+
+    ")"   deslocar, e ir ao estado 176
+    "+"   deslocar, e ir ao estado 59
+    "-"   deslocar, e ir ao estado 60
+    "*"   deslocar, e ir ao estado 61
+    "/"   deslocar, e ir ao estado 62
+    "%"   deslocar, e ir ao estado 63
+    "=="  deslocar, e ir ao estado 64
+    "!="  deslocar, e ir ao estado 65
+    ">"   deslocar, e ir ao estado 66
+    ">="  deslocar, e ir ao estado 67
+    "<"   deslocar, e ir ao estado 68
+    "<="  deslocar, e ir ao estado 69
+    "||"  deslocar, e ir ao estado 70
+    "&&"  deslocar, e ir ao estado 71
+    "?"   deslocar, e ir ao estado 72
+
+
+Estado 162
+
+   61 atrib-ini: T_ID . "=" T_NUM
+
+    "="  deslocar, e ir ao estado 177
+
+
+Estado 163
+
+   60 cmdFor: T_FOR "(" atrib-ini . ";" expressao ";" atrib-passo ")" comando
+
+    ";"  deslocar, e ir ao estado 178
+
+
+Estado 164
+
+   59 cmdWhile: T_WHILE "(" expressao . ")" comando
+   81 opTern: expressao . "?" expressao ":" expressao
+   86 expressao: expressao . "*" expressao
+   87          | expressao . "/" expressao
+   88          | expressao . "%" expressao
+   89          | expressao . "+" expressao
+   90          | expressao . "-" expressao
+   91          | expressao . "<" expressao
+   92          | expressao . "<=" expressao
+   93          | expressao . ">" expressao
+   94          | expressao . ">=" expressao
+   95          | expressao . "==" expressao
+   96          | expressao . "!=" expressao
+   97          | expressao . "&&" expressao
+   98          | expressao . "||" expressao
+
+    ")"   deslocar, e ir ao estado 179
+    "+"   deslocar, e ir ao estado 59
+    "-"   deslocar, e ir ao estado 60
+    "*"   deslocar, e ir ao estado 61
+    "/"   deslocar, e ir ao estado 62
+    "%"   deslocar, e ir ao estado 63
+    "=="  deslocar, e ir ao estado 64
+    "!="  deslocar, e ir ao estado 65
+    ">"   deslocar, e ir ao estado 66
+    ">="  deslocar, e ir ao estado 67
+    "<"   deslocar, e ir ao estado 68
+    "<="  deslocar, e ir ao estado 69
+    "||"  deslocar, e ir ao estado 70
+    "&&"  deslocar, e ir ao estado 71
+    "?"   deslocar, e ir ao estado 72
+
+
+Estado 165
+
+   73 cmdWrite: T_WRITE cnjExpr ";" .
+
+    $padrão  reduzir usando a regra 73 (cmdWrite)
+
+
+Estado 166
+
+   72 cmdRead: T_READ variavel ";" .
+
+    $padrão  reduzir usando a regra 72 (cmdRead)
+
+
+Estado 167
+
+   66 cmdReturn: T_RETURN expressao ";" .
+
+    $padrão  reduzir usando a regra 66 (cmdReturn)
+
+
+Estado 168
+
+   67 cmdChamadaProc: T_ID "(" atribProc . ")" ";"
+
+    ")"  deslocar, e ir ao estado 180
+
+
+Estado 169
+
+   76 bloco: "{" declaracoes comandos "}" .
+
+    $padrão  reduzir usando a regra 76 (bloco)
+
+
+Estado 170
+
+   48 cmdAtrib: variavel tiposAtrib expressao . ";"
+   81 opTern: expressao . "?" expressao ":" expressao
+   86 expressao: expressao . "*" expressao
+   87          | expressao . "/" expressao
+   88          | expressao . "%" expressao
+   89          | expressao . "+" expressao
+   90          | expressao . "-" expressao
+   91          | expressao . "<" expressao
+   92          | expressao . "<=" expressao
+   93          | expressao . ">" expressao
+   94          | expressao . ">=" expressao
+   95          | expressao . "==" expressao
+   96          | expressao . "!=" expressao
+   97          | expressao . "&&" expressao
+   98          | expressao . "||" expressao
+
+    ";"   deslocar, e ir ao estado 181
+    "+"   deslocar, e ir ao estado 59
+    "-"   deslocar, e ir ao estado 60
+    "*"   deslocar, e ir ao estado 61
+    "/"   deslocar, e ir ao estado 62
+    "%"   deslocar, e ir ao estado 63
+    "=="  deslocar, e ir ao estado 64
+    "!="  deslocar, e ir ao estado 65
+    ">"   deslocar, e ir ao estado 66
+    ">="  deslocar, e ir ao estado 67
+    "<"   deslocar, e ir ao estado 68
+    "<="  deslocar, e ir ao estado 69
+    "||"  deslocar, e ir ao estado 70
+    "&&"  deslocar, e ir ao estado 71
+    "?"   deslocar, e ir ao estado 72
+
+
+Estado 171
 
    27 decFun: T_DEF T_ID "(" listaParametros ")" ":" tipo bloco .
 
     $padrão  reduzir usando a regra 27 (decFun)
 
 
-Estado 160
+Estado 172
 
    70 cnjExpr: cnjExpr "," expressao .
    81 opTern: expressao . "?" expressao ":" expressao
@@ -2602,16 +2848,16 @@ Estado 160
     $padrão  reduzir usando a regra 70 (cnjExpr)
 
 
-Estado 161
+Estado 173
 
    16 specVar: T_ID "[" expressao "]" "=" "{" decArran . "}"
    17 decArran: decArran . "," expressao
 
-    "}"  deslocar, e ir ao estado 173
-    ","  deslocar, e ir ao estado 174
+    "}"  deslocar, e ir ao estado 182
+    ","  deslocar, e ir ao estado 183
 
 
-Estado 162
+Estado 174
 
    18 decArran: expressao .
    81 opTern: expressao . "?" expressao ":" expressao
@@ -2647,7 +2893,7 @@ Estado 162
     $padrão  reduzir usando a regra 18 (decArran)
 
 
-Estado 163
+Estado 175
 
    81 opTern: expressao . "?" expressao ":" expressao
    81       | expressao "?" expressao ":" expressao .
@@ -2670,219 +2916,45 @@ Estado 163
     $padrão  reduzir usando a regra 81 (opTern)
 
 
-Estado 164
-
-   56 cmdIf: T_IF "(" expressao . ")" comando cmdElse
-   81 opTern: expressao . "?" expressao ":" expressao
-   86 expressao: expressao . "*" expressao
-   87          | expressao . "/" expressao
-   88          | expressao . "%" expressao
-   89          | expressao . "+" expressao
-   90          | expressao . "-" expressao
-   91          | expressao . "<" expressao
-   92          | expressao . "<=" expressao
-   93          | expressao . ">" expressao
-   94          | expressao . ">=" expressao
-   95          | expressao . "==" expressao
-   96          | expressao . "!=" expressao
-   97          | expressao . "&&" expressao
-   98          | expressao . "||" expressao
-
-    ")"   deslocar, e ir ao estado 175
-    "+"   deslocar, e ir ao estado 59
-    "-"   deslocar, e ir ao estado 60
-    "*"   deslocar, e ir ao estado 61
-    "/"   deslocar, e ir ao estado 62
-    "%"   deslocar, e ir ao estado 63
-    "=="  deslocar, e ir ao estado 64
-    "!="  deslocar, e ir ao estado 65
-    ">"   deslocar, e ir ao estado 66
-    ">="  deslocar, e ir ao estado 67
-    "<"   deslocar, e ir ao estado 68
-    "<="  deslocar, e ir ao estado 69
-    "||"  deslocar, e ir ao estado 70
-    "&&"  deslocar, e ir ao estado 71
-    "?"   deslocar, e ir ao estado 72
-
-
-Estado 165
-
-   61 atrib-ini: T_ID . "=" T_NUM
-
-    "="  deslocar, e ir ao estado 176
-
-
-Estado 166
-
-   60 cmdFor: T_FOR "(" atrib-ini . ";" expressao ";" atrib-passo ")" comando
-
-    ";"  deslocar, e ir ao estado 177
-
-
-Estado 167
-
-   59 cmdWhile: T_WHILE "(" expressao . ")" comando
-   81 opTern: expressao . "?" expressao ":" expressao
-   86 expressao: expressao . "*" expressao
-   87          | expressao . "/" expressao
-   88          | expressao . "%" expressao
-   89          | expressao . "+" expressao
-   90          | expressao . "-" expressao
-   91          | expressao . "<" expressao
-   92          | expressao . "<=" expressao
-   93          | expressao . ">" expressao
-   94          | expressao . ">=" expressao
-   95          | expressao . "==" expressao
-   96          | expressao . "!=" expressao
-   97          | expressao . "&&" expressao
-   98          | expressao . "||" expressao
-
-    ")"   deslocar, e ir ao estado 178
-    "+"   deslocar, e ir ao estado 59
-    "-"   deslocar, e ir ao estado 60
-    "*"   deslocar, e ir ao estado 61
-    "/"   deslocar, e ir ao estado 62
-    "%"   deslocar, e ir ao estado 63
-    "=="  deslocar, e ir ao estado 64
-    "!="  deslocar, e ir ao estado 65
-    ">"   deslocar, e ir ao estado 66
-    ">="  deslocar, e ir ao estado 67
-    "<"   deslocar, e ir ao estado 68
-    "<="  deslocar, e ir ao estado 69
-    "||"  deslocar, e ir ao estado 70
-    "&&"  deslocar, e ir ao estado 71
-    "?"   deslocar, e ir ao estado 72
-
-
-Estado 168
-
-   73 cmdWrite: T_WRITE cnjExpr ";" .
-
-    $padrão  reduzir usando a regra 73 (cmdWrite)
-
-
-Estado 169
-
-   72 cmdRead: T_READ variavel ";" .
-
-    $padrão  reduzir usando a regra 72 (cmdRead)
-
-
-Estado 170
-
-   66 cmdReturn: T_RETURN expressao ";" .
-
-    $padrão  reduzir usando a regra 66 (cmdReturn)
-
-
-Estado 171
-
-   67 cmdChamadaProc: T_ID "(" atribProc . ")" ";"
-
-    ")"  deslocar, e ir ao estado 179
-
-
-Estado 172
-
-   48 cmdAtrib: variavel tiposAtrib expressao . ";"
-   81 opTern: expressao . "?" expressao ":" expressao
-   86 expressao: expressao . "*" expressao
-   87          | expressao . "/" expressao
-   88          | expressao . "%" expressao
-   89          | expressao . "+" expressao
-   90          | expressao . "-" expressao
-   91          | expressao . "<" expressao
-   92          | expressao . "<=" expressao
-   93          | expressao . ">" expressao
-   94          | expressao . ">=" expressao
-   95          | expressao . "==" expressao
-   96          | expressao . "!=" expressao
-   97          | expressao . "&&" expressao
-   98          | expressao . "||" expressao
-
-    ";"   deslocar, e ir ao estado 180
-    "+"   deslocar, e ir ao estado 59
-    "-"   deslocar, e ir ao estado 60
-    "*"   deslocar, e ir ao estado 61
-    "/"   deslocar, e ir ao estado 62
-    "%"   deslocar, e ir ao estado 63
-    "=="  deslocar, e ir ao estado 64
-    "!="  deslocar, e ir ao estado 65
-    ">"   deslocar, e ir ao estado 66
-    ">="  deslocar, e ir ao estado 67
-    "<"   deslocar, e ir ao estado 68
-    "<="  deslocar, e ir ao estado 69
-    "||"  deslocar, e ir ao estado 70
-    "&&"  deslocar, e ir ao estado 71
-    "?"   deslocar, e ir ao estado 72
-
-
-Estado 173
-
-   16 specVar: T_ID "[" expressao "]" "=" "{" decArran "}" .
-
-    $padrão  reduzir usando a regra 16 (specVar)
-
-
-Estado 174
-
-   17 decArran: decArran "," . expressao
-
-    T_TRUE        deslocar, e ir ao estado 26
-    T_FALSE       deslocar, e ir ao estado 27
-    "("           deslocar, e ir ao estado 28
-    "-"           deslocar, e ir ao estado 29
-    "!"           deslocar, e ir ao estado 30
-    T_ID          deslocar, e ir ao estado 31
-    T_NUM         deslocar, e ir ao estado 32
-    T_LIT_STRING  deslocar, e ir ao estado 33
-
-    valor          ir ao estado 34
-    opTern         ir ao estado 35
-    expressao      ir ao estado 181
-    tipoExpressao  ir ao estado 37
-    variavel       ir ao estado 38
-
-
-Estado 175
+Estado 176
 
    56 cmdIf: T_IF "(" expressao ")" . comando cmdElse
 
-    T_IF      deslocar, e ir ao estado 105
-    T_FOR     deslocar, e ir ao estado 106
-    T_WHILE   deslocar, e ir ao estado 107
-    T_WRITE   deslocar, e ir ao estado 108
-    T_READ    deslocar, e ir ao estado 109
-    T_RETURN  deslocar, e ir ao estado 110
-    T_SKIP    deslocar, e ir ao estado 111
-    T_STOP    deslocar, e ir ao estado 112
+    T_IF      deslocar, e ir ao estado 75
+    T_FOR     deslocar, e ir ao estado 76
+    T_WHILE   deslocar, e ir ao estado 77
+    T_WRITE   deslocar, e ir ao estado 78
+    T_READ    deslocar, e ir ao estado 79
+    T_RETURN  deslocar, e ir ao estado 80
+    T_SKIP    deslocar, e ir ao estado 81
+    T_STOP    deslocar, e ir ao estado 82
     "{"       deslocar, e ir ao estado 45
-    T_ID      deslocar, e ir ao estado 113
+    T_ID      deslocar, e ir ao estado 83
 
-    comando         ir ao estado 182
-    cmdSimples      ir ao estado 116
-    cmdAtrib        ir ao estado 117
-    cmdIf           ir ao estado 118
-    cmdWhile        ir ao estado 119
-    cmdFor          ir ao estado 120
-    cmdStop         ir ao estado 121
-    cmdSkip         ir ao estado 122
-    cmdReturn       ir ao estado 123
-    cmdChamadaProc  ir ao estado 124
-    cmdRead         ir ao estado 125
-    cmdWrite        ir ao estado 126
-    bloco           ir ao estado 127
-    variavel        ir ao estado 129
-
-
-Estado 176
-
-   61 atrib-ini: T_ID "=" . T_NUM
-
-    T_NUM  deslocar, e ir ao estado 183
+    comando         ir ao estado 184
+    cmdSimples      ir ao estado 86
+    cmdAtrib        ir ao estado 87
+    cmdIf           ir ao estado 88
+    cmdWhile        ir ao estado 89
+    cmdFor          ir ao estado 90
+    cmdStop         ir ao estado 91
+    cmdSkip         ir ao estado 92
+    cmdReturn       ir ao estado 93
+    cmdChamadaProc  ir ao estado 94
+    cmdRead         ir ao estado 95
+    cmdWrite        ir ao estado 96
+    bloco           ir ao estado 97
+    variavel        ir ao estado 100
 
 
 Estado 177
+
+   61 atrib-ini: T_ID "=" . T_NUM
+
+    T_NUM  deslocar, e ir ao estado 185
+
+
+Estado 178
 
    60 cmdFor: T_FOR "(" atrib-ini ";" . expressao ";" atrib-passo ")" comando
 
@@ -2897,57 +2969,152 @@ Estado 177
 
     valor          ir ao estado 34
     opTern         ir ao estado 35
-    expressao      ir ao estado 184
+    expressao      ir ao estado 186
     tipoExpressao  ir ao estado 37
     variavel       ir ao estado 38
 
 
-Estado 178
+Estado 179
 
    59 cmdWhile: T_WHILE "(" expressao ")" . comando
 
-    T_IF      deslocar, e ir ao estado 105
-    T_FOR     deslocar, e ir ao estado 106
-    T_WHILE   deslocar, e ir ao estado 107
-    T_WRITE   deslocar, e ir ao estado 108
-    T_READ    deslocar, e ir ao estado 109
-    T_RETURN  deslocar, e ir ao estado 110
-    T_SKIP    deslocar, e ir ao estado 111
-    T_STOP    deslocar, e ir ao estado 112
+    T_IF      deslocar, e ir ao estado 75
+    T_FOR     deslocar, e ir ao estado 76
+    T_WHILE   deslocar, e ir ao estado 77
+    T_WRITE   deslocar, e ir ao estado 78
+    T_READ    deslocar, e ir ao estado 79
+    T_RETURN  deslocar, e ir ao estado 80
+    T_SKIP    deslocar, e ir ao estado 81
+    T_STOP    deslocar, e ir ao estado 82
     "{"       deslocar, e ir ao estado 45
-    T_ID      deslocar, e ir ao estado 113
+    T_ID      deslocar, e ir ao estado 83
 
-    comando         ir ao estado 185
-    cmdSimples      ir ao estado 116
-    cmdAtrib        ir ao estado 117
-    cmdIf           ir ao estado 118
-    cmdWhile        ir ao estado 119
-    cmdFor          ir ao estado 120
-    cmdStop         ir ao estado 121
-    cmdSkip         ir ao estado 122
-    cmdReturn       ir ao estado 123
-    cmdChamadaProc  ir ao estado 124
-    cmdRead         ir ao estado 125
-    cmdWrite        ir ao estado 126
-    bloco           ir ao estado 127
-    variavel        ir ao estado 129
-
-
-Estado 179
-
-   67 cmdChamadaProc: T_ID "(" atribProc ")" . ";"
-
-    ";"  deslocar, e ir ao estado 186
+    comando         ir ao estado 187
+    cmdSimples      ir ao estado 86
+    cmdAtrib        ir ao estado 87
+    cmdIf           ir ao estado 88
+    cmdWhile        ir ao estado 89
+    cmdFor          ir ao estado 90
+    cmdStop         ir ao estado 91
+    cmdSkip         ir ao estado 92
+    cmdReturn       ir ao estado 93
+    cmdChamadaProc  ir ao estado 94
+    cmdRead         ir ao estado 95
+    cmdWrite        ir ao estado 96
+    bloco           ir ao estado 97
+    variavel        ir ao estado 100
 
 
 Estado 180
+
+   67 cmdChamadaProc: T_ID "(" atribProc ")" . ";"
+
+    ";"  deslocar, e ir ao estado 188
+
+
+Estado 181
 
    48 cmdAtrib: variavel tiposAtrib expressao ";" .
 
     $padrão  reduzir usando a regra 48 (cmdAtrib)
 
 
-Estado 181
+Estado 182
+
+   16 specVar: T_ID "[" expressao "]" "=" "{" decArran "}" .
+
+    $padrão  reduzir usando a regra 16 (specVar)
+
+
+Estado 183
+
+   17 decArran: decArran "," . expressao
+
+    T_TRUE        deslocar, e ir ao estado 26
+    T_FALSE       deslocar, e ir ao estado 27
+    "("           deslocar, e ir ao estado 28
+    "-"           deslocar, e ir ao estado 29
+    "!"           deslocar, e ir ao estado 30
+    T_ID          deslocar, e ir ao estado 31
+    T_NUM         deslocar, e ir ao estado 32
+    T_LIT_STRING  deslocar, e ir ao estado 33
+
+    valor          ir ao estado 34
+    opTern         ir ao estado 35
+    expressao      ir ao estado 189
+    tipoExpressao  ir ao estado 37
+    variavel       ir ao estado 38
+
+
+Estado 184
+
+   56 cmdIf: T_IF "(" expressao ")" comando . cmdElse
+
+    T_ELSE  deslocar, e ir ao estado 190
+
+    T_ELSE    [reduzir usando a regra 57 (cmdElse)]
+    $padrão  reduzir usando a regra 57 (cmdElse)
+
+    cmdElse  ir ao estado 191
+
+
+Estado 185
+
+   61 atrib-ini: T_ID "=" T_NUM .
+
+    $padrão  reduzir usando a regra 61 (atrib-ini)
+
+
+Estado 186
+
+   60 cmdFor: T_FOR "(" atrib-ini ";" expressao . ";" atrib-passo ")" comando
+   81 opTern: expressao . "?" expressao ":" expressao
+   86 expressao: expressao . "*" expressao
+   87          | expressao . "/" expressao
+   88          | expressao . "%" expressao
+   89          | expressao . "+" expressao
+   90          | expressao . "-" expressao
+   91          | expressao . "<" expressao
+   92          | expressao . "<=" expressao
+   93          | expressao . ">" expressao
+   94          | expressao . ">=" expressao
+   95          | expressao . "==" expressao
+   96          | expressao . "!=" expressao
+   97          | expressao . "&&" expressao
+   98          | expressao . "||" expressao
+
+    ";"   deslocar, e ir ao estado 192
+    "+"   deslocar, e ir ao estado 59
+    "-"   deslocar, e ir ao estado 60
+    "*"   deslocar, e ir ao estado 61
+    "/"   deslocar, e ir ao estado 62
+    "%"   deslocar, e ir ao estado 63
+    "=="  deslocar, e ir ao estado 64
+    "!="  deslocar, e ir ao estado 65
+    ">"   deslocar, e ir ao estado 66
+    ">="  deslocar, e ir ao estado 67
+    "<"   deslocar, e ir ao estado 68
+    "<="  deslocar, e ir ao estado 69
+    "||"  deslocar, e ir ao estado 70
+    "&&"  deslocar, e ir ao estado 71
+    "?"   deslocar, e ir ao estado 72
+
+
+Estado 187
+
+   59 cmdWhile: T_WHILE "(" expressao ")" comando .
+
+    $padrão  reduzir usando a regra 59 (cmdWhile)
+
+
+Estado 188
+
+   67 cmdChamadaProc: T_ID "(" atribProc ")" ";" .
+
+    $padrão  reduzir usando a regra 67 (cmdChamadaProc)
+
+
+Estado 189
 
    17 decArran: decArran "," expressao .
    81 opTern: expressao . "?" expressao ":" expressao
@@ -2983,194 +3150,126 @@ Estado 181
     $padrão  reduzir usando a regra 17 (decArran)
 
 
-Estado 182
-
-   56 cmdIf: T_IF "(" expressao ")" comando . cmdElse
-
-    T_ELSE  deslocar, e ir ao estado 187
-
-    T_ELSE    [reduzir usando a regra 57 (cmdElse)]
-    $padrão  reduzir usando a regra 57 (cmdElse)
-
-    cmdElse  ir ao estado 188
-
-
-Estado 183
-
-   61 atrib-ini: T_ID "=" T_NUM .
-
-    $padrão  reduzir usando a regra 61 (atrib-ini)
-
-
-Estado 184
-
-   60 cmdFor: T_FOR "(" atrib-ini ";" expressao . ";" atrib-passo ")" comando
-   81 opTern: expressao . "?" expressao ":" expressao
-   86 expressao: expressao . "*" expressao
-   87          | expressao . "/" expressao
-   88          | expressao . "%" expressao
-   89          | expressao . "+" expressao
-   90          | expressao . "-" expressao
-   91          | expressao . "<" expressao
-   92          | expressao . "<=" expressao
-   93          | expressao . ">" expressao
-   94          | expressao . ">=" expressao
-   95          | expressao . "==" expressao
-   96          | expressao . "!=" expressao
-   97          | expressao . "&&" expressao
-   98          | expressao . "||" expressao
-
-    ";"   deslocar, e ir ao estado 189
-    "+"   deslocar, e ir ao estado 59
-    "-"   deslocar, e ir ao estado 60
-    "*"   deslocar, e ir ao estado 61
-    "/"   deslocar, e ir ao estado 62
-    "%"   deslocar, e ir ao estado 63
-    "=="  deslocar, e ir ao estado 64
-    "!="  deslocar, e ir ao estado 65
-    ">"   deslocar, e ir ao estado 66
-    ">="  deslocar, e ir ao estado 67
-    "<"   deslocar, e ir ao estado 68
-    "<="  deslocar, e ir ao estado 69
-    "||"  deslocar, e ir ao estado 70
-    "&&"  deslocar, e ir ao estado 71
-    "?"   deslocar, e ir ao estado 72
-
-
-Estado 185
-
-   59 cmdWhile: T_WHILE "(" expressao ")" comando .
-
-    $padrão  reduzir usando a regra 59 (cmdWhile)
-
-
-Estado 186
-
-   67 cmdChamadaProc: T_ID "(" atribProc ")" ";" .
-
-    $padrão  reduzir usando a regra 67 (cmdChamadaProc)
-
-
-Estado 187
+Estado 190
 
    58 cmdElse: T_ELSE . comando
 
-    T_IF      deslocar, e ir ao estado 105
-    T_FOR     deslocar, e ir ao estado 106
-    T_WHILE   deslocar, e ir ao estado 107
-    T_WRITE   deslocar, e ir ao estado 108
-    T_READ    deslocar, e ir ao estado 109
-    T_RETURN  deslocar, e ir ao estado 110
-    T_SKIP    deslocar, e ir ao estado 111
-    T_STOP    deslocar, e ir ao estado 112
+    T_IF      deslocar, e ir ao estado 75
+    T_FOR     deslocar, e ir ao estado 76
+    T_WHILE   deslocar, e ir ao estado 77
+    T_WRITE   deslocar, e ir ao estado 78
+    T_READ    deslocar, e ir ao estado 79
+    T_RETURN  deslocar, e ir ao estado 80
+    T_SKIP    deslocar, e ir ao estado 81
+    T_STOP    deslocar, e ir ao estado 82
     "{"       deslocar, e ir ao estado 45
-    T_ID      deslocar, e ir ao estado 113
+    T_ID      deslocar, e ir ao estado 83
 
-    comando         ir ao estado 190
-    cmdSimples      ir ao estado 116
-    cmdAtrib        ir ao estado 117
-    cmdIf           ir ao estado 118
-    cmdWhile        ir ao estado 119
-    cmdFor          ir ao estado 120
-    cmdStop         ir ao estado 121
-    cmdSkip         ir ao estado 122
-    cmdReturn       ir ao estado 123
-    cmdChamadaProc  ir ao estado 124
-    cmdRead         ir ao estado 125
-    cmdWrite        ir ao estado 126
-    bloco           ir ao estado 127
-    variavel        ir ao estado 129
+    comando         ir ao estado 193
+    cmdSimples      ir ao estado 86
+    cmdAtrib        ir ao estado 87
+    cmdIf           ir ao estado 88
+    cmdWhile        ir ao estado 89
+    cmdFor          ir ao estado 90
+    cmdStop         ir ao estado 91
+    cmdSkip         ir ao estado 92
+    cmdReturn       ir ao estado 93
+    cmdChamadaProc  ir ao estado 94
+    cmdRead         ir ao estado 95
+    cmdWrite        ir ao estado 96
+    bloco           ir ao estado 97
+    variavel        ir ao estado 100
 
 
-Estado 188
+Estado 191
 
    56 cmdIf: T_IF "(" expressao ")" comando cmdElse .
 
     $padrão  reduzir usando a regra 56 (cmdIf)
 
 
-Estado 189
+Estado 192
 
    60 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" . atrib-passo ")" comando
 
-    T_ID  deslocar, e ir ao estado 191
+    T_ID  deslocar, e ir ao estado 194
 
-    atrib-passo  ir ao estado 192
+    atrib-passo  ir ao estado 195
 
 
-Estado 190
+Estado 193
 
    58 cmdElse: T_ELSE comando .
 
     $padrão  reduzir usando a regra 58 (cmdElse)
 
 
-Estado 191
+Estado 194
 
    62 atrib-passo: T_ID . atribAgreg T_NUM
 
-    "+="  deslocar, e ir ao estado 152
-    "-="  deslocar, e ir ao estado 153
-    "*="  deslocar, e ir ao estado 154
-    "/="  deslocar, e ir ao estado 155
-    "%="  deslocar, e ir ao estado 156
+    "+="  deslocar, e ir ao estado 146
+    "-="  deslocar, e ir ao estado 147
+    "*="  deslocar, e ir ao estado 148
+    "/="  deslocar, e ir ao estado 149
+    "%="  deslocar, e ir ao estado 150
 
-    atribAgreg  ir ao estado 193
-
-
-Estado 192
-
-   60 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo . ")" comando
-
-    ")"  deslocar, e ir ao estado 194
-
-
-Estado 193
-
-   62 atrib-passo: T_ID atribAgreg . T_NUM
-
-    T_NUM  deslocar, e ir ao estado 195
-
-
-Estado 194
-
-   60 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" . comando
-
-    T_IF      deslocar, e ir ao estado 105
-    T_FOR     deslocar, e ir ao estado 106
-    T_WHILE   deslocar, e ir ao estado 107
-    T_WRITE   deslocar, e ir ao estado 108
-    T_READ    deslocar, e ir ao estado 109
-    T_RETURN  deslocar, e ir ao estado 110
-    T_SKIP    deslocar, e ir ao estado 111
-    T_STOP    deslocar, e ir ao estado 112
-    "{"       deslocar, e ir ao estado 45
-    T_ID      deslocar, e ir ao estado 113
-
-    comando         ir ao estado 196
-    cmdSimples      ir ao estado 116
-    cmdAtrib        ir ao estado 117
-    cmdIf           ir ao estado 118
-    cmdWhile        ir ao estado 119
-    cmdFor          ir ao estado 120
-    cmdStop         ir ao estado 121
-    cmdSkip         ir ao estado 122
-    cmdReturn       ir ao estado 123
-    cmdChamadaProc  ir ao estado 124
-    cmdRead         ir ao estado 125
-    cmdWrite        ir ao estado 126
-    bloco           ir ao estado 127
-    variavel        ir ao estado 129
+    atribAgreg  ir ao estado 196
 
 
 Estado 195
+
+   60 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo . ")" comando
+
+    ")"  deslocar, e ir ao estado 197
+
+
+Estado 196
+
+   62 atrib-passo: T_ID atribAgreg . T_NUM
+
+    T_NUM  deslocar, e ir ao estado 198
+
+
+Estado 197
+
+   60 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" . comando
+
+    T_IF      deslocar, e ir ao estado 75
+    T_FOR     deslocar, e ir ao estado 76
+    T_WHILE   deslocar, e ir ao estado 77
+    T_WRITE   deslocar, e ir ao estado 78
+    T_READ    deslocar, e ir ao estado 79
+    T_RETURN  deslocar, e ir ao estado 80
+    T_SKIP    deslocar, e ir ao estado 81
+    T_STOP    deslocar, e ir ao estado 82
+    "{"       deslocar, e ir ao estado 45
+    T_ID      deslocar, e ir ao estado 83
+
+    comando         ir ao estado 199
+    cmdSimples      ir ao estado 86
+    cmdAtrib        ir ao estado 87
+    cmdIf           ir ao estado 88
+    cmdWhile        ir ao estado 89
+    cmdFor          ir ao estado 90
+    cmdStop         ir ao estado 91
+    cmdSkip         ir ao estado 92
+    cmdReturn       ir ao estado 93
+    cmdChamadaProc  ir ao estado 94
+    cmdRead         ir ao estado 95
+    cmdWrite        ir ao estado 96
+    bloco           ir ao estado 97
+    variavel        ir ao estado 100
+
+
+Estado 198
 
    62 atrib-passo: T_ID atribAgreg T_NUM .
 
     $padrão  reduzir usando a regra 62 (atrib-passo)
 
 
-Estado 196
+Estado 199
 
    60 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando .
 

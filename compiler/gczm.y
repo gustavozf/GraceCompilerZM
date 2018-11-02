@@ -116,7 +116,7 @@ tipo:
 	T_BOOL
 	| T_INT
 	| T_STRING
-	| T_STRING "[" T_NUM "]"
+	| T_STRING "[" expressao "]"
 	;
 
 listaSpecVars:
@@ -277,20 +277,20 @@ cmdWrite:
 	T_WRITE cnjExpr ";"
 	;
 
-// ---------------------------- Blocos
+// ----------------------------------- Blocos
 bloco:
-	"{" declaracoes comandos "}"
+	  "{" declaracoes "}"
+	| "{" comandos "}"
+	| "{" declaracoes comandos "}"
 	;
 
 declaracoes: 
-	/*vazio*/
-	| declaracoes declaracao
+	  declaracoes declaracao
 	| declaracao
 	;
 
 comandos: 
-	/*vazio*/
-	| comandos comando
+	  comandos comando
 	| comando
 	;
 

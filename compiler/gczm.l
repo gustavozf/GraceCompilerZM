@@ -5,7 +5,7 @@
 /* Arquivo gerado do Bison
    Usado para ler os tokens e etc.
  */
-#include "ns.tab.h"
+#include "gczm.tab.h"
 
 using namespace std;
 

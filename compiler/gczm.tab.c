@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "ns.y" /* yacc.c:339  */
+#line 1 "gczm.y" /* yacc.c:339  */
 
 /* Declaracoes */
 #include <iostream>
@@ -82,7 +82,7 @@ extern int num_carac;
 // Tratar Erros (aparentemente obrigatorio)
 void yyerror(const char *s);
 
-#line 86 "ns.tab.c" /* yacc.c:339  */
+#line 86 "gczm.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -101,9 +101,9 @@ void yyerror(const char *s);
 #endif
 
 /* In a future release of Bison, this section will be replaced
-   by #include "ns.tab.h".  */
-#ifndef YY_YY_NS_TAB_H_INCLUDED
-# define YY_YY_NS_TAB_H_INCLUDED
+   by #include "gczm.tab.h".  */
+#ifndef YY_YY_GCZM_TAB_H_INCLUDED
+# define YY_YY_GCZM_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -175,13 +175,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 26 "ns.y" /* yacc.c:355  */
+#line 26 "gczm.y" /* yacc.c:355  */
 
 	int ival;   // Inteiro
 	float fval; // Float
 	char *sval; // String
 
-#line 185 "ns.tab.c" /* yacc.c:355  */
+#line 185 "gczm.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -194,11 +194,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_NS_TAB_H_INCLUDED  */
+#endif /* !YY_YY_GCZM_TAB_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 202 "ns.tab.c" /* yacc.c:358  */
+#line 202 "gczm.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1464,13 +1464,13 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 101 "ns.y" /* yacc.c:1646  */
+#line 101 "gczm.y" /* yacc.c:1646  */
     {/**/}
-#line 1470 "ns.tab.c" /* yacc.c:1646  */
+#line 1470 "gczm.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1474 "ns.tab.c" /* yacc.c:1646  */
+#line 1474 "gczm.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1698,7 +1698,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 335 "ns.y" /* yacc.c:1906  */
+#line 335 "gczm.y" /* yacc.c:1906  */
 
 
 /* Codificacao C++ */

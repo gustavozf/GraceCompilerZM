@@ -1,5 +1,5 @@
 # Nome dos arquivos
-NOME = ns
+NOME = gczm
 CC = g++
 
 # ===============================================
@@ -7,7 +7,7 @@ CC = g++
 # ===============================================
 
 all: $(NOME).tab.c lex.yy.c
-	$(CC) $(NOME).tab.c lex.yy.c -ll -o $(NOME)Comp
+	$(CC) $(NOME).tab.c lex.yy.c -ll -o $(NOME)
 
 # Flex (Analisador Lexico)
 lex.yy.c: $(NOME).l
@@ -22,6 +22,7 @@ $(NOME).tab.c: $(NOME).y
 
 clean:
 	rm lex.yy.c
-	rm $(NOME)Comp
+	rm $(NOME)
 	rm $(NOME).tab.c
 	rm $(NOME).tab.h
+	rm $(NOME).output

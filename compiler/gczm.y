@@ -95,6 +95,8 @@ void yyerror(const char *s);
 %left T_OR
 %right T_COND_OP_TER T_DOIS_PON
 
+%right T_THEN T_ELSE
+
 %%
 	/* Gramatica */
 programa:
@@ -125,10 +127,10 @@ listaSpecVars:
 	;
 
 specVar:
-	T_ID 										  // specVarSimples
-	| T_ID "=" expressao 						  // specVarSimplesIni
-	| T_ID "[" expressao "]" 					  // specVarArranjo
-	| T_ID "[" expressao "]" "=" "{" decArran "}" // specVarArranjoIni
+	T_ID 										 
+	| T_ID "=" expressao 						 
+	| T_ID "[" expressao "]" 					 
+	| T_ID "[" expressao "]" "=" "{" decArran "}"
 	;
 
 decArran:
@@ -217,12 +219,8 @@ atribAgreg:
 
 // ------------------------------ Estruturas Basicas
 cmdIf:
-	T_IF "(" expressao ")" comando cmdElse
-	;
-
-cmdElse:
-	/* Vazio */
-	| T_ELSE comando
+	T_IF "(" expressao ")" comando %prec T_THEN
+	| T_IF "(" expressao ")" comando T_ELSE comando
 	;
 
 cmdWhile:
@@ -256,12 +254,8 @@ cmdReturn:
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
-	T_ID "(" atribProc ")" ";"
-	;
-
-atribProc:
-	/*vazio*/
-	| cnjExpr
+	T_ID "(" ")" ";"
+	| T_ID "(" cnjExpr ")" ";"
 	;
 
 cnjExpr:
@@ -295,7 +289,6 @@ comandos:
 	;
 
 // ----------------------------------- Expressoes
-// PAREI DE VERIFICAR AQUI
 opTern:
 	expressao "?" expressao ":" expressao
 	;
@@ -324,7 +317,8 @@ expressao:
 tipoExpressao:
 	valor
 	| variavel
-	| T_ID "(" atribProc ")" // FUNCAO
+	| T_ID "(" ")" // FUNCAO
+	| T_ID "(" cnjExpr ")"
 	;
 
 variavel:

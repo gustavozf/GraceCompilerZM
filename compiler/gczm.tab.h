@@ -94,7 +94,8 @@ extern int yydebug;
     T_ID = 304,
     T_NUM = 305,
     T_LIT_STRING = 306,
-    T_NEG_UNAR = 307
+    T_NEG_UNAR = 307,
+    THEN = 308
   };
 #endif
 
@@ -109,7 +110,7 @@ union YYSTYPE
 	float fval; // Float
 	char *sval; // String
 
-#line 113 "gczm.tab.h" /* yacc.c:1909  */
+#line 114 "gczm.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

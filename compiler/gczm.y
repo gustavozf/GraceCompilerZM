@@ -310,7 +310,7 @@ expressao:
 	| expressao "?" expressao ":" expressao		{$$ = new TerExp($1, $3, $5, $2, $4);}
 	| valor
 	| variavel
-	| T_ID "(" ")" // FUNCAO
+	| T_ID "(" ")" 
 	| T_ID "(" cnjExpr ")"
 	| "(" expressao ")"
 	;

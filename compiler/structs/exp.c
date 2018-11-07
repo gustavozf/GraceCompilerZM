@@ -90,14 +90,34 @@ NegExp::NegExp(Exp* expr){
     e1 = expr;
 }
 
-int eval(){
+int NegExp::eval(){
     return 1;
 }
 
-string codeGen(){
+string NegExp::codeGen(){
     return "";
 }
 
-string getTipo(){
+string NegExp::getTipo(){
+    return "";
+}
+
+// ----------------------------------------------------------- TerExp
+
+TerExp::TerExp(Exp* expr1, Exp* expr2, Exp* expr3){
+    e1 = expr1; 
+    e2 = expr2; 
+    e3 = expr3;
+}
+
+int TerExp::eval(){
+    return 1;
+}
+
+string TerExp::codeGen(){
+    return "";
+}
+        
+string TerExp::getTipo(){
     return "";
 }

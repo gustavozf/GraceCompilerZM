@@ -79,21 +79,10 @@ class NegExp : public Exp {
         Exp *e1;
 
     public:
-        NegExp(Exp* expr){
-            e1 = expr;
-        }
-
-        int eval(){
-            return 1;
-        }
-
-        string codeGen(){
-            return "";
-        }
-
-        string getTipo(){
-            return "";
-        }
+        NegExp(Exp* expr);
+        int eval();
+        string codeGen();
+        string getTipo();
 };
 
 class TerExp : public Exp{

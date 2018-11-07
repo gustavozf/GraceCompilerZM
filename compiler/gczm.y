@@ -113,6 +113,7 @@ declaracao:
 // ------------------------------- Declaracao de Variaveis
 decVar:
 	T_VAR listaSpecVars ":" tipo ";"
+	| T_VAR listaSpecVars ":" tipo		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 tipo:
@@ -203,6 +204,7 @@ cmdSimples:
 // ------------------------------- Atribuicoes
 cmdAtrib:
 	variavel tiposAtrib expressao ";"
+	| variavel tiposAtrib expressao 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 tiposAtrib:
@@ -242,21 +244,27 @@ atrib-passo:
 
 cmdStop:
 	T_STOP ";"
+	| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 cmdSkip:
 	T_SKIP ";"
+	| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 cmdReturn:
 	T_RETURN ";"
 	| T_RETURN expressao ";"
+	| T_RETURN 					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
 	T_ID "(" ")" ";"
 	| T_ID "(" cnjExpr ")" ";"
+	| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 cnjExpr:
@@ -266,10 +274,12 @@ cnjExpr:
 
 cmdRead:
 	T_READ variavel ";"
+	| T_READ variavel 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 cmdWrite:
 	T_WRITE cnjExpr ";"
+	| T_WRITE cnjExpr		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 // ----------------------------------- Blocos
@@ -277,6 +287,9 @@ bloco:
 	  "{" declaracoes "}"
 	| "{" comandos "}"
 	| "{" declaracoes comandos "}"
+	| "{" declaracoes 						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n"}
+	| "{" comandos							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n"}
+	| "{"declaracoes comandos				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n"}
 	;
 
 declaracoes: 

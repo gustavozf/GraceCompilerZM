@@ -7,6 +7,8 @@ using namespace std;
 
 class Exp{
     public:
+        // Pega o tipo da expressao
+        virtual string getTipo() = 0;
         // Realiza a avaliacao da expressao
         virtual int eval() = 0;
         // Gera o codigo da expressao
@@ -24,12 +26,15 @@ class AritmExp : public Exp{
         }
     
         int eval(){
-            
+            return 1;
         }
 
         string codeGen(){
-            // NoEsq = (x) No Dir = 49
-            return "x * 49";
+            return "";
+        }
+
+        string getTipo(){
+            return "";
         }
 
 };
@@ -45,13 +50,16 @@ class RelExp : public Exp{
         }
     
         int eval(){
-            
+            return 1;
         }
 
         string codeGen(){
-            
+            return "";
         }
         
+        string getTipo(){
+            return "";
+        }
 };
 
 class LogExp : public Exp{
@@ -65,11 +73,15 @@ class LogExp : public Exp{
         }
     
         int eval(){
-            
+            return 1;
         }
 
         string codeGen(){
-            
+            return "";
+        }
+
+        string getTipo(){
+            return "";
         }
 };
 
@@ -85,67 +97,82 @@ class IgExp : public Exp {
         }
     
         int eval(){
-            
+            return 1;
         }
 
         string codeGen(){
-            
+            return "";
+        }
+
+        string getTipo(){
+            return "";
         }
 };
 
 class NegUnExp : public Exp {
     private:
         Exp *e1;
-        string op;
 
     public:
-        NegUnExp(Exp* expr, string ope){
-            e1 = expr; op = ope;
+        NegUnExp(Exp* expr){
+            e1 = expr;
         }
 
         int eval(){
-
+            return 1;
         }
 
         string codeGen(){
-            
+            return "";
+        }
+
+        string getTipo(){
+            return "";
         }
 };
 
 class NegExp : public Exp {
     private:
         Exp *e1;
-        string op;
 
     public:
-        NegExp(Exp* expr, string ope){
-            e1 = expr; op = ope;
+        NegExp(Exp* expr){
+            e1 = expr;
         }
 
         int eval(){
-
+            return 1;
         }
 
         string codeGen(){
-            
+            return "";
+        }
+
+        string getTipo(){
+            return "";
         }
 };
 
 class TerExp : public Exp{
     private:
         Exp *e1, *e2, *e3;
-        string op1, op2;
     
     public:
-        TerExp(Exp* expr1, Exp* expr2, Exp* expr3, string ope1, string ope2){
-            e1 = expr1; e2 = expr2; e3 = expr3; op1 = ope1; op2 = ope2;
+        TerExp(Exp* expr1, Exp* expr2, Exp* expr3){
+            e1 = expr1; 
+            e2 = expr2; 
+            e3 = expr3;
         }
 
         int eval(){
-
+            return 1;
         }
 
         string codeGen(){
-            
+            return "";
+        }
+        
+        string getTipo(){
+            return "";
         }
 };

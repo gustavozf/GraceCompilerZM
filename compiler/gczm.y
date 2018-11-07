@@ -3,7 +3,9 @@
 #include <iostream>
 #include <cstdio>
 #include <string>
+
 #include "./structs/exp.h"
+#include "./structs/cmd.h"
 
 using namespace std;
 
@@ -208,22 +210,22 @@ cmdAtrib:
 	;
 
 tiposAtrib:
-	atribAgreg
-	| "="
+	atribAgreg	{$$ = $1;}
+	| "="		{$$ = $1;}
 	;
 
 atribAgreg:
-	"/="
-	| "%="
-	| "*="
-	| "+="
-	| "-="
+	"/="	{$$ = $1;}
+	| "%="	{$$ = $1;}
+	| "*="	{$$ = $1;}
+	| "+="	{$$ = $1;}
+	| "-="	{$$ = $1;}
 	;
 
 // ------------------------------ Estruturas Basicas
 cmdIf:
-	T_IF "(" expressao ")" comando %prec T_THEN
-	| T_IF "(" expressao ")" comando T_ELSE comando
+	T_IF "(" expressao ")" comando %prec T_THEN		{$$ = new IfCmd($3, $5, NULL);}
+	| T_IF "(" expressao ")" comando T_ELSE comando {$$ = new IfCmd($3, $5, $7);}
 	;
 
 cmdWhile:
@@ -305,8 +307,8 @@ comandos:
 // ----------------------------------- Expressoes
 
 expressao:
-	 "-" expressao %prec T_NEG_UNAR  			{$$ = new NegUnExp($2, $1);}
-	| "!" expressao					 			{$$ = new NegExp($2, $1);}
+	 "-" expressao %prec T_NEG_UNAR  			{$$ = new NegUnExp($2);}
+	| "!" expressao					 			{$$ = new NegExp($2);}
 	| expressao "*" expressao		 			{$$ = new AritmExp($1, $3, $2);}
 	| expressao "/" expressao		 			{$$ = new AritmExp($1, $3, $2);}
 	| expressao "%" expressao		 			{$$ = new AritmExp($1, $3, $2);}
@@ -320,7 +322,7 @@ expressao:
 	| expressao "!=" expressao		 			{$$ = new IgExp($1, $3, $2);}
 	| expressao "&&" expressao		 			{$$ = new LogExp($1, $3, $2);}
 	| expressao "||" expressao		 			{$$ = new LogExp($1, $3, $2);}
-	| expressao "?" expressao ":" expressao		{$$ = new TerExp($1, $3, $5, $2, $4);}
+	| expressao "?" expressao ":" expressao		{$$ = new TerExp($1, $3, $5);}
 	| valor
 	| variavel
 	| T_ID "(" ")" 

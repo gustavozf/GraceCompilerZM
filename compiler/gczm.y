@@ -6,6 +6,7 @@
 
 #include "./structs/exp.h"
 #include "./structs/cmd.h"
+#include "./structs/dec.h"
 
 using namespace std;
 
@@ -118,10 +119,10 @@ decVar:
 	;
 
 tipo:
-	T_BOOL							{$$ = $1}
-	| T_INT							{$$ = $1}
-	| T_STRING						{$$ = $1}
-	| T_STRING "[" T_NUM "]"		{/* ? */}
+	T_BOOL							{$$ = new BoolTipoVar();}
+	| T_INT							{$$ = new IntTipoVar();}
+	| T_STRING						{$$ = new StringTipoVar();}
+	| T_STRING "[" T_NUM "]"		{$$ = new StringTipoVar($3);}
 	;
 
 listaSpecVars:

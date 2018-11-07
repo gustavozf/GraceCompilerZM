@@ -6,35 +6,40 @@ using namespace std;
 class TipoVar{
     public:
         virtual string getTipo() = 0;
-        virtual int getSize() = 0;
+        virtual string getSize() = 0;
         virtual string codeGen() = 0;
 };
 
 class StringTipoVar : public TipoVar{
     private:
-        string tipo;
-        int tam;
+        string tam;
 
     public:
-        TipoVar(string tp, int tm){
-            tipo = tp; 
-            
-            if (tam > 0){
-                tam = tm;
-            } else {
-                tam = 256;
-            }
-        }
+        StringTipoVar();
+        StringTipoVar(string tm);
+        string getTipo();
+        string getSize();
+        string codeGen();
+};
 
-        string getTipo(){
-            return "string";
-        }
+class BoolTipoVar : public TipoVar{
+    private:
+        string tam;
 
-        int getSize(){
-            return tam;
-        }
+    public:
+        BoolTipoVar();
+        string getTipo();
+        string getSize();
+        string codeGen();
+};
 
-        string codeGen(){
-            return "";
-        }
+class IntTipoVar : public TipoVar{
+    private:
+        string tam;
+
+    public:
+        IntTipoVar();
+        string getTipo();
+        string getSize();
+        string codeGen();
 };

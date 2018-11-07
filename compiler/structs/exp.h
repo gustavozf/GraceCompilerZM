@@ -90,21 +90,8 @@ class TerExp : public Exp{
         Exp *e1, *e2, *e3;
     
     public:
-        TerExp(Exp* expr1, Exp* expr2, Exp* expr3){
-            e1 = expr1; 
-            e2 = expr2; 
-            e3 = expr3;
-        }
-
-        int eval(){
-            return 1;
-        }
-
-        string codeGen(){
-            return "";
-        }
-        
-        string getTipo(){
-            return "";
-        }
+        TerExp(Exp* expr1, Exp* expr2, Exp* expr3);
+        int eval();
+        string codeGen();
+        string getTipo();
 };

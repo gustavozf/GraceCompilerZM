@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdio>
 #include <string>
+#include "./structs/exp.h"
 
 using namespace std;
 
@@ -100,8 +101,8 @@ void yyerror(const char *s);
 %%
 	/* Gramatica */
 programa:
-	programa declaracao {/**/}
-	| declaracao
+	programa declaracao 
+	| declaracao {/**/}
 	;
 
 declaracao:
@@ -294,11 +295,9 @@ opTern:
 	;
 
 expressao:
-	tipoExpressao
-	| "(" expressao ")"
-	| "-" expressao %prec T_NEG_UNAR
+	 "-" expressao %prec T_NEG_UNAR
 	| "!" expressao
-	| expressao "*" expressao  
+	| expressao "*" expressao  {$$ = new MultExp($1, $3);}
 	| expressao "/" expressao
 	| expressao "%" expressao
 	| expressao "+" expressao
@@ -312,13 +311,11 @@ expressao:
 	| expressao "&&" expressao
 	| expressao "||" expressao
 	| opTern
-	;
-
-tipoExpressao:
-	valor
+	| valor
 	| variavel
 	| T_ID "(" ")" // FUNCAO
 	| T_ID "(" cnjExpr ")"
+	| "(" expressao ")"
 	;
 
 variavel:

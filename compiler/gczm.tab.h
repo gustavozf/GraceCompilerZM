@@ -95,7 +95,7 @@ extern int yydebug;
     T_NUM = 305,
     T_LIT_STRING = 306,
     T_NEG_UNAR = 307,
-    THEN = 308
+    T_THEN = 308
   };
 #endif
 

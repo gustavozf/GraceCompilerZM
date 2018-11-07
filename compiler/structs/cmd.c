@@ -1,6 +1,10 @@
 #include "cmd.h"
 
 // ------------------------------------------- IfCmd
+IfCmd::IfCmd(Exp *cnd, Cmd *thn){
+    condicao = cnd; then = thn; els = NULL;
+}
+
 IfCmd::IfCmd(Exp *cnd, Cmd *thn, Cmd *elz){
     condicao = cnd; then = thn; els = elz;
 }

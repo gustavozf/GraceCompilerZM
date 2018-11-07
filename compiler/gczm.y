@@ -225,7 +225,7 @@ atribAgreg:
 
 // ------------------------------ Estruturas Basicas
 cmdIf:
-	T_IF "(" expressao ")" comando %prec T_THEN		{$$ = new IfCmd($3, $5, NULL);}
+	T_IF "(" expressao ")" comando %prec T_THEN		{$$ = new IfCmd($3, $5);}
 	| T_IF "(" expressao ")" comando T_ELSE comando {$$ = new IfCmd($3, $5, $7);}
 	;
 

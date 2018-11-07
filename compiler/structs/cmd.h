@@ -16,6 +16,7 @@ class IfCmd : public Cmd{
         Cmd *then, *els;
 
     public:
+        IfCmd(Exp *cnd, Cmd *thn);
         IfCmd(Exp *cnd, Cmd *thn, Cmd *elz);
         int eval();
         string codeGen();

@@ -118,10 +118,10 @@ decVar:
 	;
 
 tipo:
-	T_BOOL
-	| T_INT
-	| T_STRING
-	| T_STRING "[" expressao "]"
+	T_BOOL							{$$ = $1}
+	| T_INT							{$$ = $1}
+	| T_STRING						{$$ = $1}
+	| T_STRING "[" T_NUM "]"		{/* ? */}
 	;
 
 listaSpecVars:
@@ -142,10 +142,10 @@ decArran:
 	;
 
 valor:
-	T_TRUE
-	| T_FALSE
-	| T_LIT_STRING
-	| T_NUM
+	T_TRUE			{$$ = $1}
+	| T_FALSE		{$$ = $1}
+	| T_LIT_STRING	{$$ = $1}
+	| T_NUM			{$$ = $1}
 	;
 
 // -------------------------------- Declaracao de Subprocessos
@@ -190,21 +190,21 @@ comando:
 	;
 
 cmdSimples:
-	cmdAtrib
-	| cmdIf
-	| cmdWhile
-	| cmdFor
-	| cmdStop
-	| cmdSkip
-	| cmdReturn
-	| cmdChamadaProc
-	| cmdRead
-	| cmdWrite
+	cmdAtrib			{$$ = $1}
+	| cmdIf				{$$ = $1}
+	| cmdWhile			{$$ = $1}
+	| cmdFor			{$$ = $1}
+	| cmdStop			{$$ = $1}
+	| cmdSkip			{$$ = $1}
+	| cmdReturn			{$$ = $1}
+	| cmdChamadaProc	{$$ = $1}
+	| cmdRead			{$$ = $1}
+	| cmdWrite			{$$ = $1}
 	;
 
 // ------------------------------- Atribuicoes
 cmdAtrib:
-	variavel tiposAtrib expressao ";"
+	variavel tiposAtrib expressao ";" {}
 	;
 
 tiposAtrib:
@@ -227,7 +227,7 @@ cmdIf:
 	;
 
 cmdWhile:
-	T_WHILE "(" expressao ")" comando
+	T_WHILE "(" expressao ")" comando {$$ = new WhileCmd($3, $5);}
 	;
 
 cmdFor:
@@ -294,7 +294,10 @@ comandos:
 // ----------------------------------- Expressoes
 
 expressao:
-	 "-" expressao %prec T_NEG_UNAR  			{$$ = new NegUnExp($2);}
+	valor
+	| variavel
+	| "(" expressao ")"
+	| "-" expressao %prec T_NEG_UNAR  			{$$ = new NegUnExp($2);}
 	| "!" expressao					 			{$$ = new NegExp($2);}
 	| expressao "*" expressao		 			{$$ = new AritmExp($1, $3, $2);}
 	| expressao "/" expressao		 			{$$ = new AritmExp($1, $3, $2);}
@@ -310,11 +313,8 @@ expressao:
 	| expressao "&&" expressao		 			{$$ = new LogExp($1, $3, $2);}
 	| expressao "||" expressao		 			{$$ = new LogExp($1, $3, $2);}
 	| expressao "?" expressao ":" expressao		{$$ = new TerExp($1, $3, $5);}
-	| valor
-	| variavel
 	| T_ID "(" ")" 
 	| T_ID "(" cnjExpr ")"
-	| "(" expressao ")"
 	;
 
 variavel:

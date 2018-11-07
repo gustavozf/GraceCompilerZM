@@ -1,6 +1,4 @@
 #include <iostream>
-#include <map>
-#include <list>
 #include <string>
 #include "exp.h"
 
@@ -18,17 +16,20 @@ class IfCmd : public Cmd{
         Cmd *then, *els;
 
     public:
-        IfCmd(Exp *cnd, Cmd *thn, Cmd *elz){
-            condicao = cnd; then = thn; els = elz;
-        }
-
-        int eval(){
-            return 1;
-        }
+        IfCmd(Exp *cnd, Cmd *thn, Cmd *elz);
+        int eval();
+        string codeGen();
 };
 
 class WhileCmd : public Cmd{
-    
+    private:
+        Exp *condicao;
+        Cmd *comando;
+
+    public:
+        WhileCmd(Exp *cnd, Cmd *cmd);
+        int eval();
+        string codeGen();
 };
 
 class ForCmd : public Cmd{

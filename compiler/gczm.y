@@ -313,7 +313,7 @@ expressao:
 	| opTern
 	| valor
 	| variavel
-	| T_ID "(" ")" // FUNCAO
+	| T_ID "(" ")" 
 	| T_ID "(" cnjExpr ")"
 	| "(" expressao ")"
 	;

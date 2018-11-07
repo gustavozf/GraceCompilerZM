@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class Cmd{
+class CmdSimp{
     public:
         virtual int eval() = 0;
         virtual string codeGen() = 0;
@@ -14,7 +14,7 @@ class Cmd{
 
 
 
-class IfCmd{
+class IfCmd : public CmdSimp{
     private:
         Exp *condicao;
         Cmd *then, *els;
@@ -29,36 +29,36 @@ class IfCmd{
         }
 };
 
-class WhileCmd{
+class WhileCmd : public CmdSimp{
     
 };
 
-class ForCmd{
+class ForCmd : public CmdSimp{
     
 };
 
 /*
-class StopCmd{
+class StopCmd : public CmdSimp{
     
 };
 
-class SkipCmd{
+class SkipCmd : public CmdSimp{
     
 };
 
-class RetCmd{
+class RetCmd : public CmdSimp{
     
 };
 
-class ProcCmd{
+class ProcCmd : public CmdSimp{
 
 };
 
-class ReadCmd{
+class ReadCmd : public CmdSimp{
 
 };
 
-class WriteCmd{
+class WriteCmd : public CmdSimp{
 
 };  
 */

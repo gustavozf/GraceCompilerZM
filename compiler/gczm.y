@@ -290,27 +290,24 @@ comandos:
 	;
 
 // ----------------------------------- Expressoes
-opTern:
-	expressao "?" expressao ":" expressao
-	;
 
 expressao:
-	 "-" expressao %prec T_NEG_UNAR
-	| "!" expressao
-	| expressao "*" expressao  {$$ = new MultExp($1, $3);}
-	| expressao "/" expressao
-	| expressao "%" expressao
-	| expressao "+" expressao
-	| expressao "-" expressao
-	| expressao "<" expressao
-	| expressao "<=" expressao
-	| expressao ">" expressao
-	| expressao ">=" expressao
-	| expressao "==" expressao
-	| expressao "!=" expressao
-	| expressao "&&" expressao
-	| expressao "||" expressao
-	| opTern
+	 "-" expressao %prec T_NEG_UNAR  			{$$ = new NegUnExp($2, $1);}
+	| "!" expressao					 			{$$ = new NegExp($2, $1);}
+	| expressao "*" expressao		 			{$$ = new AritmExp($1, $3, $2);}
+	| expressao "/" expressao		 			{$$ = new AritmExp($1, $3, $2);}
+	| expressao "%" expressao		 			{$$ = new AritmExp($1, $3, $2);}
+	| expressao "+" expressao		 			{$$ = new AritmExp($1, $3, $2);}
+	| expressao "-" expressao		 			{$$ = new AritmExp($1, $3, $2);}
+	| expressao "<" expressao		 			{$$ = new RelExp($1, $3, $2);}
+	| expressao "<=" expressao  	 			{$$ = new RelExp($1, $3, $2);}
+	| expressao ">" expressao		 			{$$ = new RelExp($1, $3, $2);}
+	| expressao ">=" expressao		 			{$$ = new RelExp($1, $3, $2);}
+	| expressao "==" expressao		 			{$$ = new IgExp($1, $3, $2);}
+	| expressao "!=" expressao		 			{$$ = new IgExp($1, $3, $2);}
+	| expressao "&&" expressao		 			{$$ = new LogExp($1, $3, $2);}
+	| expressao "||" expressao		 			{$$ = new LogExp($1, $3, $2);}
+	| expressao "?" expressao ":" expressao		{$$ = new TerExp($1, $3, $5, $2, $4);}
 	| valor
 	| variavel
 	| T_ID "(" ")" // FUNCAO

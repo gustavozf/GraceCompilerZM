@@ -33,6 +33,7 @@ void yyerror(const char *s);
 	TipoVar *tipoVar;
 	Cmd *cmd;
 	Exp *exp;
+	SpecVar *specvar;
 	list<exp *> *cnjExp;
 	list<cmd *> *cnjCmd;
 }
@@ -113,6 +114,7 @@ void yyerror(const char *s);
 %type <cnjExp> cnjExpr
 %type <exp> expressao
 %type <cnjCmd> comandos
+%type <specvar> specVar
 
 %%
 	/* Gramatica */
@@ -145,8 +147,8 @@ listaSpecVars:
 	;
 
 specVar:
-	T_ID 										 
-	| T_ID "=" expressao 						 
+	T_ID 											{ $$ = new SpecVarSimples(); }					 
+	| T_ID "=" expressao 						 	{ $$ = new SpecVarSimples($3); }
 	| T_ID "[" expressao "]" 					 
 	| T_ID "[" expressao "]" "=" "{" cnjExpr "}"
 	;

@@ -45,7 +45,7 @@ class IntTipoVar : public TipoVar{
         string codeGen();
 };
 
-class DecVar{
+class Spec{
     private:
         string id;
 
@@ -53,7 +53,7 @@ class DecVar{
         virtual string codeGen() = 0;
 }
 
-class DecVarSimples : public DecVar{
+class SpecVarSimples : public SpecVar{
     private:
         Exp *inicializacao;
     

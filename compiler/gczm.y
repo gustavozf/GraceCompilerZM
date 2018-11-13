@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdio>
 #include <string>
+#include <list>
 
 #include "./structs/exp.h"
 #include "./structs/cmd.h"
@@ -28,59 +29,62 @@ void yyerror(const char *s);
    Utilizada pela ferramenta
 */
 %union {
-	int ival;   // Inteiro
-	float fval; // Float
 	char *sval; // String
+	TipoVar *tipoVar;
+	Cmd *cmd;
+	Exp *exp;
+	list<exp *> *cnjExp;
+	list<cmd *> *cnjCmd;
 }
 
 /* Tokens */
 // constant-strings
-%token T_BOOL
-%token T_INT
-%token T_STRING
-%token T_IF
-%token T_ELSE
-%token T_FOR
-%token T_WHILE
-%token T_WRITE
-%token T_READ
-%token T_DEF
-%token T_RETURN
-%token T_VAR
-%token T_SKIP
-%token T_STOP
-%token T_TRUE
-%token T_FALSE
-%token T_ABRE_PARENTESES  "("
-%token T_FECHA_PARENTESES ")"
-%token T_ABRE_COLCHETES   "["
-%token T_FECHA_COLCHETES  "]"
-%token T_ABRE_CHAVES      "{"
-%token T_FECHA_CHAVES     "}"
-%token T_VIRGULA          ","
-%token T_PONTO_VIRGULA    ";"
-%token T_ADICAO           "+"
-%token T_SUBTRACAO        "-"
-%token T_MULTIPLICACAO    "*"
-%token T_DIVISAO          "/"
-%token T_MODULO           "%"
-%token T_EQ_LOGICA        "=="
-%token T_DIF_LOGICA       "!="
-%token T_MAIOR 		      ">"
-%token T_MAIOR_IGUAL      ">="
-%token T_MENOR            "<"
-%token T_MENOR_IGUAL      "<="
-%token T_OR               "||"
-%token T_AND              "&&"
-%token T_NOT              "!"
-%token T_ATRIBUICAO       "="
-%token T_ATRIB_SOMA       "+="
-%token T_ATRIB_SUB        "-="
-%token T_ATRIB_MULT       "*="
-%token T_ATRIB_DIV        "/="
-%token T_ATRIB_MOD        "%="
-%token T_COND_OP_TER      "?"
-%token T_DOIS_PON         ":"
+%token <sval> T_BOOL
+%token <sval> T_INT
+%token <sval> T_STRING
+%token <sval> T_IF
+%token <sval> T_ELSE
+%token <sval> T_FOR
+%token <sval> T_WHILE
+%token <sval> T_WRITE
+%token <sval> T_READ
+%token <sval> T_DEF
+%token <sval> T_RETURN
+%token <sval> T_VAR
+%token <sval> T_SKIP
+%token <sval> T_STOP
+%token <sval> T_TRUE
+%token <sval> T_FALSE
+%token <sval> T_ABRE_PARENTESES  "("
+%token <sval> T_FECHA_PARENTESES ")"
+%token <sval> T_ABRE_COLCHETES   "["
+%token <sval> T_FECHA_COLCHETES  "]"
+%token <sval> T_ABRE_CHAVES      "{"
+%token <sval> T_FECHA_CHAVES     "}"
+%token <sval> T_VIRGULA          ","
+%token <sval> T_PONTO_VIRGULA    ";"
+%token <sval> T_ADICAO           "+"
+%token <sval> T_SUBTRACAO        "-"
+%token <sval> T_MULTIPLICACAO    "*"
+%token <sval> T_DIVISAO          "/"
+%token <sval> T_MODULO           "%"
+%token <sval> T_EQ_LOGICA        "=="
+%token <sval> T_DIF_LOGICA       "!="
+%token <sval> T_MAIOR 		      ">"
+%token <sval> T_MAIOR_IGUAL      ">="
+%token <sval> T_MENOR            "<"
+%token <sval> T_MENOR_IGUAL      "<="
+%token <sval> T_OR               "||"
+%token <sval> T_AND              "&&"
+%token <sval> T_NOT              "!"
+%token <sval> T_ATRIBUICAO       "="
+%token <sval> T_ATRIB_SOMA       "+="
+%token <sval> T_ATRIB_SUB        "-="
+%token <sval> T_ATRIB_MULT       "*="
+%token <sval> T_ATRIB_DIV        "/="
+%token <sval> T_ATRIB_MOD        "%="
+%token <sval> T_COND_OP_TER      "?"
+%token <sval> T_DOIS_PON         ":"
 
 // tokens que assumem valores
 // %token <TIPO> <NOME>
@@ -88,6 +92,7 @@ void yyerror(const char *s);
 %token <sval> T_NUM
 %token <sval> T_LIT_STRING
 
+/* Ordem de precedencia */
 %right T_NEG_UNAR
 %right T_NOT
 %left T_MULTIPLICACAO T_DIVISAO T_MODULO 
@@ -100,6 +105,14 @@ void yyerror(const char *s);
 %right T_COND_OP_TER T_DOIS_PON
 
 %right T_THEN T_ELSE
+
+/* Declaracao de Tipos */
+%type <tipoVar> tipo
+%type <sval> valor tiposAtrib atribAgreg
+%type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip cmdReturn cmdChamadaProc cmdRead cmdWrite comando
+%type <cnjExp> cnjExpr
+%type <exp> expressao
+%type <cnjCmd> comandos
 
 %%
 	/* Gramatica */
@@ -135,19 +148,19 @@ specVar:
 	T_ID 										 
 	| T_ID "=" expressao 						 
 	| T_ID "[" expressao "]" 					 
-	| T_ID "[" expressao "]" "=" "{" decArran "}"
+	| T_ID "[" expressao "]" "=" "{" cnjExpr "}"
 	;
 
-decArran:
-	decArran "," expressao
-	| expressao
+cnjExpr:
+	cnjExpr "," expressao { $$ = $1; $$->push_back($3); }
+	| expressao 		  { $$ = new list<exp *>(); $$->push_back($1); }
 	;
 
 valor:
-	T_TRUE			{$$ = $1}
-	| T_FALSE		{$$ = $1}
-	| T_LIT_STRING	{$$ = $1}
-	| T_NUM			{$$ = $1}
+	T_TRUE			{$$ = $1;}
+	| T_FALSE		{$$ = $1;}
+	| T_LIT_STRING	{$$ = $1;}
+	| T_NUM			{$$ = $1;}
 	;
 
 // -------------------------------- Declaracao de Subprocessos
@@ -192,16 +205,16 @@ comando:
 	;
 
 cmdSimples:
-	cmdAtrib			{$$ = $1}
-	| cmdIf				{$$ = $1}
-	| cmdWhile			{$$ = $1}
-	| cmdFor			{$$ = $1}
-	| cmdStop			{$$ = $1}
-	| cmdSkip			{$$ = $1}
-	| cmdReturn			{$$ = $1}
-	| cmdChamadaProc	{$$ = $1}
-	| cmdRead			{$$ = $1}
-	| cmdWrite			{$$ = $1}
+	cmdAtrib			{$$ = $1;}
+	| cmdIf				{$$ = $1;}
+	| cmdWhile			{$$ = $1;}
+	| cmdFor			{$$ = $1;}
+	| cmdStop			{$$ = $1;}
+	| cmdSkip			{$$ = $1;}
+	| cmdReturn			{$$ = $1;}
+	| cmdChamadaProc	{$$ = $1;}
+	| cmdRead			{$$ = $1;}
+	| cmdWrite			{$$ = $1;}
 	;
 
 // ------------------------------- Atribuicoes
@@ -268,11 +281,6 @@ cmdChamadaProc:
 	| T_ID "(" cnjExpr ")" ";"
 	| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
-	;
-
-cnjExpr:
-	cnjExpr "," expressao
-	| expressao
 	;
 
 cmdRead:

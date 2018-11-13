@@ -29,3 +29,33 @@ int WhileCmd::eval(){
 string WhileCmd::codeGen(){
     return "";
 }
+
+//-------------------------------------------- StopSkipCmd
+StopSkipCmd::StopSkipCmd(string comando){
+    cmd = comando;
+}
+
+int StopSkipCmd::eval(){
+    return 1;
+}
+
+string StopSkipCmd::codeGen(){
+    return "";
+}
+
+//-------------------------------------------- RetCmd
+RetCmd::RetCmd(Exp *ret){
+    retorno = ret;
+}
+
+RetCmd::RetCmd(){
+    retorno = NULL;
+}
+
+int RetCmd::eval(){
+    return 1;
+}
+
+string RetCmd::codeGen(){
+    return "";
+}

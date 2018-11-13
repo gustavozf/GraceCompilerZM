@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "exp.h"
 
 using namespace std;
 
@@ -43,3 +44,22 @@ class IntTipoVar : public TipoVar{
         string getSize();
         string codeGen();
 };
+
+class DecVar{
+    private:
+        string id;
+
+    public:
+        virtual string codeGen() = 0;
+}
+
+class DecVarSimples : public DecVar{
+    private:
+        Exp *inicializacao;
+    
+    public:
+        DecVarSimples(Exp *ini);
+        DecVarSimples();
+        string codeGen();
+        int eval();
+}

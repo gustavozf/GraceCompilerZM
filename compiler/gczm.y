@@ -259,18 +259,18 @@ atrib-passo:
 	;
 
 cmdStop:
-	T_STOP ";"
+	T_STOP ";"  {$$ = new StopSkipCmd($1);}
 	| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 cmdSkip:
-	T_SKIP ";"
+	T_SKIP ";"  {$$ = new StopSkipCmd($1);}
 	| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;
 
 cmdReturn:
-	T_RETURN ";"
-	| T_RETURN expressao ";"
+	T_RETURN ";"				{$$ = new RetCmd();}
+	| T_RETURN expressao ";"	{$$ - new RetCmd($2);}
 	| T_RETURN 					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
 	;

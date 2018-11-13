@@ -54,3 +54,14 @@ string IntTipoVar::getSize(){
 string IntTipoVar::codeGen(){
     return "";
 }
+
+//------------------------------------ DecVarSimples
+DecVarSimples::DecVarSimples(Exp *ini){
+    inicializacao = ini;
+}
+
+DecVarSimples::DecVarSimples(){
+    inicializacao = NULL;
+}
+
+//

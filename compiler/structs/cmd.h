@@ -37,18 +37,29 @@ class ForCmd : public Cmd{
     
 };
 
-/*
-class StopCmd : public Cmd{
-    
+class StopSkipCmd : public Cmd{
+    private:
+        string cmd;
+
+    public:
+        StopSkipCmd(string comando);
+        int eval();
+        string codeGen();
 };
 
-class SkipCmd : public Cmd{
-    
-};
 
 class RetCmd : public Cmd{
-    
+    private:
+        Exp *retorno;
+
+    public:
+        RetCmd(Exp *ret);
+        RetCmd();
+        int eval();
+        string codeGen();    
 };
+
+/*
 
 class ProcCmd : public Cmd{
 

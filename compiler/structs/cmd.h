@@ -75,25 +75,36 @@ class AtribCmd : public Cmd{
         string codeGen();  
 };
 
-class Bloco : public Cmd{
-    private:
-        //list<> declaracoes;
-        list<Cmd *> comandos;
-
-
-};
-
-#endif
-/*
-class ProcCmd : public Cmd{
-
-};
-
 class ReadCmd : public Cmd{
-
+    private:
+        Var* var;
+    public:
+        ReadCmd(Var* varia);
+        int eval();
+        string codeGen();
 };
 
 class WriteCmd : public Cmd{
-
+    private:
+        list<Exp *> *cnjExp;
+    public:
+        WriteCmd(list<Exp *> *cnExp);
+        int eval();
+        string codeGen();
 };  
+
+#endif
+
+/*
+class Bloco : public Cmd{
+    private:
+        //list<> declaracoes;
+        list<Cmd *> *comandos;
+
+
+};
+
+class ProcCmd : public Cmd{
+
+};
 */

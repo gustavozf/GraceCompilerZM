@@ -74,3 +74,29 @@ int AtribCmd::eval(){
 string AtribCmd::codeGen(){
     return ""
 }
+
+// --------------------------------------------WriteCmd
+WriteCmd::WriteCmd(list<Exp *> *cnExp;){
+    cnjExp = cnExp;
+}
+
+int WriteCmd::eval(){
+    return 1;
+}
+
+string WriteCmd::codeGen(){
+    return ""
+}
+
+// --------------------------------------------ReadCmd
+ReadCmd::ReadCmd(Var* varia){
+    var = varia;
+}
+
+int ReadCmd::eval(){
+    return 1;
+}
+
+string ReadCmd::codeGen(){
+    return ""
+}

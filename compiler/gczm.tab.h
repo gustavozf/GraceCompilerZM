@@ -39,6 +39,18 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 20 "gczm.y" /* yacc.c:1909  */
+
+	#include <list>
+	#include <string>
+
+	#include "./structs/exp.h"
+	#include "./structs/cmd.h"
+	#include "./structs/dec.h"
+	#include "./structs/prog.h"
+
+#line 54 "gczm.tab.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -104,7 +116,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 30 "gczm.y" /* yacc.c:1909  */
+#line 33 "gczm.y" /* yacc.c:1909  */
 
 	char *sval; // String
 	
@@ -121,7 +133,7 @@ union YYSTYPE
 	list<SpecVar *> *cnjSpecVar;
 
 
-#line 125 "gczm.tab.h" /* yacc.c:1909  */
+#line 137 "gczm.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

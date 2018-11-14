@@ -2,13 +2,6 @@
 %{
 /* Declaracoes */
 #include <iostream>
-#include <list>
-#include <string>
-
-#include "./structs/exp.h"
-#include "./structs/cmd.h"
-#include "./structs/dec.h"
-#include "./structs/prog.h"
 
 using namespace std;
 
@@ -23,6 +16,16 @@ extern int num_carac;
 // Tratar Erros (aparentemente obrigatorio)
 void yyerror(const char *s);
 %}
+
+%code requires {
+	#include <list>
+	#include <string>
+
+	#include "./structs/exp.h"
+	#include "./structs/cmd.h"
+	#include "./structs/dec.h"
+	#include "./structs/prog.h"
+}
 
 /* Uniao que representa o valores basicos possiveis.
    Utilizada pela ferramenta
@@ -294,12 +297,12 @@ cmdChamadaProc:
 	;
 
 cmdRead:
-	T_READ variavel ";"
-	//| T_READ variavel 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	T_READ variavel ";"		{ $$ = new ReadCmd($2); }
+	//| T_READ variavel 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdWrite:
-	T_WRITE cnjExpr ";"
+	T_WRITE cnjExpr ";"		{ $$ = new WriteCmd($2); }
 	//| T_WRITE cnjExpr		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "exp.h"
+#include "prog.h"
 
 using namespace std;
 
@@ -62,17 +63,28 @@ class RetCmd : public Cmd{
         string codeGen();    
 };
 
-#endif
-/*
 class AtribCmd : public Cmd{
     private:
         string type;
         Exp *exp;
+        Var *var;
 
-    
-}
+    public:
+        AtribCmd(Var *varia, string typ, Exp *ex);
+        int eval();
+        string codeGen();  
+};
+
+class Bloco : public Cmd{
+    private:
+        //list<> declaracoes;
+        list<Cmd *> comandos;
 
 
+};
+
+#endif
+/*
 class ProcCmd : public Cmd{
 
 };

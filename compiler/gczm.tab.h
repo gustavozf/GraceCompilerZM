@@ -104,7 +104,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 32 "gczm.y" /* yacc.c:1909  */
+#line 30 "gczm.y" /* yacc.c:1909  */
 
 	char *sval; // String
 	
@@ -112,14 +112,16 @@ union YYSTYPE
 	TipoVar *tipoVar;
 	Cmd *cmd;
 	Exp *exp;
-	Var* var;
-	SpecVar *specvar;
+	Var *var;
+	SpecVar *specVar;
 
 	// Listas
 	list<Exp *> *cnjExp;
 	list<Cmd *> *cnjCmd;
+	list<SpecVar *> *cnjSpecVar;
 
-#line 123 "gczm.tab.h" /* yacc.c:1909  */
+
+#line 125 "gczm.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

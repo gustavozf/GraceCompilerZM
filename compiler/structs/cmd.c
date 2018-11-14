@@ -59,3 +59,18 @@ int RetCmd::eval(){
 string RetCmd::codeGen(){
     return "";
 }
+
+// ----------------------------------------------AtribCmd
+AtribCmd::AtribCmd(Var *varia, string typ, Exm *ex){
+    var = varia;
+    type = typ;
+    exp = ex;
+}
+
+int AtribCmd::eval(){
+    return 1;
+}
+
+string AtribCmd::codeGen(){
+    return ""
+}

@@ -1,9 +1,9 @@
+%error-verbose
 %{
 /* Declaracoes */
 #include <iostream>
-#include <cstdio>
-#include <string>
 #include <list>
+#include <string>
 
 #include "./structs/exp.h"
 #include "./structs/cmd.h"
@@ -24,8 +24,6 @@ extern int num_carac;
 void yyerror(const char *s);
 %}
 
-%error-verbose
-
 /* Uniao que representa o valores basicos possiveis.
    Utilizada pela ferramenta
 */
@@ -36,12 +34,14 @@ void yyerror(const char *s);
 	TipoVar *tipoVar;
 	Cmd *cmd;
 	Exp *exp;
-	Var* var;
-	SpecVar *specvar;
+	Var *var;
+	SpecVar *specVar;
 
 	// Listas
 	list<Exp *> *cnjExp;
 	list<Cmd *> *cnjCmd;
+	list<SpecVar *> *cnjSpecVar;
+
 }
 
 /* Tokens */
@@ -116,12 +116,13 @@ void yyerror(const char *s);
 /* Declaracao de Tipos */
 %type <tipoVar> tipo
 %type <sval> valor tiposAtrib atribAgreg
-%type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip cmdReturn cmdChamadaProc cmdRead cmdWrite comando
+%type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco
 %type <cnjExp> cnjExpr
 %type <exp> expressao
 %type <cnjCmd> comandos
 %type <var> variavel
-%type <specvar> specVar
+%type <specVar> specVar
+%type <cnjSpecVar> listaSpecVars
 
 %%
 	/* Gramatica */
@@ -138,7 +139,7 @@ declaracao:
 // ------------------------------- Declaracao de Variaveis
 decVar:
 	T_VAR listaSpecVars ":" tipo ";"
-	| T_VAR listaSpecVars ":" tipo		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_VAR listaSpecVars ":" tipo		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tipo:
@@ -149,8 +150,8 @@ tipo:
 	;
 
 listaSpecVars:
-	| listaSpecVars "," specVar
-	| specVar
+	 listaSpecVars "," specVar { $$ = $1; $$->push_back($3); }
+	| specVar					{ $$ = new list<SpecVar *>(); $$->push_back($1);}
 	;
 
 specVar:
@@ -228,8 +229,8 @@ cmdSimples:
 
 // ------------------------------- Atribuicoes
 cmdAtrib:
-	variavel tiposAtrib expressao ";"
-	| variavel tiposAtrib expressao 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	variavel tiposAtrib expressao ";" 	{ $$ = new AtribCmd($1, $2, $3);}
+	//| variavel tiposAtrib expressao 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tiposAtrib:
@@ -269,37 +270,37 @@ atrib-passo:
 
 cmdStop:
 	T_STOP ";"  {$$ = new StopSkipCmd($1);}
-	| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdSkip:
 	T_SKIP ";"  {$$ = new StopSkipCmd($1);}
-	| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdReturn:
 	T_RETURN ";"				{$$ = new RetCmd();}
 	| T_RETURN expressao ";"	{$$ = new RetCmd($2);}
-	| T_RETURN 					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
-	| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_RETURN 					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
 	T_ID "(" ")" ";"
 	| T_ID "(" cnjExpr ")" ";"
-	| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
-	| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdRead:
 	T_READ variavel ";"
-	| T_READ variavel 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_READ variavel 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdWrite:
 	T_WRITE cnjExpr ";"
-	| T_WRITE cnjExpr		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_WRITE cnjExpr		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ----------------------------------- Blocos
@@ -307,9 +308,9 @@ bloco:
 	  "{" declaracoes "}"
 	| "{" comandos "}"
 	| "{" declaracoes comandos "}"
-	| "{" declaracoes 						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	| "{" comandos							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	| "{"declaracoes comandos				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{" declaracoes 						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{" comandos							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{"declaracoes comandos				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	;
 
 declaracoes: 
@@ -318,8 +319,8 @@ declaracoes:
 	;
 
 comandos: 
-	  comandos comando
-	| comando
+	  comandos comando	{ $$ = $1; $$->push_back($2); }
+	| comando			{ $$ = new list<Cmd *>(); $$->push_back($1);}
 	;
 
 // ----------------------------------- Expressoes

@@ -8,6 +8,7 @@
 #include "./structs/exp.h"
 #include "./structs/cmd.h"
 #include "./structs/dec.h"
+#include "./structs/prog.h"
 
 using namespace std;
 
@@ -30,12 +31,17 @@ void yyerror(const char *s);
 */
 %union {
 	char *sval; // String
+	
+	// Nos AST
 	TipoVar *tipoVar;
 	Cmd *cmd;
 	Exp *exp;
+	Var* var;
 	SpecVar *specvar;
-	list<exp *> *cnjExp;
-	list<cmd *> *cnjCmd;
+
+	// Listas
+	list<Exp *> *cnjExp;
+	list<Cmd *> *cnjCmd;
 }
 
 /* Tokens */
@@ -114,6 +120,7 @@ void yyerror(const char *s);
 %type <cnjExp> cnjExpr
 %type <exp> expressao
 %type <cnjCmd> comandos
+%type <var> variavel
 %type <specvar> specVar
 
 %%
@@ -131,7 +138,7 @@ declaracao:
 // ------------------------------- Declaracao de Variaveis
 decVar:
 	T_VAR listaSpecVars ":" tipo ";"
-	| T_VAR listaSpecVars ":" tipo		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| T_VAR listaSpecVars ":" tipo		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tipo:
@@ -155,7 +162,7 @@ specVar:
 
 cnjExpr:
 	cnjExpr "," expressao { $$ = $1; $$->push_back($3); }
-	| expressao 		  { $$ = new list<exp *>(); $$->push_back($1); }
+	| expressao 		  { $$ = new list<Exp *>(); $$->push_back($1); }
 	;
 
 valor:
@@ -222,7 +229,7 @@ cmdSimples:
 // ------------------------------- Atribuicoes
 cmdAtrib:
 	variavel tiposAtrib expressao ";"
-	| variavel tiposAtrib expressao 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| variavel tiposAtrib expressao 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tiposAtrib:
@@ -262,37 +269,37 @@ atrib-passo:
 
 cmdStop:
 	T_STOP ";"  {$$ = new StopSkipCmd($1);}
-	| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdSkip:
 	T_SKIP ";"  {$$ = new StopSkipCmd($1);}
-	| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdReturn:
 	T_RETURN ";"				{$$ = new RetCmd();}
-	| T_RETURN expressao ";"	{$$ - new RetCmd($2);}
-	| T_RETURN 					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
-	| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| T_RETURN expressao ";"	{$$ = new RetCmd($2);}
+	| T_RETURN 					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
 	T_ID "(" ")" ";"
 	| T_ID "(" cnjExpr ")" ";"
-	| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
-	| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdRead:
 	T_READ variavel ";"
-	| T_READ variavel 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| T_READ variavel 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdWrite:
 	T_WRITE cnjExpr ";"
-	| T_WRITE cnjExpr		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n"}
+	| T_WRITE cnjExpr		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ----------------------------------- Blocos
@@ -300,9 +307,9 @@ bloco:
 	  "{" declaracoes "}"
 	| "{" comandos "}"
 	| "{" declaracoes comandos "}"
-	| "{" declaracoes 						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n"}
-	| "{" comandos							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n"}
-	| "{"declaracoes comandos				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n"}
+	| "{" declaracoes 						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	| "{" comandos							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	| "{"declaracoes comandos				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	;
 
 declaracoes: 
@@ -321,29 +328,29 @@ expressao:
 	valor
 	| variavel
 	| "(" expressao ")"
-	| "-" expressao %prec T_NEG_UNAR  			{$$ = new NegUnExp($2);}
-	| "!" expressao					 			{$$ = new NegExp($2);}
-	| expressao "*" expressao		 			{$$ = new AritmExp($1, $3, $2);}
-	| expressao "/" expressao		 			{$$ = new AritmExp($1, $3, $2);}
-	| expressao "%" expressao		 			{$$ = new AritmExp($1, $3, $2);}
-	| expressao "+" expressao		 			{$$ = new AritmExp($1, $3, $2);}
-	| expressao "-" expressao		 			{$$ = new AritmExp($1, $3, $2);}
-	| expressao "<" expressao		 			{$$ = new RelExp($1, $3, $2);}
-	| expressao "<=" expressao  	 			{$$ = new RelExp($1, $3, $2);}
-	| expressao ">" expressao		 			{$$ = new RelExp($1, $3, $2);}
-	| expressao ">=" expressao		 			{$$ = new RelExp($1, $3, $2);}
-	| expressao "==" expressao		 			{$$ = new IgExp($1, $3, $2);}
-	| expressao "!=" expressao		 			{$$ = new IgExp($1, $3, $2);}
-	| expressao "&&" expressao		 			{$$ = new LogExp($1, $3, $2);}
-	| expressao "||" expressao		 			{$$ = new LogExp($1, $3, $2);}
-	| expressao "?" expressao ":" expressao		{$$ = new TerExp($1, $3, $5);}
+	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2);			}
+	| "!" expressao					 			{	$$ = new NegExp($2);			}
+	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
+	| expressao "/" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
+	| expressao "%" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
+	| expressao "+" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
+	| expressao "-" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
+	| expressao "<" expressao		 			{	$$ = new RelExp($1, $3, $2);	}
+	| expressao "<=" expressao  	 			{	$$ = new RelExp($1, $3, $2);	}
+	| expressao ">" expressao		 			{	$$ = new RelExp($1, $3, $2);	}
+	| expressao ">=" expressao		 			{	$$ = new RelExp($1, $3, $2);	}
+	| expressao "==" expressao		 			{	$$ = new IgExp($1, $3, $2);	}
+	| expressao "!=" expressao		 			{	$$ = new IgExp($1, $3, $2);	}
+	| expressao "&&" expressao		 			{	$$ = new LogExp($1, $3, $2);	}
+	| expressao "||" expressao		 			{	$$ = new LogExp($1, $3, $2);	}
+	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5);	}
 	| T_ID "(" ")" 
 	| T_ID "(" cnjExpr ")"
 	;
 
 variavel:
-	T_ID
-	| T_ID "[" expressao "]"
+	T_ID						{ $$ = new VarSimples($1);     }
+	| T_ID "[" expressao "]"	{ $$ = new VarArranjo($1, $3); }
 	;
 
 %%

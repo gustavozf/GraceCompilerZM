@@ -4,6 +4,9 @@
 
 using namespace std;
 
+#ifndef DEC_H
+#define DEC_H
+
 class TipoVar{
     public:
         virtual string getTipo() = 0;
@@ -45,21 +48,23 @@ class IntTipoVar : public TipoVar{
         string codeGen();
 };
 
-class Spec{
+class SpecVar {
     private:
         string id;
 
     public:
         virtual string codeGen() = 0;
-}
+};
 
-class SpecVarSimples : public SpecVar{
+class SpecVarSimples : public SpecVar {
     private:
         Exp *inicializacao;
     
     public:
-        DecVarSimples(Exp *ini);
-        DecVarSimples();
+        SpecVarSimples(Exp *ini);
+        SpecVarSimples();
         string codeGen();
         int eval();
-}
+};
+
+#endif

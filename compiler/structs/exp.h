@@ -3,6 +3,9 @@
 
 using namespace std;
 
+#ifndef EXP_H
+#define EXP_H
+
 class Exp{
     public:
         // Pega o tipo da expressao
@@ -95,3 +98,5 @@ class TerExp : public Exp{
         string codeGen();
         string getTipo();
 };
+
+#endif

@@ -4,6 +4,9 @@
 
 using namespace std;
 
+#ifndef CMD_H
+#define CMD_H
+
 class Cmd{
     public:
         virtual int eval() = 0;
@@ -59,7 +62,16 @@ class RetCmd : public Cmd{
         string codeGen();    
 };
 
+#endif
 /*
+class AtribCmd : public Cmd{
+    private:
+        string type;
+        Exp *exp;
+
+    
+}
+
 
 class ProcCmd : public Cmd{
 

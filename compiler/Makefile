@@ -22,7 +22,7 @@ $(NOME).tab.c: $(NOME).y
 
 clean:
 	rm lex.yy.c
-	rm $(NOME)
-	rm $(NOME).tab.c
 	rm $(NOME).tab.h
+	rm $(NOME).tab.c
 	rm $(NOME).output
+	rm $(NOME)

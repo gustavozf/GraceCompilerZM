@@ -56,12 +56,55 @@ string IntTipoVar::codeGen(){
 }
 
 //------------------------------------ DecVarSimples
-DecVarSimples::DecVarSimples(Exp *ini){
+SpecVarSimples::SpecVarSimples(string id1, Exp *ini){
     inicializacao = ini;
+    id = id1;
 }
 
-DecVarSimples::DecVarSimples(){
+SpecVarSimples::SpecVarSimples(string id1){
     inicializacao = NULL;
+    id = id1;
 }
 
-//
+string SpecVarSimples::codeGen(){
+    return "";
+}
+
+int SpecVarSimples::eval(){
+    return 1;
+}
+
+// ------------------------------------- SpecVarArranjo
+SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini){
+    inicializacao = ini;
+    tam = tama;
+    id = id1;
+}
+
+SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama){
+    inicializacao = NULL;
+    tam = tama;
+    id = id1;
+}
+
+string SpecVarArranjo::codeGen(){
+    return "";
+}
+
+int SpecVarArranjo::eval(){
+    return 1;
+}
+
+// ---------------------------------- DeclVar
+DeclVar::DeclVar(list<SpecVar *> *lista, TipoVar *type){
+    listaSpecVar = lista;
+    tipo = type;
+}
+
+string DeclVar::codeGen(){
+    return "";
+}
+
+int DeclVar::eval(){
+    return 1;
+}

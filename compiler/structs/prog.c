@@ -6,10 +6,10 @@ VarSimples::VarSimples(string idName){
     id = idName;
 }
 int VarSimples::eval(){
-    return 1
+    return 1;
 }
 string VarSimples::codeGen(){
-    return ""
+    return "";
 }
 
 
@@ -22,5 +22,5 @@ int VarArranjo::eval(){
     return 1;
 }
 string VarArranjo::codeGen(){
-    return ""
+    return "";
 }

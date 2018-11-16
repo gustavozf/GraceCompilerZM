@@ -8,7 +8,7 @@ using namespace std;
 #define PROG_H
 
 class Var{
-    private:
+    protected:
         string id;
 
     public:

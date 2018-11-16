@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <list>
 #include "exp.h"
 #include "prog.h"
 
@@ -38,7 +39,14 @@ class WhileCmd : public Cmd{
 };
 
 class ForCmd : public Cmd{
-    
+    private:
+        Exp *exp, *atribIni, *atribPasso;;
+        Cmd* comando;
+
+    public:
+        ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman);
+        int eval();
+        string codeGen();
 };
 
 class StopSkipCmd : public Cmd{

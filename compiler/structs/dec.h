@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <list>
 #include "exp.h"
 
 using namespace std;
@@ -49,11 +50,12 @@ class IntTipoVar : public TipoVar{
 };
 
 class SpecVar {
-    private:
+    protected:
         string id;
 
     public:
         virtual string codeGen() = 0;
+        virtual int eval() = 0;
 };
 
 class SpecVarSimples : public SpecVar {
@@ -61,8 +63,36 @@ class SpecVarSimples : public SpecVar {
         Exp *inicializacao;
     
     public:
-        SpecVarSimples(Exp *ini);
-        SpecVarSimples();
+        SpecVarSimples(string id1, Exp *ini);
+        SpecVarSimples(string id1);
+        string codeGen();
+        int eval();
+};
+
+class SpecVarArranjo : public SpecVar {
+    private:
+        Exp *tam;
+        list<Exp *> *inicializacao;
+    
+    public:
+        SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini);
+        SpecVarArranjo(string id1, Exp *tama);
+        string codeGen();
+        int eval();
+};
+
+class Decl{
+    public:
+        string codeGen();
+        int eval();
+};
+
+class DeclVar : public Decl{
+    private:
+        list<SpecVar *> *listaSpecVar;
+        TipoVar *tipo;
+    public:
+        DeclVar(list<SpecVar *> *lista, TipoVar *type);
         string codeGen();
         int eval();
 };

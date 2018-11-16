@@ -121,3 +121,28 @@ string TerExp::codeGen(){
 string TerExp::getTipo(){
     return "";
 }
+
+// ---------------------------------------------------------- AtribFor
+AtribFor::AtribFor(string id1, string typ, string nume){
+    id = id1;
+    type = typ;
+    num = nume;
+}
+
+AtribFor::AtribFor(string id1, string nume){
+    id = id1;
+    type = "=";
+    num = nume;
+}
+
+int AtribFor::eval(){
+    return 1;
+}
+
+string AtribFor::codeGen(){
+    return "";
+}
+
+string AtribFor::getTipo(){
+    return "";
+}

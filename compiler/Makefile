@@ -1,13 +1,13 @@
 # Nome dos arquivos
 NOME = gczm
 CC = g++
-
+HEADERS = ./structs/cmd.o ./structs/exp.o ./structs/prog.o ./structs/dec.o
 # ===============================================
 # Nao eh necessario alterar as regras abaixo
 # ===============================================
 
 all: $(NOME).tab.c lex.yy.c
-	$(CC) $(NOME).tab.c lex.yy.c -ll -o $(NOME)
+	$(CC) $(NOME).tab.c lex.yy.c -ll -o $(NOME) $(HEADERS)
 
 # Flex (Analisador Lexico)
 lex.yy.c: $(NOME).l
@@ -25,4 +25,5 @@ clean:
 	rm $(NOME).tab.h
 	rm $(NOME).tab.c
 	rm $(NOME).output
+	rm ./structs/*.o
 	rm $(NOME)

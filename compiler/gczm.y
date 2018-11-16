@@ -2,6 +2,12 @@
 %{
 /* Declaracoes */
 #include <iostream>
+#include <list>
+#include <string>
+#include "./structs/exp.h"
+#include "./structs/cmd.h"
+#include "./structs/dec.h"
+#include "./structs/prog.h"
 
 using namespace std;
 
@@ -17,16 +23,6 @@ extern int num_carac;
 void yyerror(const char *s);
 %}
 
-%code requires {
-	#include <list>
-	#include <string>
-
-	#include "./structs/exp.h"
-	#include "./structs/cmd.h"
-	#include "./structs/dec.h"
-	#include "./structs/prog.h"
-}
-
 /* Uniao que representa o valores basicos possiveis.
    Utilizada pela ferramenta
 */
@@ -38,6 +34,7 @@ void yyerror(const char *s);
 	Cmd *cmd;
 	Exp *exp;
 	Var *var;
+	Decl *decl;
 	SpecVar *specVar;
 
 	// Listas
@@ -119,13 +116,15 @@ void yyerror(const char *s);
 /* Declaracao de Tipos */
 %type <tipoVar> tipo
 %type <sval> valor tiposAtrib atribAgreg
-%type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco
+%type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip
+%type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco 
 %type <cnjExp> cnjExpr
-%type <exp> expressao
+%type <exp> expressao atrib-ini atrib-passo
 %type <cnjCmd> comandos
 %type <var> variavel
 %type <specVar> specVar
 %type <cnjSpecVar> listaSpecVars
+%type <decl> decVar declaracao decSub
 
 %%
 	/* Gramatica */
@@ -135,45 +134,45 @@ programa:
 	;
 
 declaracao:
-	decVar
-	| decSub
+	decVar		{ $$ = $1; }
+	| decSub	{ $$ = $1; }
 	;
 
 // ------------------------------- Declaracao de Variaveis
 decVar:
-	T_VAR listaSpecVars ":" tipo ";"
+	T_VAR listaSpecVars ":" tipo ";"		{ $$ = new DeclVar($2, $4); }
 	//| T_VAR listaSpecVars ":" tipo		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tipo:
-	T_BOOL							{$$ = new BoolTipoVar();}
-	| T_INT							{$$ = new IntTipoVar();}
-	| T_STRING						{$$ = new StringTipoVar();}
-	| T_STRING "[" T_NUM "]"		{$$ = new StringTipoVar($3);}
+	T_BOOL							{$$ = new BoolTipoVar();	 }
+	| T_INT							{$$ = new IntTipoVar();		 }
+	| T_STRING						{$$ = new StringTipoVar();   }
+	| T_STRING "[" T_NUM "]"		{$$ = new StringTipoVar($3); }
 	;
 
 listaSpecVars:
-	 listaSpecVars "," specVar { $$ = $1; $$->push_back($3); }
-	| specVar					{ $$ = new list<SpecVar *>(); $$->push_back($1);}
+	 listaSpecVars "," specVar  { $$ = $1; $$->push_back($3); 					 }
+	| specVar					{ $$ = new list<SpecVar *>(); $$->push_back($1); }
 	;
 
 specVar:
-	T_ID 											{ $$ = new SpecVarSimples(); }					 
-	| T_ID "=" expressao 						 	{ $$ = new SpecVarSimples($3); }
-	| T_ID "[" expressao "]" 					 
-	| T_ID "[" expressao "]" "=" "{" cnjExpr "}"
+	T_ID 											{ $$ = new SpecVarSimples($1); 		   }					 
+	| T_ID "=" expressao 						 	{ $$ = new SpecVarSimples($1, $3); 	   }
+	| T_ID "[" expressao "]" 					 	{ $$ = new SpecVarArranjo($1, $3);	   }
+	| T_ID "[" expressao "]" "=" "{" cnjExpr "}"	{ $$ = new SpecVarArranjo($1, $3, $7); } 
 	;
 
 cnjExpr:
-	cnjExpr "," expressao { $$ = $1; $$->push_back($3); }
+	cnjExpr "," expressao { $$ = $1; $$->push_back($3); 			   }
 	| expressao 		  { $$ = new list<Exp *>(); $$->push_back($1); }
 	;
 
 valor:
-	T_TRUE			{$$ = $1;}
-	| T_FALSE		{$$ = $1;}
-	| T_LIT_STRING	{$$ = $1;}
-	| T_NUM			{$$ = $1;}
+	T_TRUE			{ $$ = $1; }
+	| T_FALSE		{ $$ = $1; }
+	| T_LIT_STRING	{ $$ = $1; }
+	| T_NUM			{ $$ = $1; }
 	;
 
 // -------------------------------- Declaracao de Subprocessos
@@ -251,8 +250,8 @@ atribAgreg:
 
 // ------------------------------ Estruturas Basicas
 cmdIf:
-	T_IF "(" expressao ")" comando %prec T_THEN		{$$ = new IfCmd($3, $5);}
-	| T_IF "(" expressao ")" comando T_ELSE comando {$$ = new IfCmd($3, $5, $7);}
+	T_IF "(" expressao ")" comando %prec T_THEN		{$$ = new IfCmd($3, $5);     }
+	| T_IF "(" expressao ")" comando T_ELSE comando {$$ = new IfCmd($3, $5, $7); }
 	;
 
 cmdWhile:
@@ -260,15 +259,15 @@ cmdWhile:
 	;
 
 cmdFor:
-	T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando
+	T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando {$$ = new ForCmd($3, $5, $7, $9);}
 	;
 
 atrib-ini:
-	T_ID "=" T_NUM
+	T_ID "=" T_NUM 		 	{$$ = new AtribFor($1, $3);}
 	;
 
 atrib-passo:
-	T_ID atribAgreg T_NUM
+	T_ID atribAgreg T_NUM 	{$$ = new AtribFor($1, $2, $3);}
 	;
 
 cmdStop:

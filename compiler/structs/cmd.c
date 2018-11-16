@@ -61,7 +61,7 @@ string RetCmd::codeGen(){
 }
 
 // ----------------------------------------------AtribCmd
-AtribCmd::AtribCmd(Var *varia, string typ, Exm *ex){
+AtribCmd::AtribCmd(Var *varia, string typ, Exp *ex){
     var = varia;
     type = typ;
     exp = ex;
@@ -72,11 +72,11 @@ int AtribCmd::eval(){
 }
 
 string AtribCmd::codeGen(){
-    return ""
+    return "";
 }
 
 // --------------------------------------------WriteCmd
-WriteCmd::WriteCmd(list<Exp *> *cnExp;){
+WriteCmd::WriteCmd(list<Exp *> *cnExp){
     cnjExp = cnExp;
 }
 
@@ -85,7 +85,7 @@ int WriteCmd::eval(){
 }
 
 string WriteCmd::codeGen(){
-    return ""
+    return "";
 }
 
 // --------------------------------------------ReadCmd
@@ -98,5 +98,20 @@ int ReadCmd::eval(){
 }
 
 string ReadCmd::codeGen(){
-    return ""
+    return "";
+}
+// ----------------------------------------------ForCmd
+ForCmd::ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman){
+    exp = ex;
+    atribIni = atriIni;
+    atribPasso = atriPasso;
+    comando = cman;
+}
+
+int ForCmd::eval(){
+    return 1;
+}
+
+string ForCmd::codeGen(){
+    return "";
 }

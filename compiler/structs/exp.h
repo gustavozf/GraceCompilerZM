@@ -99,4 +99,17 @@ class TerExp : public Exp{
         string getTipo();
 };
 
+
+class AtribFor : public Exp{
+    private:
+        string type, id, num;
+
+    public:
+        AtribFor(string id1, string typ, string nume);
+        AtribFor(string id1, string nume);
+        int eval();
+        string codeGen();
+        string getTipo();
+};
+
 #endif

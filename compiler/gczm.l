@@ -1,6 +1,12 @@
 %{
 /* Declaracoes */
 #include <iostream>
+#include <list>
+#include <string>
+#include "./structs/exp.h"
+#include "./structs/cmd.h"
+#include "./structs/dec.h"
+#include "./structs/prog.h"
 
 /* Arquivo gerado do Bison
    Usado para ler os tokens e etc.

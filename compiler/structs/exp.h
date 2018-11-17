@@ -112,4 +112,8 @@ class AtribFor : public Exp{
         string getTipo();
 };
 
+class BlocoExp : public Exp{
+
+};
+
 #endif

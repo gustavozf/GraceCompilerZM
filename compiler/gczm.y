@@ -36,12 +36,15 @@ void yyerror(const char *s);
 	Var *var;
 	Decl *decl;
 	SpecVar *specVar;
+	Param *param;
+	SpecParam *specParam;
 
 	// Listas
 	list<Exp *> *cnjExp;
 	list<Cmd *> *cnjCmd;
 	list<SpecVar *> *cnjSpecVar;
-
+	list<Param *> cnjParam;
+	list<SpecParam *> cnjSpecParam;
 }
 
 /* Tokens */
@@ -125,6 +128,9 @@ void yyerror(const char *s);
 %type <specVar> specVar
 %type <cnjSpecVar> listaSpecVars
 %type <decl> decVar declaracao decSub
+%type <param> param
+%type <cnjParam> specParamsN
+%type <specParam> specParams
 
 %%
 	/* Gramatica */
@@ -177,37 +183,37 @@ valor:
 
 // -------------------------------- Declaracao de Subprocessos
 decSub:
-	decProc
-	| decFun
+	decProc		{ $$ = $1; }
+	| decFun	{ $$ = $1; }
 	;
 
 decProc:
-	T_DEF T_ID "(" listaParametros ")" bloco
-	| T_DEF T_ID "(" ")" bloco
+	T_DEF T_ID "(" listaParametros ")" bloco { $$ = new DeclSub($2, $4, $6); }
+	| T_DEF T_ID "(" ")" bloco				 { $$ = new DeclSub($2, $5); }
 	;
 
 decFun:
-	T_DEF T_ID "(" listaParametros ")" ":" tipo bloco 
-	| T_DEF T_ID "(" ")" ":" tipo bloco
+	T_DEF T_ID "(" listaParametros ")" ":" tipo bloco	{ $$ = new DeclSub($2, $4, $7, $8); }
+	| T_DEF T_ID "(" ")" ":" tipo bloco					{ $$ = new DeclSub($2, $6, $7); }
 	; 
 
 listaParametros:
-	listaParametros ";" specParams
-	| specParams
+	listaParametros ";" specParams  { $$ = $1; $$->push_back($3);					   }
+	| specParams					{ $$ = new list<SpecParam *>(); $$->push_back($1); }
 	;
 
 specParams:
-	specParamsN ":" tipo
+	specParamsN ":" tipo { $$ = new SpecParam($1, $2); } 
 	;
 
 specParamsN:
-	specParamsN "," param 
-	| param 
+	specParamsN "," param 	{ $$ = $1; $$->push_back($3);				   }
+	| param 				{ $$ = new list<Param *>(); $$->push_back($1); }
 	;
 
 param:
-	T_ID
-	| T_ID "[" "]"
+	T_ID			{ $$ = new Param($1, false); }
+	| T_ID "[" "]"	{ $$ = new Param($1, true); }
 	;
 
 // ------------------------ Comandos

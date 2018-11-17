@@ -108,3 +108,74 @@ string DeclVar::codeGen(){
 int DeclVar::eval(){
     return 1;
 }
+
+// ---------------------------------- Param
+Param::Param(string id1, bool arranj){
+    id = id1;
+    arranjo = arranj;
+}
+
+string Param::getId(){
+    return id;
+}
+
+bool Param::getArrano(){
+    return arranjo;
+}
+
+// ------------------------------------ SpecParam
+SpecParam::SpecParam(list<Param *> *lista, string typ){
+    cnjParam = lista;
+    type = typ;
+}
+
+list<Param *>* SpecParam::getCnjParam(){
+    return cnjParam;
+}
+
+string SpecParam::getTipo(){
+    return type;
+}
+
+// ------------------------------------- DeclSub
+// Declaracao de Procedimento
+DeclSub::DeclSub(string id1, list<SpecParam *> *lista, BlocoExp *block){
+    tipo = "procedimento";
+    id = id1;
+    listaParam = lista;
+    retorno = ""; 
+    bloco = block;
+}
+
+DeclSub::DeclSub(string id1, BlocoExp *block){
+    tipo = "procedimento";
+    id = id1;
+    listaParam = NULL;
+    retorno = "";
+    bloco = block;
+}
+
+// Declaracao de Funcao
+DeclSub::DeclSub(string id1, list<SpecParam *> *lista, string ret, BlocoExp *block){
+    tipo = "funcao";
+    id = id1;
+    listaParam = lista;
+    retorno = ret;
+    bloco = block;
+}
+
+DeclSub::DeclSub(string id1, string ret, BlocoExp *block){
+    tipo = "funcao";
+    id = id1;
+    listaParam = NULL;
+    retorno = ret;
+    bloco = block;
+}
+
+string DeclSub::codeGen(){
+    return "";
+}
+
+int DeclSub::eval(){
+    return 1;
+}

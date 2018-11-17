@@ -97,4 +97,42 @@ class DeclVar : public Decl{
         int eval();
 };
 
+class Param {
+    private:
+        string id;
+        bool arranjo;   
+    public:
+        Param(string id1, bool arranj);
+        string getId();
+        bool getArrano();
+};
+
+class SpecParam {
+    private:
+        list<Param *> *cnjParam;
+        string type;
+    private:
+        SpecParam(list<Param *> *lista, string typ);
+        list<Param *>* getCnjParam();
+        string getTipo();
+}
+
+class DeclSub : public Decl{
+    private:
+        string id, retorno, tipo;
+        list<SpecParam *> *listaParam;
+        BlocoExp *bloco;
+    public:
+        // Declaracao de Procedimento
+        DeclSub(string id1, list<SpecParam *> *lista, BlocoExp *block);
+        DeclSub(string id1, BlocoExp *block);
+
+        // Declaracao de Funcao
+        DeclSub(string id1, list<SpecParam *> *lista, string ret, BlocoExp *block);
+        DeclSub(string id1, string ret, BlocoExp *block);
+
+        string codeGen();
+        int eval();
+};
+
 #endif

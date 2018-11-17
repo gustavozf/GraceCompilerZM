@@ -1,26 +1,18 @@
 #include "prog.h"
 
 
-// ------------------------------ VarSimples
-VarSimples::VarSimples(string idName){
-    id = idName;
-}
-int VarSimples::eval(){
-    return 1;
-}
-string VarSimples::codeGen(){
-    return "";
-}
-
-
-// ------------------------------ VarArranjo
-VarArranjo::VarArranjo(string idName, Exp *pos){
-    id = idName;
+// ------------------------------ Var
+Var::Var(string id1, Exp *pos){
+    id = id1;
     position = pos;
 }
-int VarArranjo::eval(){
+Var::Var(string id2){
+    id = id2;
+    position = NULL;
+}
+int Var::eval(){
     return 1;
 }
-string VarArranjo::codeGen(){
+string Var::codeGen(){
     return "";
 }

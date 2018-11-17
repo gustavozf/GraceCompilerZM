@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "prog.h"
 
 using namespace std;
 
@@ -110,6 +111,26 @@ class AtribFor : public Exp{
         int eval();
         string codeGen();
         string getTipo();
+};
+
+class ValExp : public Exp{
+    private:
+        string valor, type;
+    
+    public:
+        ValExp(string val, string typ);
+        int eval();
+        string codeGen();
+        string getTipo();
+};
+
+class VarExp : public Exp{
+    private:
+        Var *variavel;
+    public:
+        VarExp(Var *vari);
+        int eval();
+        string codeGen();
 };
 
 class BlocoExp : public Exp{

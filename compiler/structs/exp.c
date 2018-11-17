@@ -146,3 +146,34 @@ string AtribFor::codeGen(){
 string AtribFor::getTipo(){
     return "";
 }
+
+// ---------------------------------------------------------- ValExp
+ValExp::ValExp(string val, string typ){
+    valor = val;
+    type = typ;
+}
+
+int ValExp::eval(){
+    return 1;
+}
+
+string ValExp::codeGen(){
+    return "";
+}
+
+string ValExp::getTipo(){
+    return type;
+}
+
+// ---------------------------------------------------------- ValExp
+VarExp::VarExp(Var *vari){
+    variavel = vari;
+}
+
+int VarExp::eval(){
+    return variavel.eval();
+}
+
+string VarExp::codeGen(){
+    return variavel.codeGen();
+}

@@ -115,11 +115,11 @@ void yyerror(const char *s);
 
 /* Declaracao de Tipos */
 %type <tipoVar> tipo
-%type <sval> valor tiposAtrib atribAgreg
+%type <sval> tiposAtrib atribAgreg
 %type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip
 %type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco 
 %type <cnjExp> cnjExpr
-%type <exp> expressao atrib-ini atrib-passo
+%type <exp> expressao atrib-ini atrib-passo valor
 %type <cnjCmd> comandos
 %type <var> variavel
 %type <specVar> specVar
@@ -169,10 +169,10 @@ cnjExpr:
 	;
 
 valor:
-	T_TRUE			{ $$ = $1; }
-	| T_FALSE		{ $$ = $1; }
-	| T_LIT_STRING	{ $$ = $1; }
-	| T_NUM			{ $$ = $1; }
+	T_TRUE			{ $$ = new ValExp($1, "bool");   }
+	| T_FALSE		{ $$ = new ValExp($1, "bool");   }
+	| T_LIT_STRING	{ $$ = new ValExp($1, "string"); }
+	| T_NUM			{ $$ = new ValExp($1, "int");	 }
 	;
 
 // -------------------------------- Declaracao de Subprocessos
@@ -283,7 +283,7 @@ cmdSkip:
 cmdReturn:
 	T_RETURN ";"				{$$ = new RetCmd();}
 	| T_RETURN expressao ";"	{$$ = new RetCmd($2);}
-	//| T_RETURN 					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_RETURN 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	//| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
@@ -312,7 +312,7 @@ bloco:
 	| "{" declaracoes comandos "}"
 	//| "{" declaracoes 						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{" comandos							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	//| "{"declaracoes comandos				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{"declaracoes comandos					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	;
 
 declaracoes: 
@@ -328,22 +328,22 @@ comandos:
 // ----------------------------------- Expressoes
 
 expressao:
-	valor
-	| variavel
+valor											{	$$ = $1;						}
+	| variavel									{	$$ = new VarExp($1);			}
 	| "(" expressao ")"
-	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2);			}
+	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2);		  	}
 	| "!" expressao					 			{	$$ = new NegExp($2);			}
-	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
-	| expressao "/" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
-	| expressao "%" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
-	| expressao "+" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
-	| expressao "-" expressao		 			{	$$ = new AritmExp($1, $3, $2); }
+	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
+	| expressao "/" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
+	| expressao "%" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
+	| expressao "+" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
+	| expressao "-" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
 	| expressao "<" expressao		 			{	$$ = new RelExp($1, $3, $2);	}
 	| expressao "<=" expressao  	 			{	$$ = new RelExp($1, $3, $2);	}
 	| expressao ">" expressao		 			{	$$ = new RelExp($1, $3, $2);	}
 	| expressao ">=" expressao		 			{	$$ = new RelExp($1, $3, $2);	}
-	| expressao "==" expressao		 			{	$$ = new IgExp($1, $3, $2);	}
-	| expressao "!=" expressao		 			{	$$ = new IgExp($1, $3, $2);	}
+	| expressao "==" expressao		 			{	$$ = new IgExp($1, $3, $2);		}
+	| expressao "!=" expressao		 			{	$$ = new IgExp($1, $3, $2);		}
 	| expressao "&&" expressao		 			{	$$ = new LogExp($1, $3, $2);	}
 	| expressao "||" expressao		 			{	$$ = new LogExp($1, $3, $2);	}
 	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5);	}

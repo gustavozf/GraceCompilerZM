@@ -131,13 +131,13 @@ void yyerror(const char *s);
 %type <cnjExp> cnjExpr
 %type <cnjParam> specParamsN
 %type <cnjCmd> comandos
-%type <cnjDecl> declaracoes
+%type <cnjDecl> declaracoes programa
 %type <cnjSpecParam> listaParametros
 
 %%
 	/* Gramatica */
 programa: 
-	declaracoes
+	declaracoes { $$ = $1; cout << "Programa Reconhecido!" << endl; }
 	;
 
 declaracoes: 

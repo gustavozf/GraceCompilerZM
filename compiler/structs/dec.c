@@ -62,7 +62,7 @@ SpecVarSimples::SpecVarSimples(string id1, Exp *ini){
 }
 
 SpecVarSimples::SpecVarSimples(string id1){
-    inicializacao = NULL;
+    inicializacao = nullptr;
     id = id1;
 }
 
@@ -82,7 +82,7 @@ SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini){
 }
 
 SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama){
-    inicializacao = NULL;
+    inicializacao = nullptr;
     tam = tama;
     id = id1;
 }
@@ -143,15 +143,15 @@ DeclSub::DeclSub(string id1, list<SpecParam *> *lista, Cmd *block){
     tipo = "procedimento";
     id = id1;
     listaParam = lista;
-    retorno = NULL; 
+    retorno = nullptr; 
     bloco = block;
 }
 
 DeclSub::DeclSub(string id1, Cmd *block){
     tipo = "procedimento";
     id = id1;
-    listaParam = NULL;
-    retorno = NULL;
+    listaParam = nullptr;
+    retorno = nullptr;
     bloco = block;
 }
 
@@ -167,7 +167,7 @@ DeclSub::DeclSub(string id1, list<SpecParam *> *lista, TipoVar *ret, Cmd *block)
 DeclSub::DeclSub(string id1, TipoVar *ret, Cmd *block){
     tipo = "funcao";
     id = id1;
-    listaParam = NULL;
+    listaParam = nullptr;
     retorno = ret;
     bloco = block;
 }

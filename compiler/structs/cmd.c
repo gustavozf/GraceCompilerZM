@@ -2,7 +2,7 @@
 
 // ------------------------------------------- IfCmd
 IfCmd::IfCmd(Exp *cnd, Cmd *thn){
-    condicao = cnd; then = thn; els = NULL;
+    condicao = cnd; then = thn; els = nullptr;
 }
 
 IfCmd::IfCmd(Exp *cnd, Cmd *thn, Cmd *elz){
@@ -49,7 +49,7 @@ RetCmd::RetCmd(Exp *ret){
 }
 
 RetCmd::RetCmd(){
-    retorno = NULL;
+    retorno = nullptr;
 }
 
 int RetCmd::eval(){
@@ -120,11 +120,11 @@ string ForCmd::codeGen(){
 
 BlocoCmd::BlocoCmd(list<Decl *> *decl){
     declaracoes = decl;
-    comandos = NULL;
+    comandos = nullptr;
 }
 
 BlocoCmd::BlocoCmd(list<Cmd *> *com){
-    declaracoes = NULL;
+    declaracoes = nullptr;
     comandos = com;
 }
 
@@ -144,7 +144,7 @@ string BlocoCmd::codeGen(){
 // ------------------------------------------------------ ProcCmd
 ProcCmd::ProcCmd(string id1){
     id = id1;
-    expressoes = NULL;
+    expressoes = nullptr;
 }
 
 ProcCmd::ProcCmd(string id1, list<Exp *> *exps){

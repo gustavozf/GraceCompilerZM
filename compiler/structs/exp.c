@@ -6,6 +6,11 @@ AritmExp::AritmExp(Exp* expr1, Exp* expr2, string ope){
 }
     
 int AritmExp::eval(){
+    if (this->getTipo() == "error"){
+        cout<<"Aviso: Pode ser que os tipos não sejam apropriados para a operação aritmética!\n";
+        return 0;
+    }
+
     return 1;
 }
 
@@ -14,7 +19,11 @@ string AritmExp::codeGen(){
 }
 
 string AritmExp::getTipo(){
-    return "";
+    if ((e1->getTipo() == "int") && (e2->getTipo() == "int")){
+        return "int";
+    }else{
+        return "error";
+    }
 }
 
 // ------------------------------------------------------ RelExp
@@ -23,6 +32,10 @@ RelExp::RelExp(Exp* expr1, Exp* expr2, string ope){
 }
     
 int RelExp::eval(){
+    if (this->getTipo() == "error"){
+        cout<<"Aviso: Pode ser que os tipos não sejam apropriados para a operação relacional!\n";
+        return 0;
+    }
     return 1;
 }
 
@@ -31,7 +44,11 @@ string RelExp::codeGen(){
 }
         
 string RelExp::getTipo(){
-    return "";
+    if ((e1->getTipo() == "int") && (e2->getTipo() == "int")){
+        return "bool";
+    }else{
+        return "error";
+    }
 }
 
 // ------------------------------------------------------- LogExp
@@ -40,6 +57,10 @@ LogExp::LogExp(Exp* expr1, Exp* expr2, string ope){
 }
     
 int LogExp::eval(){
+    if (this->getTipo() == "error"){
+        cout<<"Aviso: Pode ser que os tipos não sejam apropriados para a operação lógica!\n";
+        return 0;
+    }
     return 1;
 }
 
@@ -48,7 +69,11 @@ string LogExp::codeGen(){
 }
 
 string LogExp::getTipo(){
-    return "";
+    if ((e1->getTipo() == "bool") && (e2->getTipo() == "bool")){
+        return "bool";
+    }else{
+        return "error";
+    }
 }
 
 // ------------------------------------------------------- IgExp
@@ -57,6 +82,11 @@ IgExp::IgExp(Exp* expr1, Exp* expr2, string ope){
 }
     
 int IgExp::eval(){
+    if (this->getTipo() == "error"){
+        cout<<"Aviso: Pode ser que os tipos não sejam apropriados para a operação de igualdade!\n";
+        return 0;
+    }
+    
     return 1;
 }
 
@@ -65,7 +95,11 @@ string IgExp::codeGen(){
 }
 
 string IgExp::getTipo(){
-    return "";
+    if (e1->getTipo() == e2->getTipo()){
+        return "bool";
+    }else{
+        return "error";
+    }
 }
 
 // ------------------------------------------------------- NegUnExp
@@ -74,6 +108,11 @@ NegUnExp::NegUnExp(Exp* expr){
 }
 
 int NegUnExp::eval(){
+    if (this->getTipo() == "error"){
+        cout<<"Aviso: Pode ser que o tipo não seja apropriado para a operação de negação unária!\n";
+        return 0;
+    }
+    
     return 1;
 }
 
@@ -82,7 +121,11 @@ string NegUnExp::codeGen(){
 }
 
 string NegUnExp::getTipo(){
-    return "";
+    if (e1->getTipo() == "int"){
+        return "int";
+    }else{
+        return "error";
+    }
 }
 
 // -------------------------------------------------------- NegExp
@@ -91,6 +134,11 @@ NegExp::NegExp(Exp* expr){
 }
 
 int NegExp::eval(){
+    if (this->getTipo() == "error"){
+        cout<<"Aviso: Pode ser que o tipo não seja apropriado para a operação de negação!\n";
+        return 0;
+    }
+
     return 1;
 }
 
@@ -99,7 +147,11 @@ string NegExp::codeGen(){
 }
 
 string NegExp::getTipo(){
-    return "";
+    if (e1->getTipo() == "bool"){
+        return "bool";
+    }else{
+        return "error";
+    }
 }
 
 // ----------------------------------------------------------- TerExp
@@ -111,6 +163,11 @@ TerExp::TerExp(Exp* expr1, Exp* expr2, Exp* expr3){
 }
 
 int TerExp::eval(){
+    if (this->getTipo() == "error"){
+        cout<<"Aviso: Uso inapropriado da operacao ternaria!\n";
+        return 0;
+    }
+
     return 1;
 }
 
@@ -119,7 +176,11 @@ string TerExp::codeGen(){
 }
         
 string TerExp::getTipo(){
-    return "";
+    if((e1->getTipo() == "bool") && (e2->getTipo() == e3->getTipo())){
+        return e2->getTipo();
+    }else{
+        return "error";
+    }
 }
 
 // ---------------------------------------------------------- AtribFor
@@ -158,7 +219,7 @@ int ValExp::eval(){
 }
 
 string ValExp::codeGen(){
-    return "";
+    return val;
 }
 
 string ValExp::getTipo(){
@@ -173,7 +234,7 @@ VarExp::VarExp(string id1, Exp *pos){
 
 VarExp::VarExp(string id2){
     id = id2;
-    position = NULL;
+    position = nullptr;
 }
 
 int VarExp::eval(){
@@ -191,7 +252,7 @@ string VarExp::getTipo(){
 // -------------------------------------------------- FuncExp
 FuncExp::FuncExp(string id1){
     id = id1;
-    expressoes = NULL;
+    expressoes = nullptr;
 }
 
 FuncExp::FuncExp(string id1, list<Exp *> *exps){

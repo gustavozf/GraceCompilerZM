@@ -1,19 +1,23 @@
 To do list:
 
-AST:
-	- programa
-	- decSub
-		- decProc
-		- decFun
-	- listaParametros
-		- specParams
-		- specParamsN
-		- param
-	- bloco
-		- declaracoes	
-	- cmdChamadaProc 
-	- variavel
-	- chamadaFunc
+Semantica:
+	- Programa
+	- Declaracao
+	- Comandos
+		- If
+		- While
+		- For
+		- Stop 
+		- Skip
+		- Return
+		- Read
+		- Write
+		- Chamada Procedimento
+		- Atribuicao
+		- Bloco
+	- Expressoes
+		- Uso de Variavel
+		- Chamada de Funcao
 	
 	
 			

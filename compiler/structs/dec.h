@@ -110,26 +110,29 @@ class Param {
 class SpecParam {
     private:
         list<Param *> *cnjParam;
-        string type;
-    private:
-        SpecParam(list<Param *> *lista, string typ);
+        TipoVar *type;
+    public:
+        SpecParam(list<Param *> *lista, TipoVar *typ);
         list<Param *>* getCnjParam();
         string getTipo();
-}
+};
 
+
+#include "cmd.h"
 class DeclSub : public Decl{
     private:
-        string id, retorno, tipo;
+        string id, tipo;
+        TipoVar *retorno;
         list<SpecParam *> *listaParam;
-        BlocoExp *bloco;
+        Cmd *bloco;
     public:
         // Declaracao de Procedimento
-        DeclSub(string id1, list<SpecParam *> *lista, BlocoExp *block);
-        DeclSub(string id1, BlocoExp *block);
+        DeclSub(string id1, list<SpecParam *> *lista, Cmd *block);
+        DeclSub(string id1, Cmd *block);
 
         // Declaracao de Funcao
-        DeclSub(string id1, list<SpecParam *> *lista, string ret, BlocoExp *block);
-        DeclSub(string id1, string ret, BlocoExp *block);
+        DeclSub(string id1, list<SpecParam *> *lista, TipoVar *ret, Cmd *block);
+        DeclSub(string id1, TipoVar *ret, Cmd *block);
 
         string codeGen();
         int eval();

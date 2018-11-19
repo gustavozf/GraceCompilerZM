@@ -61,7 +61,7 @@ string RetCmd::codeGen(){
 }
 
 // ----------------------------------------------AtribCmd
-AtribCmd::AtribCmd(Var *varia, string typ, Exp *ex){
+AtribCmd::AtribCmd(Exp *varia, string typ, Exp *ex){
     var = varia;
     type = typ;
     exp = ex;
@@ -89,7 +89,7 @@ string WriteCmd::codeGen(){
 }
 
 // --------------------------------------------ReadCmd
-ReadCmd::ReadCmd(Var* varia){
+ReadCmd::ReadCmd(Exp* varia){
     var = varia;
 }
 
@@ -113,5 +113,49 @@ int ForCmd::eval(){
 }
 
 string ForCmd::codeGen(){
+    return "";
+}
+
+// -------------------------------------------- BlocoCmd
+
+BlocoCmd::BlocoCmd(list<Decl *> *decl){
+    declaracoes = decl;
+    comandos = NULL;
+}
+
+BlocoCmd::BlocoCmd(list<Cmd *> *com){
+    declaracoes = NULL;
+    comandos = com;
+}
+
+BlocoCmd::BlocoCmd(list<Decl *> *decl, list<Cmd *> *com){
+    declaracoes = decl;
+    comandos = com;
+}
+
+int BlocoCmd::eval(){
+    return 1;
+}
+
+string BlocoCmd::codeGen(){
+    return "";
+}
+
+// ------------------------------------------------------ ProcCmd
+ProcCmd::ProcCmd(string id1){
+    id = id1;
+    expressoes = NULL;
+}
+
+ProcCmd::ProcCmd(string id1, list<Exp *> *exps){
+    id = id1;
+    expressoes = exps;
+}
+
+int ProcCmd::eval(){
+    return 1;
+}
+
+string ProcCmd::codeGen(){
     return "";
 }

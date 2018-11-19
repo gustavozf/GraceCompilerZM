@@ -3,6 +3,7 @@
 #include <list>
 #include "exp.h"
 #include "prog.h"
+#include "dec.h"
 
 using namespace std;
 
@@ -75,19 +76,19 @@ class AtribCmd : public Cmd{
     private:
         string type;
         Exp *exp;
-        Var *var;
+        Exp *var;
 
     public:
-        AtribCmd(Var *varia, string typ, Exp *ex);
+        AtribCmd(Exp *varia, string typ, Exp *ex);
         int eval();
         string codeGen();  
 };
 
 class ReadCmd : public Cmd{
     private:
-        Var* var;
+        Exp* var;
     public:
-        ReadCmd(Var* varia);
+        ReadCmd(Exp* varia);
         int eval();
         string codeGen();
 };
@@ -101,18 +102,31 @@ class WriteCmd : public Cmd{
         string codeGen();
 };  
 
-#endif
 
-/*
-class Bloco : public Cmd{
+class BlocoCmd : public Cmd{
     private:
-        //list<> declaracoes;
+        list<Decl *> *declaracoes;
         list<Cmd *> *comandos;
+    public:
+        BlocoCmd(list<Decl *> *decl);
+        BlocoCmd(list<Cmd *> *com);
+        BlocoCmd(list<Decl *> *decl, list<Cmd *> *com);
 
-
+        int eval();
+        string codeGen();
 };
+
 
 class ProcCmd : public Cmd{
+    private:
+        string id;
+        list<Exp *> *expressoes;
 
+    public:
+        ProcCmd(string id1);
+        ProcCmd(string id1, list<Exp *> *exps);
+        int eval();
+        string codeGen();
 };
-*/
+
+#endif

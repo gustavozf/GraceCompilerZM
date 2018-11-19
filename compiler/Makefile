@@ -25,5 +25,4 @@ clean:
 	rm $(NOME).tab.h
 	rm $(NOME).tab.c
 	rm $(NOME).output
-	rm ./structs/*.o
 	rm $(NOME)

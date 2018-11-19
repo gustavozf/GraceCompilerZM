@@ -124,7 +124,7 @@ bool Param::getArrano(){
 }
 
 // ------------------------------------ SpecParam
-SpecParam::SpecParam(list<Param *> *lista, string typ){
+SpecParam::SpecParam(list<Param *> *lista, TipoVar *typ){
     cnjParam = lista;
     type = typ;
 }
@@ -134,29 +134,29 @@ list<Param *>* SpecParam::getCnjParam(){
 }
 
 string SpecParam::getTipo(){
-    return type;
+    return type->getTipo();
 }
 
 // ------------------------------------- DeclSub
 // Declaracao de Procedimento
-DeclSub::DeclSub(string id1, list<SpecParam *> *lista, BlocoExp *block){
+DeclSub::DeclSub(string id1, list<SpecParam *> *lista, Cmd *block){
     tipo = "procedimento";
     id = id1;
     listaParam = lista;
-    retorno = ""; 
+    retorno = NULL; 
     bloco = block;
 }
 
-DeclSub::DeclSub(string id1, BlocoExp *block){
+DeclSub::DeclSub(string id1, Cmd *block){
     tipo = "procedimento";
     id = id1;
     listaParam = NULL;
-    retorno = "";
+    retorno = NULL;
     bloco = block;
 }
 
 // Declaracao de Funcao
-DeclSub::DeclSub(string id1, list<SpecParam *> *lista, string ret, BlocoExp *block){
+DeclSub::DeclSub(string id1, list<SpecParam *> *lista, TipoVar *ret, Cmd *block){
     tipo = "funcao";
     id = id1;
     listaParam = lista;
@@ -164,7 +164,7 @@ DeclSub::DeclSub(string id1, list<SpecParam *> *lista, string ret, BlocoExp *blo
     bloco = block;
 }
 
-DeclSub::DeclSub(string id1, string ret, BlocoExp *block){
+DeclSub::DeclSub(string id1, TipoVar *ret, Cmd *block){
     tipo = "funcao";
     id = id1;
     listaParam = NULL;

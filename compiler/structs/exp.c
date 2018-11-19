@@ -166,14 +166,47 @@ string ValExp::getTipo(){
 }
 
 // ---------------------------------------------------------- ValExp
-VarExp::VarExp(Var *vari){
-    variavel = vari;
+VarExp::VarExp(string id1, Exp *pos){
+    id = id1;
+    position = pos;
+}
+
+VarExp::VarExp(string id2){
+    id = id2;
+    position = NULL;
 }
 
 int VarExp::eval(){
-    return variavel.eval();
+    return 1;
 }
 
 string VarExp::codeGen(){
-    return variavel.codeGen();
+    return "";
+}
+
+string VarExp::getTipo(){
+    return "";
+}
+
+// -------------------------------------------------- FuncExp
+FuncExp::FuncExp(string id1){
+    id = id1;
+    expressoes = NULL;
+}
+
+FuncExp::FuncExp(string id1, list<Exp *> *exps){
+    id = id1;
+    expressoes = exps;
+}
+
+int FuncExp::eval(){
+    return 1;
+}
+
+string FuncExp::codeGen(){
+    return "";
+}
+
+string FuncExp::getTipo(){
+    return "";
 }

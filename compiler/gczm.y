@@ -33,7 +33,6 @@ void yyerror(const char *s);
 	TipoVar *tipoVar;
 	Cmd *cmd;
 	Exp *exp;
-	Var *var;
 	Decl *decl;
 	SpecVar *specVar;
 	Param *param;
@@ -43,8 +42,9 @@ void yyerror(const char *s);
 	list<Exp *> *cnjExp;
 	list<Cmd *> *cnjCmd;
 	list<SpecVar *> *cnjSpecVar;
-	list<Param *> cnjParam;
-	list<SpecParam *> cnjSpecParam;
+	list<Param *> *cnjParam;
+	list<SpecParam *> *cnjSpecParam;
+	list<Decl *> *cnjDecl;
 }
 
 /* Tokens */
@@ -117,26 +117,32 @@ void yyerror(const char *s);
 %right T_THEN T_ELSE
 
 /* Declaracao de Tipos */
-%type <tipoVar> tipo
 %type <sval> tiposAtrib atribAgreg
+%type <tipoVar> tipo
 %type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip
 %type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco 
-%type <cnjExp> cnjExpr
-%type <exp> expressao atrib-ini atrib-passo valor
-%type <cnjCmd> comandos
-%type <var> variavel
-%type <specVar> specVar
-%type <cnjSpecVar> listaSpecVars
-%type <decl> decVar declaracao decSub
+%type <exp> expressao atrib-ini atrib-passo valor variavel
+%type <decl> decVar declaracao decSub decProc decFun
 %type <param> param
-%type <cnjParam> specParamsN
+%type <specVar> specVar
 %type <specParam> specParams
+
+%type <cnjSpecVar> listaSpecVars
+%type <cnjExp> cnjExpr
+%type <cnjParam> specParamsN
+%type <cnjCmd> comandos
+%type <cnjDecl> declaracoes
+%type <cnjSpecParam> listaParametros
 
 %%
 	/* Gramatica */
-programa:
-	programa declaracao 
-	| declaracao {/**/}
+programa: 
+	declaracoes
+	;
+
+declaracoes: 
+	  declaracoes declaracao	{ $$ = $1; $$->push_back($2); 					}
+	| declaracao				{ $$ = new list<Decl *>(); $$->push_back($1);	}
 	;
 
 declaracao:
@@ -203,7 +209,7 @@ listaParametros:
 	;
 
 specParams:
-	specParamsN ":" tipo { $$ = new SpecParam($1, $2); } 
+	specParamsN ":" tipo { $$ = new SpecParam($1, $3); } 
 	;
 
 specParamsN:
@@ -218,8 +224,8 @@ param:
 
 // ------------------------ Comandos
 comando:
-	cmdSimples
-	| bloco
+	cmdSimples { $$ = $1; }
+	| bloco	   { $$ = $1; }
 	;
 
 cmdSimples:
@@ -295,8 +301,8 @@ cmdReturn:
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
-	T_ID "(" ")" ";"
-	| T_ID "(" cnjExpr ")" ";"
+	T_ID "(" ")" ";"				{ $$ = new ProcCmd($1); 	}
+	| T_ID "(" cnjExpr ")" ";"		{ $$ = new ProcCmd($1, $3); }
 	//| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	//| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
@@ -313,30 +319,25 @@ cmdWrite:
 
 // ----------------------------------- Blocos
 bloco:
-	  "{" declaracoes "}"
-	| "{" comandos "}"
-	| "{" declaracoes comandos "}"
+	  "{" declaracoes "}"						{ $$ = new BlocoCmd($2); }
+	| "{" comandos "}"							{ $$ = new BlocoCmd($2); }
+	| "{" declaracoes comandos "}"				{ $$ = new BlocoCmd($2, $3); }
 	//| "{" declaracoes 						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{" comandos							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{"declaracoes comandos					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	;
 
-declaracoes: 
-	  declaracoes declaracao
-	| declaracao
-	;
-
 comandos: 
-	  comandos comando	{ $$ = $1; $$->push_back($2); }
-	| comando			{ $$ = new list<Cmd *>(); $$->push_back($1);}
+	  comandos comando	{ $$ = $1; $$->push_back($2); 				 }
+	| comando			{ $$ = new list<Cmd *>(); $$->push_back($1); }
 	;
 
 // ----------------------------------- Expressoes
 
 expressao:
-valor											{	$$ = $1;						}
-	| variavel									{	$$ = new VarExp($1);			}
-	| "(" expressao ")"
+	valor										{	$$ = $1;						}
+	| variavel									{	$$ = $1;						}
+	| "(" expressao ")"							{	$$ = $2;						}
 	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2);		  	}
 	| "!" expressao					 			{	$$ = new NegExp($2);			}
 	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
@@ -353,13 +354,13 @@ valor											{	$$ = $1;						}
 	| expressao "&&" expressao		 			{	$$ = new LogExp($1, $3, $2);	}
 	| expressao "||" expressao		 			{	$$ = new LogExp($1, $3, $2);	}
 	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5);	}
-	| T_ID "(" ")" 
-	| T_ID "(" cnjExpr ")"
+	| T_ID "(" ")" 								{	$$ = new FuncExp($1); 			}
+	| T_ID "(" cnjExpr ")"						{	$$ = new FuncExp($1, $3); 		}
 	;
 
 variavel:
-	T_ID						{ $$ = new VarSimples($1);     }
-	| T_ID "[" expressao "]"	{ $$ = new VarArranjo($1, $3); }
+	T_ID						{ $$ = new VarExp($1);     }
+	| T_ID "[" expressao "]"	{ $$ = new VarExp($1, $3); }
 	;
 
 %%

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <list>
 #include "prog.h"
 
 using namespace std;
@@ -126,15 +127,27 @@ class ValExp : public Exp{
 
 class VarExp : public Exp{
     private:
-        Var *variavel;
+        string id;
+        Exp *position;
+
     public:
-        VarExp(Var *vari);
+        VarExp(string id1, Exp *pos);
+        VarExp(string id2);
         int eval();
         string codeGen();
+        string getTipo();
 };
 
-class BlocoExp : public Exp{
-
+class FuncExp : public Exp{
+    private:
+        string id;
+        list<Exp *> *expressoes;
+    public:
+        FuncExp(string id1);
+        FuncExp(string id1, list<Exp *> *exps);
+        int eval();
+        string codeGen();
+        string getTipo();
 };
 
 #endif

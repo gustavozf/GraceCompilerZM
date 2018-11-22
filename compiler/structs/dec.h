@@ -83,8 +83,8 @@ class SpecVarArranjo : public SpecVar {
 
 class Decl{
     public:
-        string codeGen();
-        int eval();
+        virtual string codeGen() = 0;
+        virtual int eval() = 0;
 };
 
 class DeclVar : public Decl{

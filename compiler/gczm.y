@@ -21,6 +21,9 @@ extern int num_carac;
 
 // Tratar Erros (aparentemente obrigatorio)
 void yyerror(const char *s);
+
+list<Decl *> *raiz = nullptr;
+
 %}
 
 /* Uniao que representa o valores basicos possiveis.
@@ -137,7 +140,7 @@ void yyerror(const char *s);
 %%
 	/* Gramatica */
 programa: 
-	declaracoes { $$ = $1; cout << "Programa Reconhecido!" << endl; }
+	declaracoes { $$ = $1; raiz = $$; cout << "Programa Reconhecido!" << endl; }
 	;
 
 declaracoes: 
@@ -319,12 +322,16 @@ cmdWrite:
 
 // ----------------------------------- Blocos
 bloco:
-	  "{" declaracoes "}"						{ $$ = new BlocoCmd($2); }
-	| "{" comandos "}"							{ $$ = new BlocoCmd($2); }
-	| "{" declaracoes comandos "}"				{ $$ = new BlocoCmd($2, $3); }
-	//| "{" declaracoes 						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	//| "{" comandos							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	//| "{"declaracoes comandos					{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	  "{" declaracoes blocoEnd						{ $$ = new BlocoCmd($2); }
+	| "{" comandos blocoEnd							{ $$ = new BlocoCmd($2); }
+	| "{" declaracoes comandos blocoEnd				{ $$ = new BlocoCmd($2, $3); }
+	//| "{" declaracoes 							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{" comandos								{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{"declaracoes comandos						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	;
+
+blocoEnd:
+	"}" 
 	;
 
 comandos: 

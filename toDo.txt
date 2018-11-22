@@ -4,8 +4,6 @@ Semantica:
 	- Programa
 	- Declaracao
 	- Comandos
-		- If
-		- While
 		- For
 		- Stop 
 		- Skip

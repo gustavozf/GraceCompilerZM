@@ -28,39 +28,24 @@ proc
 */
 class ElemTab{
     public:
-        string id, categoria;
+        string categoria, tipo, retorno;
 
+        int numParams;
         bool agreg;
-        vector<string > *ini;
-        vector<string > *typeParam;
-        vector<string > *params;
-    
-        //var sem inicializacao, func sem param, proc sem param
-        ElemTab(string id1, string type, string cat); 
-        //var com inicializacao
-        ElemTab(srting id1, string type, vector<string > *ini);
-        //var agregada sem inicializacao
-        ElemTab(string id1, string type, bool agreg1);
-        //var agregada com inicializacao
-        ElemTab(string id1, string type, bool agreg1, vector<string > *ini1);
-        //func com params
-        ElemTab(string id1, string type, vector<string > *params1, vector<string > *typeParam1);
-        //proc com params
-        ElemTab(string id1, vector<string > *params1, vector<string > *typeParam1);
+        vector<string > *tiposParams;
 
+        //var simples e agreg
+        ElemTab(string cat, string type, bool agre); 
+        //proc sem param
+        ElemTab(string cat);
+        //proc com param
+        ElemTab(string cat, int nParams, vector<string > *tipos);
+        //func sem param
+        ElemTab(string cat, string ret);
+        //func com param
+        ElemTab(string cat, string ret, int nParams, vector<string > *tipos);
 };
 
-class VarElemTab : public ElemTab{
-
-};
-
-class FuncElemTab : public ElemTab{
-
-};
-
-class ProcElemTab : public ElemTab{
-
-};
 
 class Escopo{
     private:

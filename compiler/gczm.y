@@ -338,7 +338,7 @@ bloco:
 	;
 
 blocoEnd:
-	"}" { escopoAtual = escopoAtual.getPai(); }
+	"}" { escopoAtual = escopoAtual->getPai(); }
 	;
 
 comandos: 

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <vector>
+#include <list>
 #include <map>
 
 using namespace std;
@@ -29,18 +29,12 @@ class ElemTab{
 
         int numParams;
         bool agregado;
-        vector<string > *tiposParams;
+        list<string > *tiposParams;
 
         //var simples e agreg
         ElemTab(string cat, string type, bool agreg); 
-        //proc sem param
-        ElemTab(string cat);
-        //proc com param
-        ElemTab(string cat, int nParams, vector<string > *tipos);
-        //func sem param
-        ElemTab(string cat, string ret);
         //func com param
-        ElemTab(string cat, string ret, int nParams, vector<string > *tipos);
+        ElemTab(string cat, string ret, int nParams, list<string > *tipos);
 };
 
 

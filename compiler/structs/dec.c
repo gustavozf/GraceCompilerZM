@@ -1,6 +1,6 @@
 #include "dec.h"
 
-// ---------------------------------- StringTipoVar
+// ---------------------------------------------- StringTipoVar
 StringTipoVar::StringTipoVar(){
     tam = "256";
 }
@@ -21,7 +21,7 @@ string StringTipoVar::codeGen(){
     return "";
 }
 
-// ---------------------------------- BoolTipoVar
+// --------------------------------------------------- BoolTipoVar
 BoolTipoVar::BoolTipoVar(){
     tam = "1";
 }
@@ -38,7 +38,7 @@ string BoolTipoVar::codeGen(){
     return "";
 }
 
-// ---------------------------------- IntTipoVar
+// ----------------------------------------------------- IntTipoVar
 IntTipoVar::IntTipoVar(){
     tam = "1";
 }
@@ -55,7 +55,7 @@ string IntTipoVar::codeGen(){
     return "";
 }
 
-//------------------------------------ DecVarSimples
+//-------------------------------------------------------- DecVarSimples
 SpecVarSimples::SpecVarSimples(string id1, Exp *ini){
     inicializacao = ini;
     id = id1;
@@ -74,7 +74,15 @@ int SpecVarSimples::eval(){
     return 1;
 }
 
-// ------------------------------------- SpecVarArranjo
+string SpecVarSimples::getId(){
+    return id;
+}
+
+bool SpecVarSimples::isArranjo(){
+    return false;
+}
+
+// ------------------------------------------------------------- SpecVarArranjo
 SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini){
     inicializacao = ini;
     tam = tama;
@@ -95,21 +103,15 @@ int SpecVarArranjo::eval(){
     return 1;
 }
 
-// ---------------------------------- DeclVar
-DeclVar::DeclVar(list<SpecVar *> *lista, TipoVar *type){
-    listaSpecVar = lista;
-    tipo = type;
+string SpecVarArranjo::getId(){
+    return id;
 }
 
-string DeclVar::codeGen(){
-    return "";
+bool SpecVarArranjo::isArranjo(){
+    return true;
 }
 
-int DeclVar::eval(){
-    return 1;
-}
-
-// ---------------------------------- Param
+// -------------------------------------------------------- Param
 Param::Param(string id1, bool arranj){
     id = id1;
     arranjo = arranj;
@@ -119,11 +121,11 @@ string Param::getId(){
     return id;
 }
 
-bool Param::getArrano(){
+bool Param::getArranjo(){
     return arranjo;
 }
 
-// ------------------------------------ SpecParam
+// -------------------------------------------------------- SpecParam
 SpecParam::SpecParam(list<Param *> *lista, TipoVar *typ){
     cnjParam = lista;
     type = typ;
@@ -137,7 +139,38 @@ string SpecParam::getTipo(){
     return type->getTipo();
 }
 
-// ------------------------------------- DeclSub
+int SpecParam::getSize(){
+    return cnjParam->size();
+}
+
+// --------------------------------------------------------- DeclVar
+DeclVar::DeclVar(list<SpecVar *> *lista, TipoVar *type){
+    listaSpecVar = lista;
+    tipo = type;
+}
+
+string DeclVar::codeGen(){
+    return "";
+}
+
+int DeclVar::eval(){
+    return 1;
+}
+
+void DeclVar::addTabSimb(Escopo *atual){
+    list<SpecVar *>::const_iterator i;
+    for(i=listaSpecVar->begin(); i != listaSpecVar->end(); ++i){
+        atual->addElem((*i)->getId(), 
+                       new ElemTab("variavel", 
+                                   tipo->getTipo(), 
+                                   (*i)->isArranjo())
+                      );
+    }
+    
+}
+
+
+// ---------------------------------------------------------------- DeclSub
 // Declaracao de Procedimento
 DeclSub::DeclSub(string id1, list<SpecParam *> *lista, Cmd *block){
     tipo = "procedimento";
@@ -150,7 +183,7 @@ DeclSub::DeclSub(string id1, list<SpecParam *> *lista, Cmd *block){
 DeclSub::DeclSub(string id1, Cmd *block){
     tipo = "procedimento";
     id = id1;
-    listaParam = nullptr;
+    listaParam = new list<SpecParam *>(); // lista vazia
     retorno = nullptr;
     bloco = block;
 }
@@ -167,7 +200,7 @@ DeclSub::DeclSub(string id1, list<SpecParam *> *lista, TipoVar *ret, Cmd *block)
 DeclSub::DeclSub(string id1, TipoVar *ret, Cmd *block){
     tipo = "funcao";
     id = id1;
-    listaParam = nullptr;
+    listaParam = new list<SpecParam *>(); // lista vazia
     retorno = ret;
     bloco = block;
 }
@@ -178,4 +211,26 @@ string DeclSub::codeGen(){
 
 int DeclSub::eval(){
     return 1;
+}
+
+void DeclSub::addTabSimb(Escopo *atual){
+    int numParams = 0, j, tam;
+    list<string> *tipos = new list<string>();
+    
+    list<SpecParam *>::const_iterator i;
+    for(i=listaParam->begin(); i != listaParam->end(); ++i){
+        tam = (*i)->getSize();
+        
+        numParams += tam;
+        for(j=0; j<tam; ++j){
+            tipos->push_back((*i)->getTipo());
+        }
+    }
+
+    atual->addElem(id, 
+                   new ElemTab(tipo, 
+                               retorno->getTipo(), 
+                               numParams, 
+                               tipos)
+                  );
 }

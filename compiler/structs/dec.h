@@ -2,6 +2,7 @@
 #include <string>
 #include <list>
 #include "exp.h"
+#include "prog.h"
 
 using namespace std;
 
@@ -56,6 +57,8 @@ class SpecVar {
     public:
         virtual string codeGen() = 0;
         virtual int eval() = 0;
+        virtual string getId() = 0;
+        virtual bool isArranjo() = 0;
 };
 
 class SpecVarSimples : public SpecVar {
@@ -67,6 +70,8 @@ class SpecVarSimples : public SpecVar {
         SpecVarSimples(string id1);
         string codeGen();
         int eval();
+        string getId();
+        bool isArranjo();
 };
 
 class SpecVarArranjo : public SpecVar {
@@ -79,24 +84,10 @@ class SpecVarArranjo : public SpecVar {
         SpecVarArranjo(string id1, Exp *tama);
         string codeGen();
         int eval();
+        string getId();
+        bool isArranjo();
 };
 
-class Decl{
-    public:
-        virtual string codeGen() = 0;
-        virtual int eval() = 0;
-        virtual void addTabSimb() = 0;
-};
-
-class DeclVar : public Decl{
-    private:
-        list<SpecVar *> *listaSpecVar;
-        TipoVar *tipo;
-    public:
-        DeclVar(list<SpecVar *> *lista, TipoVar *type);
-        string codeGen();
-        int eval();
-};
 
 class Param {
     private:
@@ -105,7 +96,7 @@ class Param {
     public:
         Param(string id1, bool arranj);
         string getId();
-        bool getArrano();
+        bool getArranjo();
 };
 
 class SpecParam {
@@ -116,8 +107,26 @@ class SpecParam {
         SpecParam(list<Param *> *lista, TipoVar *typ);
         list<Param *>* getCnjParam();
         string getTipo();
+        int getSize();
 };
 
+class Decl{
+    public:
+        virtual string codeGen() = 0;
+        virtual int eval() = 0;
+        virtual void addTabSimb(Escopo *atual) = 0;
+};
+
+class DeclVar : public Decl{
+    private:
+        list<SpecVar *> *listaSpecVar;
+        TipoVar *tipo;
+    public:
+        DeclVar(list<SpecVar *> *lista, TipoVar *type);
+        string codeGen();
+        int eval();
+        void addTabSimb(Escopo *atual);
+};
 
 #include "cmd.h"
 class DeclSub : public Decl{
@@ -137,6 +146,7 @@ class DeclSub : public Decl{
 
         string codeGen();
         int eval();
+        void addTabSimb(Escopo *atual);
 };
 
 #endif

@@ -150,8 +150,12 @@ declaracoes:
 	;
 
 declaracao:
-	decVar		{ $$ = $1; }
-	| decSub	{ $$ = $1; }
+	decVar		{ $$ = $1; 
+				  $$->addTabSimb(escopoAtual);
+				}
+	| decSub	{ $$ = $1; 
+				  $$->addTabSimb(escopoAtual);
+				}
 	;
 
 // ------------------------------- Declaracao de Variaveis

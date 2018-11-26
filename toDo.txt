@@ -3,6 +3,8 @@ To do list:
 Semantica:
 	- Programa
 	- Declaracao
+		- adicionar na tabela de simbolos
+		- verificar inicializacao
 	- Comandos
 		- For
 		- Stop 

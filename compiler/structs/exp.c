@@ -219,7 +219,7 @@ int ValExp::eval(){
 }
 
 string ValExp::codeGen(){
-    return val;
+    return valor;
 }
 
 string ValExp::getTipo(){

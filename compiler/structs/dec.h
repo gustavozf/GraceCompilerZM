@@ -85,6 +85,7 @@ class Decl{
     public:
         virtual string codeGen() = 0;
         virtual int eval() = 0;
+        virtual void addTabSimb() = 0;
 };
 
 class DeclVar : public Decl{

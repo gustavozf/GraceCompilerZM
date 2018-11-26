@@ -12,7 +12,6 @@ Semantica:
 		- Write
 		- Chamada Procedimento
 		- Atribuicao
-		- Bloco
 	- Expressoes
 		- Uso de Variavel
 		- Chamada de Funcao

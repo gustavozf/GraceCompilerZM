@@ -28,11 +28,11 @@ class ElemTab{
         string categoria, tipo, retorno;
 
         int numParams;
-        bool agreg;
+        bool agregado;
         vector<string > *tiposParams;
 
         //var simples e agreg
-        ElemTab(string cat, string type, bool agre); 
+        ElemTab(string cat, string type, bool agreg); 
         //proc sem param
         ElemTab(string cat);
         //proc com param
@@ -50,11 +50,10 @@ class Escopo{
         Escopo *pai;
 
     public:
-        Escopo();
-        void addElem(ElemTab *);
-        void addPai(Escopo *);
+        Escopo(Escopo *papi);
+        void addElem(string id, ElemTab *elem);
         Escopo* getPai();
-        bool checkInserted(strin id);
+        bool checkInserido(string id);
 };
 
 #endif

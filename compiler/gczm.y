@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <stack>
 #include "./structs/exp.h"
 #include "./structs/cmd.h"
 #include "./structs/dec.h"
@@ -23,7 +24,7 @@ extern int num_carac;
 void yyerror(const char *s);
 
 list<Decl *> *raiz = nullptr;
-
+Escopo *escopoAtual = new Escopo(nullptr);
 %}
 
 /* Uniao que representa o valores basicos possiveis.
@@ -322,16 +323,22 @@ cmdWrite:
 
 // ----------------------------------- Blocos
 bloco:
-	  "{" declaracoes blocoEnd						{ $$ = new BlocoCmd($2); }
-	| "{" comandos blocoEnd							{ $$ = new BlocoCmd($2); }
-	| "{" declaracoes comandos blocoEnd				{ $$ = new BlocoCmd($2, $3); }
+	  "{" declaracoes blocoEnd						{ $$ = new BlocoCmd($2); 
+	  												  escopoAtual = new Escopo(escopoAtual);
+	  												}
+	| "{" comandos blocoEnd							{ $$ = new BlocoCmd($2); 
+													  escopoAtual = new Escopo(escopoAtual);
+													}
+	| "{" declaracoes comandos blocoEnd				{ $$ = new BlocoCmd($2, $3); 
+													  escopoAtual = new Escopo(escopoAtual);
+													}
 	//| "{" declaracoes 							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{" comandos								{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{"declaracoes comandos						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	;
 
 blocoEnd:
-	"}" 
+	"}" { escopoAtual = escopoAtual.getPai(); }
 	;
 
 comandos: 

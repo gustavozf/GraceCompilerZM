@@ -3,6 +3,7 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <stack>
 #include "./structs/exp.h"
 #include "./structs/cmd.h"
 #include "./structs/dec.h"

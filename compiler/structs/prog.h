@@ -8,14 +8,11 @@ using namespace std;
 #ifndef PROG_H
 #define PROG_H
 
-void teste();
-
 
 /* 
 var 
     - id
     - agregada?
-    - inicializacao?
 func
     - id
     - params
@@ -49,12 +46,15 @@ class ElemTab{
 
 class Escopo{
     private:
-        map<string id, ElemTab *> tabelaSimbolos;
+        map<string, ElemTab *> tabelaSimbolos;
+        Escopo *pai;
 
     public:
-        addElem();
-        addMultElem();
-        buscaElem();
+        Escopo();
+        void addElem(ElemTab *);
+        void addPai(Escopo *);
+        Escopo* getPai();
+        bool checkInserted(strin id);
 };
 
 #endif

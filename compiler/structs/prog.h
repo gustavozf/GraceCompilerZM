@@ -31,11 +31,11 @@ class ElemTab{
         string categoria, tipo, retorno;
 
         int numParams;
-        bool agreg;
+        bool agregado;
         vector<string > *tiposParams;
 
         //var simples e agreg
-        ElemTab(string cat, string type, bool agre); 
+        ElemTab(string cat, string type, bool agreg); 
         //proc sem param
         ElemTab(string cat);
         //proc com param

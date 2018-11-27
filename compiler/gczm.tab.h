@@ -116,6 +116,7 @@ union YYSTYPE
 	SpecVar *specVar;
 	Param *param;
 	SpecParam *specParam;
+	Programa *programa;
 
 	// Listas
 	list<Exp *> *cnjExp;
@@ -125,7 +126,7 @@ union YYSTYPE
 	list<SpecParam *> *cnjSpecParam;
 	list<Decl *> *cnjDecl;
 
-#line 129 "gczm.tab.h" /* yacc.c:1909  */
+#line 130 "gczm.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

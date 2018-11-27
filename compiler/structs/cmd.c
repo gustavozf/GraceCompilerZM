@@ -159,3 +159,17 @@ int ProcCmd::eval(){
 string ProcCmd::codeGen(){
     return "";
 }
+
+// -------------------------------------------- Programa
+Programa::Programa(list<Decl *> *decl, Escopo *glob){
+    declaracoes = decl;
+    global = glob;
+}
+
+int Programa::eval(){
+    return 1;
+}
+
+string Programa::codeGen(){
+    return "";
+}

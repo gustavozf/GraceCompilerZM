@@ -29,12 +29,12 @@ class ElemTab{
 
         int numParams;
         bool agregado;
-        list<string > *tiposParams;
+        list<pair<int, string > > *params;
 
         //var simples e agreg
         ElemTab(string cat, string type, bool agreg); 
         //func com param
-        ElemTab(string cat, string ret, int nParams, list<string > *tipos);
+        ElemTab(string cat, string ret, int nParams, list<pair<int, string > > *tipos);
 };
 
 

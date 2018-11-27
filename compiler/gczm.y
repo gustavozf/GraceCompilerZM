@@ -23,7 +23,7 @@ extern int num_carac;
 // Tratar Erros (aparentemente obrigatorio)
 void yyerror(const char *s);
 
-list<Decl *> *raiz = nullptr;
+Programa *raiz = nullptr;
 Escopo *escopoAtual = new Escopo(nullptr);
 %}
 
@@ -41,6 +41,7 @@ Escopo *escopoAtual = new Escopo(nullptr);
 	SpecVar *specVar;
 	Param *param;
 	SpecParam *specParam;
+	Programa *programa;
 
 	// Listas
 	list<Exp *> *cnjExp;
@@ -130,18 +131,19 @@ Escopo *escopoAtual = new Escopo(nullptr);
 %type <param> param
 %type <specVar> specVar
 %type <specParam> specParams
+%type <programa>  programa
 
 %type <cnjSpecVar> listaSpecVars
 %type <cnjExp> cnjExpr
 %type <cnjParam> specParamsN
 %type <cnjCmd> comandos
-%type <cnjDecl> declaracoes programa
+%type <cnjDecl> declaracoes
 %type <cnjSpecParam> listaParametros
 
 %%
 	/* Gramatica */
 programa: 
-	declaracoes { $$ = $1; raiz = $$; cout << "Programa Reconhecido!" << endl; }
+	declaracoes { $$ = new Programa($1, escopoAtual); raiz = $$; }
 	;
 
 declaracoes: 

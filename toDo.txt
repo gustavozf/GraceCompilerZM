@@ -2,21 +2,37 @@ To do list:
 
 Semantica:
 	- Programa
+		* ultima declaracao = subrotina "main" que tem "return"  0 ou outro num
 	- Declaracao
-		- adicionar na tabela de simbolos
-		- verificar inicializacao
+		* checar inicializacao
 	- Comandos
 		- For
-		- Stop 
+			* inicializacao e passo devem ser analisadas como Atribuicao
+			* expressao condicional = tipo logico
+		- Stop
+			* cercado (in)diretamente por um while/for
 		- Skip
+			* cercado (in)diretamente por um while/for
 		- Return
+			* funcao = tipo da expressao igual ao retorno declarado
+			* procedimento = retorno sem expressao
 		- Read
-		- Write
+			* variavel deve estar declarada e visivel no escopo atual
 		- Chamada Procedimento
+			* deve estar declarado e visivel ao escopo atual
+			* os argumentos fornecidos devem ter mesmo tipo e quantidade dos declarados
 		- Atribuicao
+			* lado esquerdo = variavel declarada e visivel no escopo atual
+			* lado direito = expressao de mesmo tipo da variavel do lado esquerdo
 	- Expressoes
 		- Uso de Variavel
+			* variavel declarada e visivel no escopo atual
+			* tipo resultante = declarado
+			* agregadas = expressao de acesso tem que ser int
 		- Chamada de Funcao
+			* deve estar declarado e visivel ao escopo atual
+			* os argumentos fornecidos devem ter mesmo tipo e quantidade dos declarados
+			* tipo resultante eh igual ao tipo declarado na funcao	
 	
 	
 			

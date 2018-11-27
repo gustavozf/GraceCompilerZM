@@ -129,4 +129,14 @@ class ProcCmd : public Cmd{
         string codeGen();
 };
 
+class Programa{
+    private:
+        list<Decl *> *declaracoes;
+        Escopo *global;
+    public:
+        Programa(list<Decl *> *decl, Escopo *glob);
+        int eval();
+        string codeGen();
+};
+
 #endif

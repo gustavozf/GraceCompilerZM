@@ -222,9 +222,7 @@ void DeclSub::addTabSimb(Escopo *atual){
         tam = (*i)->getSize();
         
         numParams += tam;
-        for(j=0; j<tam; ++j){
-            tipos->push_back((*i)->getTipo());
-        }
+        tipos->push_back(pair<int, string >(tam, (*i)->getTipo());
     }
 
     atual->addElem(id, 

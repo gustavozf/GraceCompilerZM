@@ -6,10 +6,10 @@ ElemTab::ElemTab(string cat, string type, bool agreg){
     retorno = "";
     numParams = 0;
     agregado = agreg;
-    tiposParams = new list<string >();
+    tiposParams = new list<pair<int, string > >();
 } 
 
-ElemTab::ElemTab(string cat, string ret, int nParams, list<string > *tipos){
+ElemTab::ElemTab(string cat, string ret, int nParams, list<pair<int, string > > *tipos){
     categoria = cat;
     tipo = "";
     retorno = ret;

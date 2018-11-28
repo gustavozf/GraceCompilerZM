@@ -59,6 +59,7 @@ class SpecVar {
         virtual int eval() = 0;
         virtual string getId() = 0;
         virtual bool isArranjo() = 0;
+        virtual bool confereTipagem(string tipo) = 0;
 };
 
 class SpecVarSimples : public SpecVar {
@@ -72,6 +73,7 @@ class SpecVarSimples : public SpecVar {
         int eval();
         string getId();
         bool isArranjo();
+        bool confereTipagem(string tipo);
 };
 
 class SpecVarArranjo : public SpecVar {
@@ -86,6 +88,7 @@ class SpecVarArranjo : public SpecVar {
         int eval();
         string getId();
         bool isArranjo();
+        bool confereTipagem(string tipo);
 };
 
 

@@ -128,7 +128,7 @@ class ValExp : public Exp{
 
 class VarExp : public Exp{
     private:
-        string id;
+        string id, tipo;
         Exp *position;
         Escopo *atual;
 

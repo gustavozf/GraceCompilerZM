@@ -3,8 +3,6 @@ To do list:
 Semantica:
 	- Programa
 		* subrotina "main" que tem "return"  0 ou outro num
-	- Declaracao
-		* checar inicializacao
 	- Comandos
 		- For
 			* inicializacao e passo devem ser analisadas como Atribuicao
@@ -16,13 +14,7 @@ Semantica:
 		- Return
 			* funcao = tipo da expressao igual ao retorno declarado
 			* procedimento = retorno sem expressao
-	- Expressoes
-		- Uso de Variavel
-			* tipo resultante = declarado
-			* agregadas = expressao de acesso tem que ser int
-		- Chamada de Funcao
-			* os argumentos fornecidos devem ter mesmo tipo e quantidade dos declarados
-			* tipo resultante eh igual ao tipo declarado na funcao	
+	
 	
 	
 			

@@ -82,6 +82,14 @@ bool SpecVarSimples::isArranjo(){
     return false;
 }
 
+bool SpecVarSimples::confereTipagem(string tipo){
+    if(inicializacao != nullptr){
+        return (tipo == inicializacao->getTipo());
+    }
+
+    return true;
+}
+
 // ------------------------------------------------------------- SpecVarArranjo
 SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini){
     inicializacao = ini;
@@ -109,6 +117,24 @@ string SpecVarArranjo::getId(){
 
 bool SpecVarArranjo::isArranjo(){
     return true;
+}
+
+bool SpecVarArranjo::confereTipagem(string tipo){
+    bool retorno = true;
+    int count = 0;
+    list<Exp *>::iterator i;
+    
+    if(inicializacao != nullptr){
+        for(i=this->inicializacao->begin(); i != this->inicializacao->end(); ++i){
+            count++;
+            if ((*i)->getTipo() != tipo){
+                cout << "Erro: parametro #" << count << " da inicializacao possui tipo incorreto (" << (*i)->getTipo() <<")\n";
+                retorno = false;
+            }    
+        }
+    }
+
+    return retorno;
 }
 
 // -------------------------------------------------------- Param
@@ -154,7 +180,16 @@ string DeclVar::codeGen(){
 }
 
 int DeclVar::eval(){
-    return 1;
+    list<SpecVar *>::iterator i;
+    int retorno = 1;
+
+    for(i = this->listaSpecVar->begin(); i != this->listaSpecVar->end(); ++i){
+        if(!(*i)->confereTipagem(this->tipo->getTipo())){
+            retorno = 0;
+        }
+    }
+
+    return retorno;
 }
 
 string DeclVar::getTipo(){

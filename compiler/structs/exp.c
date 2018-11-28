@@ -233,12 +233,16 @@ VarExp::VarExp(string id1, Exp *pos, Escopo* atual1){
     id = id1;
     position = pos;
     atual = atual1;
+    tipo = "";
+    this->isInEscopo();
 }
 
 VarExp::VarExp(string id2, Escopo* atual1){
     id = id2;
     position = nullptr;
     atual = atual1;
+    tipo = "";
+    this->isInEscopo();
 }
 
 bool VarExp::isInEscopo(){
@@ -246,12 +250,13 @@ bool VarExp::isInEscopo(){
     Escopo* i = this->atual;
 
     while((!encontrado) && (i != nullptr)){
-        encontrado = i->checkInserido(id);
+        encontrado = i->checkInserido(this->id);
         
         if(!encontrado){
             i = i->getPai();
         }else{
             this->atual = i;
+            this->tipo = i->getElemTab(this->id)->tipo;
         }
     }
 
@@ -260,11 +265,18 @@ bool VarExp::isInEscopo(){
 
 
 int VarExp::eval(){
+    int cond1 = 1, cond2 = 1;
+
     if(!this->isInEscopo()){
         cout << "Erro: Var (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
+        cond1 = 0;
+    }
+
+    if(this->position != nullptr){
+        cond2 = (this->position->getTipo() == "int") ? 1 : 0;
     }
     
-    return 1;
+    return cond1 && cond2;
 }
 
 string VarExp::getId(){
@@ -280,7 +292,7 @@ string VarExp::codeGen(){
 }
 
 string VarExp::getTipo(){
-    return "";
+    return this->tipo;
 }
 
 // -------------------------------------------------- FuncExp

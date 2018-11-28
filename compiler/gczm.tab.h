@@ -34,7 +34,7 @@
 # define YY_YY_GCZM_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -104,7 +104,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 33 "gczm.y" /* yacc.c:1909  */
+#line 36 "gczm.y" /* yacc.c:1909  */
 
 	char *sval; // String
 	

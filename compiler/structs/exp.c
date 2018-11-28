@@ -184,16 +184,18 @@ string TerExp::getTipo(){
 }
 
 // ---------------------------------------------------------- AtribFor
-AtribFor::AtribFor(string id1, string typ, string nume){
+AtribFor::AtribFor(string id1, string typ, string nume, Escopo *atual1){
     id = id1;
     type = typ;
     num = nume;
+    atual = atual1;
 }
 
-AtribFor::AtribFor(string id1, string nume){
+AtribFor::AtribFor(string id1, string nume, Escopo *atual1){
     id = id1;
     type = "=";
     num = nume;
+    atual = atual1;
 }
 
 int AtribFor::eval(){

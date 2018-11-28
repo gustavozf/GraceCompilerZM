@@ -7,7 +7,7 @@ HEADERS = ./structs/cmd.o ./structs/exp.o ./structs/prog.o ./structs/dec.o
 # ===============================================
 
 all: $(NOME).tab.c lex.yy.c
-	$(CC) $(NOME).tab.c lex.yy.c -ll -o $(NOME) $(HEADERS)
+	$(CC) -DYYDEBUG=1 $(NOME).tab.c lex.yy.c -ll -o $(NOME) $(HEADERS)
 
 # Flex (Analisador Lexico)
 lex.yy.c: $(NOME).l
@@ -15,7 +15,7 @@ lex.yy.c: $(NOME).l
 
 # Bison (Analisador Sintatico)
 $(NOME).tab.c: $(NOME).y
-	bison -d --verbose $(NOME).y
+	bison -dt --debug --verbose -Dparse.trace $(NOME).y
 
 # Para remover os arquivos
 .PHONY: clean

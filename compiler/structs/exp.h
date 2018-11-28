@@ -105,10 +105,11 @@ class TerExp : public Exp{
 class AtribFor : public Exp{
     private:
         string type, id, num;
+        Escopo *atual;
 
     public:
-        AtribFor(string id1, string typ, string nume);
-        AtribFor(string id1, string nume);
+        AtribFor(string id1, string typ, string nume, Escopo *atual1);
+        AtribFor(string id1, string nume, Escopo *atual1);
         int eval();
         string codeGen();
         string getTipo();

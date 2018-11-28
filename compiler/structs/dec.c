@@ -215,20 +215,31 @@ int DeclSub::eval(){
 
 void DeclSub::addTabSimb(Escopo *atual){
     int numParams = 0, j, tam;
-    list<string> *tipos = new list<string>();
+    list<string > *tipos = new list<string>();
     
-    list<SpecParam *>::const_iterator i;
+    list<SpecParam *>::iterator i;
     for(i=listaParam->begin(); i != listaParam->end(); ++i){
         tam = (*i)->getSize();
-        
         numParams += tam;
-        tipos->push_back(pair<int, string >(tam, (*i)->getTipo());
+
+        for(j=0; j < tam; j++){
+            tipos->push_back((*i)->getTipo());
+        }
     }
 
-    atual->addElem(id, 
-                   new ElemTab(tipo, 
-                               retorno->getTipo(), 
-                               numParams, 
-                               tipos)
-                  );
+    if(retorno == nullptr){
+        atual->addElem( id, 
+                        new ElemTab(tipo, 
+                                    "", 
+                                    numParams, 
+                                    tipos)
+                      );
+    } else {
+        atual->addElem( id, 
+                        new ElemTab(tipo, 
+                                    retorno->getTipo(), 
+                                    numParams, 
+                                    tipos)
+                      );
+    }
 }

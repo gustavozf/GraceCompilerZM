@@ -76,10 +76,10 @@ class AtribCmd : public Cmd{
     private:
         string type;
         Exp *exp;
-        Exp *var;
+        VarExp *var;
 
     public:
-        AtribCmd(Exp *varia, string typ, Exp *ex);
+        AtribCmd(VarExp *varia, string typ, Exp *ex);
         int eval();
         string codeGen();  
 };

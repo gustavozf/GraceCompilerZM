@@ -248,6 +248,8 @@ bool VarExp::isInEscopo(){
         
         if(!encontrado){
             i = i->getPai();
+        }else{
+            this->atual = i;
         }
     }
 

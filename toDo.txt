@@ -19,8 +19,8 @@ Semantica:
 		- Chamada Procedimento
 			* os argumentos fornecidos devem ter mesmo tipo e quantidade dos declarados
 		- Atribuicao
-			* lado esquerdo = variavel declarada e visivel no escopo atual
-			* lado direito = expressao de mesmo tipo da variavel do lado esquerdo
+			* lado esquerdo = variavel declarada e visivel no escopo atual (acho que fiz)
+			* lado direito = expressao de mesmo tipo da variavel do lado esquerdo (acho que fiz)
 	- Expressoes
 		- Uso de Variavel
 			* tipo resultante = declarado

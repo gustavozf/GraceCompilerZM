@@ -61,13 +61,20 @@ string RetCmd::codeGen(){
 }
 
 // ----------------------------------------------AtribCmd
-AtribCmd::AtribCmd(Exp *varia, string typ, Exp *ex){
+AtribCmd::AtribCmd(VarExp *varia, string typ, Exp *ex){
     var = varia;
     type = typ;
     exp = ex;
 }
 
 int AtribCmd::eval(){
+    if(!var->isInEscopo()){
+        cout << "Erro: Var (" << var->getId() << ") nao visivel ao escopo em que foi chamada!\n";
+    }else{
+        if(!(var->atual->getElemTab(var->id).tipo == exp->getTipo())){
+            cout << "Erro: Atribuicao de tipos incompatíveis";
+        }
+    }
     return 1;
 }
 
@@ -167,6 +174,8 @@ bool ProcCmd::isInEscopo(){
 
         if (!encontrado){
             i = i->getPai();
+        } else {
+            this->atual = i;
         }
     }
 

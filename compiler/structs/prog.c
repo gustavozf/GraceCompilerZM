@@ -26,7 +26,7 @@ void Escopo::addElem(string id, ElemTab *elem){
     if (this->checkInserido(id)){
         cout << "Aviso: redeclaração de ID ("<<id<<") em um mesmo escopo!" <<endl;
     } else {
-        tabelaSimbolos.insert(pair<string, ElemTab *>(id, elem));
+        tabelaSimbolos[id] = elem;
     }
 }
 
@@ -36,4 +36,12 @@ Escopo* Escopo::getPai(){
 
 bool Escopo::checkInserido(string id){
     return tabelaSimbolos.count(id);
+}
+
+ElemTab* Escopo::getElemTab(string id){
+    if(this->checkInserido(id)){
+        return tabelaSimbolos[id];
+    }else{
+        return "null"
+    }
 }

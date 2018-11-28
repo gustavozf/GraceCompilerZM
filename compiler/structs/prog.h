@@ -48,6 +48,7 @@ class Escopo{
         void addElem(string id, ElemTab *elem);
         Escopo* getPai();
         bool checkInserido(string id);
+        ElemTab* getElemTab(string id);
 };
 
 #endif

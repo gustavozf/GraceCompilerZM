@@ -16,21 +16,16 @@ Semantica:
 		- Return
 			* funcao = tipo da expressao igual ao retorno declarado
 			* procedimento = retorno sem expressao
-		- Read
-			* variavel deve estar declarada e visivel no escopo atual
 		- Chamada Procedimento
-			* deve estar declarado e visivel ao escopo atual
 			* os argumentos fornecidos devem ter mesmo tipo e quantidade dos declarados
 		- Atribuicao
 			* lado esquerdo = variavel declarada e visivel no escopo atual
 			* lado direito = expressao de mesmo tipo da variavel do lado esquerdo
 	- Expressoes
 		- Uso de Variavel
-			* variavel declarada e visivel no escopo atual
 			* tipo resultante = declarado
 			* agregadas = expressao de acesso tem que ser int
 		- Chamada de Funcao
-			* deve estar declarado e visivel ao escopo atual
 			* os argumentos fornecidos devem ter mesmo tipo e quantidade dos declarados
 			* tipo resultante eh igual ao tipo declarado na funcao	
 	

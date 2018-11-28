@@ -121,10 +121,12 @@ class ProcCmd : public Cmd{
     private:
         string id;
         list<Exp *> *expressoes;
+        Escopo *atual;
 
     public:
-        ProcCmd(string id1);
-        ProcCmd(string id1, list<Exp *> *exps);
+        ProcCmd(string id1, Escopo *atual1);
+        ProcCmd(string id1, list<Exp *> *exps, Escopo *atual1);
+        bool isInEscopo();
         int eval();
         string codeGen();
 };

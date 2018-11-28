@@ -145,10 +145,13 @@ class FuncExp : public Exp{
     private:
         string id;
         list<Exp *> *expressoes;
+        Escopo *atual;
+
     public:
-        FuncExp(string id1);
-        FuncExp(string id1, list<Exp *> *exps);
+        FuncExp(string id1, Escopo *atual1);
+        FuncExp(string id1, list<Exp *> *exps, Escopo *atual1);
         int eval();
+        bool isInEscopo();
         string codeGen();
         string getTipo();
 };

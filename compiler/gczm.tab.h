@@ -112,6 +112,7 @@ union YYSTYPE
 	TipoVar *tipoVar;
 	Cmd *cmd;
 	Exp *exp;
+	VarExp* varExp;
 	Decl *decl;
 	SpecVar *specVar;
 	Param *param;
@@ -126,7 +127,7 @@ union YYSTYPE
 	list<SpecParam *> *cnjSpecParam;
 	list<Decl *> *cnjDecl;
 
-#line 130 "gczm.tab.h" /* yacc.c:1909  */
+#line 131 "gczm.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

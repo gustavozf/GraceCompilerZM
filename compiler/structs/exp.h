@@ -129,13 +129,16 @@ class VarExp : public Exp{
     private:
         string id;
         Exp *position;
+        Escopo *atual;
 
     public:
-        VarExp(string id1, Exp *pos);
-        VarExp(string id2);
+        VarExp(string id1, Exp *pos, Escopo* atual1);
+        VarExp(string id2, Escopo* atual1);
         int eval();
+        bool isInEscopo();
         string codeGen();
         string getTipo();
+        string getId();
 };
 
 class FuncExp : public Exp{

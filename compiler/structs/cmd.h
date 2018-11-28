@@ -86,9 +86,9 @@ class AtribCmd : public Cmd{
 
 class ReadCmd : public Cmd{
     private:
-        Exp* var;
+        VarExp* var;
     public:
-        ReadCmd(Exp* varia);
+        ReadCmd(VarExp* varia);
         int eval();
         string codeGen();
 };

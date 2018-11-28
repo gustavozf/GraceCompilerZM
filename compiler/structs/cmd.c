@@ -89,11 +89,15 @@ string WriteCmd::codeGen(){
 }
 
 // --------------------------------------------ReadCmd
-ReadCmd::ReadCmd(Exp* varia){
+ReadCmd::ReadCmd(VarExp* varia){
     var = varia;
 }
 
 int ReadCmd::eval(){
+    if(!var->isInEscopo()){
+        cout << "Erro: Var (" << var->getId() << ") nao visivel ao escopo em que foi chamada!\n";
+    }
+
     return 1;
 }
 

@@ -227,18 +227,44 @@ string ValExp::getTipo(){
 }
 
 // ---------------------------------------------------------- ValExp
-VarExp::VarExp(string id1, Exp *pos){
+VarExp::VarExp(string id1, Exp *pos, Escopo* atual1){
     id = id1;
     position = pos;
+    atual = atual1;
 }
 
-VarExp::VarExp(string id2){
+VarExp::VarExp(string id2, Escopo* atual1){
     id = id2;
     position = nullptr;
+    atual = atual1;
 }
 
+bool VarExp::isInEscopo(){
+    bool encontrado = false;
+    Escopo* i = this->atual;
+
+    while((!encontrado) && (i != nullptr)){
+        encontrado = i->checkInserido(id);
+        
+        if(!encontrado){
+            i = i->getPai();
+        }
+    }
+
+    return encontrado;
+}
+
+
 int VarExp::eval(){
+    if(!this->isInEscopo()){
+        cout << "Erro: Var (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
+    }
+    
     return 1;
+}
+
+string VarExp::getId(){
+    return id;
 }
 
 string VarExp::codeGen(){

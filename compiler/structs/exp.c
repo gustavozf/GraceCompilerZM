@@ -7,7 +7,7 @@ AritmExp::AritmExp(Exp* expr1, Exp* expr2, string ope){
     
 int AritmExp::eval(){
     if (this->getTipo() == "error"){
-        cout<<"Aviso: Pode ser que os tipos não sejam apropriados para a operação aritmética!\n";
+        cout<<"Erro: Pode ser que os tipos não sejam apropriados para a operação aritmética!\n";
         return 0;
     }
 
@@ -33,7 +33,7 @@ RelExp::RelExp(Exp* expr1, Exp* expr2, string ope){
     
 int RelExp::eval(){
     if (this->getTipo() == "error"){
-        cout<<"Aviso: Pode ser que os tipos não sejam apropriados para a operação relacional!\n";
+        cout<<"Erro: Pode ser que os tipos não sejam apropriados para a operação relacional!\n";
         return 0;
     }
     return 1;
@@ -58,7 +58,7 @@ LogExp::LogExp(Exp* expr1, Exp* expr2, string ope){
     
 int LogExp::eval(){
     if (this->getTipo() == "error"){
-        cout<<"Aviso: Pode ser que os tipos não sejam apropriados para a operação lógica!\n";
+        cout<<"Erro: Pode ser que os tipos não sejam apropriados para a operação lógica!\n";
         return 0;
     }
     return 1;
@@ -83,7 +83,7 @@ IgExp::IgExp(Exp* expr1, Exp* expr2, string ope){
     
 int IgExp::eval(){
     if (this->getTipo() == "error"){
-        cout<<"Aviso: Pode ser que os tipos não sejam apropriados para a operação de igualdade!\n";
+        cout<<"Erro: Pode ser que os tipos não sejam apropriados para a operação de igualdade!\n";
         return 0;
     }
     
@@ -109,7 +109,7 @@ NegUnExp::NegUnExp(Exp* expr){
 
 int NegUnExp::eval(){
     if (this->getTipo() == "error"){
-        cout<<"Aviso: Pode ser que o tipo não seja apropriado para a operação de negação unária!\n";
+        cout<<"Erro: Pode ser que o tipo não seja apropriado para a operação de negação unária!\n";
         return 0;
     }
     
@@ -135,7 +135,7 @@ NegExp::NegExp(Exp* expr){
 
 int NegExp::eval(){
     if (this->getTipo() == "error"){
-        cout<<"Aviso: Pode ser que o tipo não seja apropriado para a operação de negação!\n";
+        cout<<"Erro: Pode ser que o tipo não seja apropriado para a operação de negação!\n";
         return 0;
     }
 
@@ -164,7 +164,7 @@ TerExp::TerExp(Exp* expr1, Exp* expr2, Exp* expr3){
 
 int TerExp::eval(){
     if (this->getTipo() == "error"){
-        cout<<"Aviso: Uso inapropriado da operacao ternaria!\n";
+        cout<<"Erro: Uso inapropriado da operacao ternaria!\n";
         return 0;
     }
 
@@ -250,17 +250,38 @@ string VarExp::getTipo(){
 }
 
 // -------------------------------------------------- FuncExp
-FuncExp::FuncExp(string id1){
+FuncExp::FuncExp(string id1, Escopo *atual1){
     id = id1;
     expressoes = nullptr;
+    atual = atual1;
 }
 
-FuncExp::FuncExp(string id1, list<Exp *> *exps){
+FuncExp::FuncExp(string id1, list<Exp *> *exps, Escopo *atual1){
     id = id1;
     expressoes = exps;
+    atual = atual1;
+}
+
+bool FuncExp::isInEscopo(){
+    bool encontrado = false;
+    Escopo *i = this->atual;
+
+    while((i != nullptr) && (!encontrado)){
+        encontrado = i->checkInserido(id);
+
+        if (!encontrado){
+            i = i->getPai();
+        }
+    }
+
+    return encontrado;
 }
 
 int FuncExp::eval(){
+    if(!this->isInEscopo()){
+        cout << "Erro: Funcao (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
+    }
+
     return 1;
 }
 

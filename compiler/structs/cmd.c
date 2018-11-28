@@ -142,23 +142,45 @@ string BlocoCmd::codeGen(){
 }
 
 // ------------------------------------------------------ ProcCmd
-ProcCmd::ProcCmd(string id1){
+ProcCmd::ProcCmd(string id1, , Escopo *atual1){
     id = id1;
     expressoes = nullptr;
+    atual = atual1;
 }
 
-ProcCmd::ProcCmd(string id1, list<Exp *> *exps){
+ProcCmd::ProcCmd(string id1, list<Exp *> *exps, Escopo *atual1){
     id = id1;
     expressoes = exps;
+    atual = atual1;
+}
+
+bool ProcCmd::isInEscopo(){
+    bool encontrado = false;
+    Escopo *i = this->atual;
+
+    while((i != nullptr) && (!encontrado)){
+        encontrado = i->checkInserido(id);
+
+        if (!encontrado){
+            i = i->getPai();
+        }
+    }
+
+    return encontrado;
 }
 
 int ProcCmd::eval(){
+    if(!this->isInEscopo()){
+        cout << "Erro: Procedimento (" << this->id << ") nao visivel ao escopo em que foi chamado!\n";
+    }
+
     return 1;
 }
 
 string ProcCmd::codeGen(){
     return "";
 }
+
 
 // -------------------------------------------- Programa
 Programa::Programa(list<Decl *> *decl, Escopo *glob){

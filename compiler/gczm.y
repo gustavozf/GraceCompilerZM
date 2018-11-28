@@ -37,6 +37,7 @@ Escopo *escopoAtual = new Escopo(nullptr);
 	TipoVar *tipoVar;
 	Cmd *cmd;
 	Exp *exp;
+	VarExp* varExp;
 	Decl *decl;
 	SpecVar *specVar;
 	Param *param;
@@ -126,7 +127,8 @@ Escopo *escopoAtual = new Escopo(nullptr);
 %type <tipoVar> tipo
 %type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip
 %type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco 
-%type <exp> expressao atrib-ini atrib-passo valor variavel
+%type <exp> expressao atrib-ini atrib-passo valor
+%type <varExp> variavel
 %type <decl> decVar declaracao decSub decProc decFun
 %type <param> param
 %type <specVar> specVar

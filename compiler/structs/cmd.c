@@ -153,7 +153,7 @@ string BlocoCmd::codeGen(){
 }
 
 // ------------------------------------------------------ ProcCmd
-ProcCmd::ProcCmd(string id1, , Escopo *atual1){
+ProcCmd::ProcCmd(string id1, Escopo *atual1){
     id = id1;
     expressoes = nullptr;
     atual = atual1;

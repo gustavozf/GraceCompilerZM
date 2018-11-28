@@ -1,5 +1,7 @@
 %error-verbose
+%debug
 %{
+#define YYDEBUG 1
 /* Declaracoes */
 #include <iostream>
 #include <list>
@@ -15,6 +17,7 @@ using namespace std;
 // Coisas do Flex que o Bison precisa
 extern int yylex();
 extern int yyparse();
+extern int yydebug;
 extern FILE *yyin;
 
 extern int num_linhas;
@@ -145,7 +148,7 @@ Escopo *escopoAtual = new Escopo(nullptr);
 %%
 	/* Gramatica */
 programa: 
-	declaracoes { $$ = new Programa($1, escopoAtual); raiz = $$; }
+	declaracoes { $$ = new Programa($1, escopoAtual); raiz = $$; cout << "Programa reconhecido!\n";}
 	;
 
 declaracoes: 
@@ -287,11 +290,11 @@ cmdFor:
 	;
 
 atrib-ini:
-	T_ID "=" T_NUM 		 	{$$ = new AtribFor($1, $3);}
+	T_ID "=" T_NUM 		 	{$$ = new AtribFor($1, $3, escopoAtual);}
 	;
 
 atrib-passo:
-	T_ID atribAgreg T_NUM 	{$$ = new AtribFor($1, $2, $3);}
+	T_ID atribAgreg T_NUM 	{$$ = new AtribFor($1, $2, $3, escopoAtual);}
 	;
 
 cmdStop:
@@ -313,8 +316,8 @@ cmdReturn:
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
-	T_ID "(" ")" ";"				{ $$ = new ProcCmd($1); 	}
-	| T_ID "(" cnjExpr ")" ";"		{ $$ = new ProcCmd($1, $3); }
+	T_ID "(" ")" ";"				{ $$ = new ProcCmd($1, escopoAtual);     }
+	| T_ID "(" cnjExpr ")" ";"		{ $$ = new ProcCmd($1, $3, escopoAtual); }
 	//| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	//| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
@@ -357,38 +360,40 @@ comandos:
 // ----------------------------------- Expressoes
 
 expressao:
-	valor										{	$$ = $1;						}
-	| variavel									{	$$ = $1;						}
-	| "(" expressao ")"							{	$$ = $2;						}
-	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2);		  	}
-	| "!" expressao					 			{	$$ = new NegExp($2);			}
-	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
-	| expressao "/" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
-	| expressao "%" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
-	| expressao "+" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
-	| expressao "-" expressao		 			{	$$ = new AritmExp($1, $3, $2); 	}
-	| expressao "<" expressao		 			{	$$ = new RelExp($1, $3, $2);	}
-	| expressao "<=" expressao  	 			{	$$ = new RelExp($1, $3, $2);	}
-	| expressao ">" expressao		 			{	$$ = new RelExp($1, $3, $2);	}
-	| expressao ">=" expressao		 			{	$$ = new RelExp($1, $3, $2);	}
-	| expressao "==" expressao		 			{	$$ = new IgExp($1, $3, $2);		}
-	| expressao "!=" expressao		 			{	$$ = new IgExp($1, $3, $2);		}
-	| expressao "&&" expressao		 			{	$$ = new LogExp($1, $3, $2);	}
-	| expressao "||" expressao		 			{	$$ = new LogExp($1, $3, $2);	}
-	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5);	}
-	| T_ID "(" ")" 								{	$$ = new FuncExp($1); 			}
-	| T_ID "(" cnjExpr ")"						{	$$ = new FuncExp($1, $3); 		}
+	valor										{	$$ = $1;								}
+	| variavel									{	$$ = $1;								}
+	| "(" expressao ")"							{	$$ = $2;								}
+	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2);		  			}
+	| "!" expressao					 			{	$$ = new NegExp($2);					}
+	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
+	| expressao "/" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
+	| expressao "%" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
+	| expressao "+" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
+	| expressao "-" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
+	| expressao "<" expressao		 			{	$$ = new RelExp($1, $3, $2);			}
+	| expressao "<=" expressao  	 			{	$$ = new RelExp($1, $3, $2);			}
+	| expressao ">" expressao		 			{	$$ = new RelExp($1, $3, $2);			}
+	| expressao ">=" expressao		 			{	$$ = new RelExp($1, $3, $2);			}
+	| expressao "==" expressao		 			{	$$ = new IgExp($1, $3, $2);				}
+	| expressao "!=" expressao		 			{	$$ = new IgExp($1, $3, $2);				}
+	| expressao "&&" expressao		 			{	$$ = new LogExp($1, $3, $2);			}
+	| expressao "||" expressao		 			{	$$ = new LogExp($1, $3, $2);			}
+	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5);			}
+	| T_ID "(" ")" 								{	$$ = new FuncExp($1, escopoAtual); 		}
+	| T_ID "(" cnjExpr ")"						{	$$ = new FuncExp($1, $3, escopoAtual);  }
 	;
 
 variavel:
-	T_ID						{ $$ = new VarExp($1);     }
-	| T_ID "[" expressao "]"	{ $$ = new VarExp($1, $3); }
+	T_ID						{ $$ = new VarExp($1, escopoAtual);     }
+	| T_ID "[" expressao "]"	{ $$ = new VarExp($1, $3, escopoAtual); }
 	;
 
 %%
 
 /* Codificacao C++ */
 int main(int argc, char *argv[]){
+	yydebug = 0;
+
 	if(argc < 2){
 		cout << "ERRO: Eh necessario passar o nome do arquivo de entrada!\n";
 

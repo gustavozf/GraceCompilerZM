@@ -6,16 +6,16 @@ ElemTab::ElemTab(string cat, string type, bool agreg){
     retorno = "";
     numParams = 0;
     agregado = agreg;
-    tiposParams = new list<pair<int, string > >();
+    params = new list<string >();
 } 
 
-ElemTab::ElemTab(string cat, string ret, int nParams, list<pair<int, string > > *tipos){
+ElemTab::ElemTab(string cat, string ret, int nParams, list<string > *tipos){
     categoria = cat;
     tipo = "";
     retorno = ret;
     numParams = nParams;
     agregado = false;
-    tiposParams = tipos;
+    params = tipos;
 }
 
 // ========================================= Escopo

@@ -157,6 +157,10 @@ int DeclVar::eval(){
     return 1;
 }
 
+string DeclVar::getTipo(){
+    return this->tipo->getTipo();
+}
+
 void DeclVar::addTabSimb(Escopo *atual){
     list<SpecVar *>::const_iterator i;
     for(i=listaSpecVar->begin(); i != listaSpecVar->end(); ++i){
@@ -209,6 +213,14 @@ string DeclSub::codeGen(){
     return "";
 }
 
+string DeclSub::getTipo(){
+    return this->tipo;
+}
+
+string DeclSub::getId(){
+    return this->id;
+}
+
 int DeclSub::eval(){
     return 1;
 }
@@ -227,19 +239,10 @@ void DeclSub::addTabSimb(Escopo *atual){
         }
     }
 
-    if(retorno == nullptr){
-        atual->addElem( id, 
-                        new ElemTab(tipo, 
-                                    "", 
-                                    numParams, 
-                                    tipos)
-                      );
-    } else {
-        atual->addElem( id, 
-                        new ElemTab(tipo, 
-                                    retorno->getTipo(), 
-                                    numParams, 
-                                    tipos)
-                      );
-    }
+    atual->addElem( id, 
+                    new ElemTab(tipo, 
+                                (retorno == nullptr) ? "" : retorno->getTipo(), 
+                                numParams, 
+                                tipos)
+                  );
 }

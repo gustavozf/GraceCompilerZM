@@ -115,6 +115,7 @@ class Decl{
         virtual string codeGen() = 0;
         virtual int eval() = 0;
         virtual void addTabSimb(Escopo *atual) = 0;
+        virtual string getTipo() = 0;
 };
 
 class DeclVar : public Decl{
@@ -126,6 +127,7 @@ class DeclVar : public Decl{
         string codeGen();
         int eval();
         void addTabSimb(Escopo *atual);
+        string getTipo();
 };
 
 #include "cmd.h"
@@ -147,6 +149,8 @@ class DeclSub : public Decl{
         string codeGen();
         int eval();
         void addTabSimb(Escopo *atual);
+        string getTipo();
+        string getId();
 };
 
 #endif

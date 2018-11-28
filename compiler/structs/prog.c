@@ -42,6 +42,6 @@ ElemTab* Escopo::getElemTab(string id){
     if(this->checkInserido(id)){
         return tabelaSimbolos[id];
     }else{
-        return "null"
+        return nullptr;
     }
 }

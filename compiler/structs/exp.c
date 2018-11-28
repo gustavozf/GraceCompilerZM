@@ -271,6 +271,10 @@ string VarExp::getId(){
     return id;
 }
 
+Escopo* VarExp::getEscopo(){
+    return this->atual;
+}
+
 string VarExp::codeGen(){
     return "";
 }

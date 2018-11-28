@@ -61,8 +61,8 @@ string RetCmd::codeGen(){
 }
 
 // ----------------------------------------------AtribCmd
-AtribCmd::AtribCmd(VarExp *varia, string typ, Exp *ex){
-    var = varia;
+AtribCmd::AtribCmd(Exp *varia, string typ, Exp *ex){
+    var = static_cast<VarExp *>(varia);
     type = typ;
     exp = ex;
 }
@@ -70,9 +70,12 @@ AtribCmd::AtribCmd(VarExp *varia, string typ, Exp *ex){
 int AtribCmd::eval(){
     if(!var->isInEscopo()){
         cout << "Erro: Var (" << var->getId() << ") nao visivel ao escopo em que foi chamada!\n";
+
+        return 0;
     }else{
-        if(!(var->atual->getElemTab(var->id).tipo == exp->getTipo())){
+        if(!(var->getEscopo()->getElemTab(var->getId())->tipo == exp->getTipo())){
             cout << "Erro: Atribuicao de tipos incompatíveis";
+            return 0;
         }
     }
     return 1;
@@ -96,8 +99,8 @@ string WriteCmd::codeGen(){
 }
 
 // --------------------------------------------ReadCmd
-ReadCmd::ReadCmd(VarExp* varia){
-    var = varia;
+ReadCmd::ReadCmd(Exp* varia){
+    var = static_cast<VarExp *>(varia);
 }
 
 int ReadCmd::eval(){
@@ -183,8 +186,37 @@ bool ProcCmd::isInEscopo(){
 }
 
 int ProcCmd::eval(){
+    list<Exp *>::iterator i;
+    list<string >::iterator j;
+    ElemTab* proc;
+    int count = 0;
+    bool igual = true;
+    
     if(!this->isInEscopo()){
         cout << "Erro: Procedimento (" << this->id << ") nao visivel ao escopo em que foi chamado!\n";
+        return 0;
+    } else {
+        proc = this->atual->getElemTab(this->id);
+
+        if(proc->numParams != this->expressoes->size()){
+            cout << "Erro: Numero de parametros incompativel na chamada do procedimento ("<< this->id <<")!\n";
+            return 0; 
+        } else {
+            j = proc->params->begin();
+
+            for(i = this->expressoes->begin(); i != this->expressoes->end(); ++i){
+                count++;
+                if((*j) != (*i)->getTipo()){
+                    igual = false;
+                    cout << "Erro: Parametro #"<< count << " da chamada de procedimento '" << this->id << "' possui tipo incorreto!\n";
+                }
+
+                ++j;
+            }
+
+            if(!igual) return 0;
+        }
+
     }
 
     return 1;
@@ -202,6 +234,25 @@ Programa::Programa(list<Decl *> *decl, Escopo *glob){
 }
 
 int Programa::eval(){
+    list<Decl *>::iterator i = declaracoes->end();
+    bool isMain = true;
+    DeclSub *main;
+
+    if ((*i)->getTipo() == "funcao"){
+        main = static_cast<DeclSub *>(*i);
+
+        if(main->getId() != "main"){
+            isMain = false;
+        } 
+    } else {
+        isMain = false;
+    }
+
+    if (!isMain){
+        cout << "Erro: Ultima declaracao do programa deve ser a funcao main!\n";
+        return 0;
+    }
+
     return 1;
 }
 

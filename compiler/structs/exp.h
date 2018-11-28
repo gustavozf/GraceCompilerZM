@@ -140,6 +140,7 @@ class VarExp : public Exp{
         string codeGen();
         string getTipo();
         string getId();
+        Escopo* getEscopo();
 };
 
 class FuncExp : public Exp{

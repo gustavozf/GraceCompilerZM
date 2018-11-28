@@ -130,8 +130,7 @@ Escopo *escopoAtual = new Escopo(nullptr);
 %type <tipoVar> tipo
 %type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip
 %type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco 
-%type <exp> expressao atrib-ini atrib-passo valor
-%type <varExp> variavel
+%type <exp> expressao atrib-ini atrib-passo valor variavel
 %type <decl> decVar declaracao decSub decProc decFun
 %type <param> param
 %type <specVar> specVar

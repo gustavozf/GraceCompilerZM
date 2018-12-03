@@ -1,4 +1,5 @@
 #include "cmd.h"
+#include "dec.h"
 
 // ------------------------------------------- IfCmd
 IfCmd::IfCmd(Exp *cnd, Cmd *thn){
@@ -44,15 +45,41 @@ string StopSkipCmd::codeGen(){
 }
 
 //-------------------------------------------- RetCmd
-RetCmd::RetCmd(Exp *ret){
+RetCmd::RetCmd(Exp *ret, stack<DeclSub *> *pilhaSub){
     retorno = ret;
+    pilhaSubprog = pilhaSub;
 }
 
-RetCmd::RetCmd(){
+RetCmd::RetCmd(stack<DeclSub *> *pilhaSub){
     retorno = nullptr;
+    pilhaSubprog = pilhaSub;
 }
 
 int RetCmd::eval(){
+    DeclSub *subprog;
+
+    if(pilhaSubprog->size() == 0){
+        cout << "Erro: retorno fora de subprograma!\n";
+        return 0;
+    } else {
+        subprog = pilhaSubprog->top();
+
+        if ((subprog->getTipo() == "procedimento") && (retorno != nullptr)){
+            cout << "Erro: retorno de procedimento nao deve conter uma expressao!\n";
+            return 0;
+        } else {
+            if ((subprog->getTipo() == "funcao")){
+                if (retorno == nullptr){
+                    cout << "Erro: retorno de funcao deve conter uma expressao!\n";
+                    return 0;
+                } else if ((subprog->getTipoRetorno() != retorno->getTipo())){
+                    cout << "Erro: retorno de tipo incopativel com o tipo declarado na funcao!\n";
+                    return 0;
+                }
+            }
+        }
+    }
+
     return 1;
 }
 
@@ -117,13 +144,20 @@ string ReadCmd::codeGen(){
 // ----------------------------------------------ForCmd
 ForCmd::ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman){
     exp = ex;
-    atribIni = atriIni;
-    atribPasso = atriPasso;
+    atribIni = static_cast<AtribFor *>(atriIni);
+    atribPasso = static_cast<AtribFor *>(atriPasso);
     comando = cman;
 }
 
 int ForCmd::eval(){
-    return 1;
+    int cond[3] = {true, true, true};
+
+    if (this->exp->getTipo() != "bool"){
+        cout << "Erro! Expressao condicional do comando for deve retornar um tipo logico (encontrado: "<< this->exp->getTipo()  <<")!\n";
+        cond[0] = false;
+    }
+
+    return cond[0] && cond[1] && cond[2];
 }
 
 string ForCmd::codeGen(){
@@ -235,20 +269,19 @@ Programa::Programa(list<Decl *> *decl, Escopo *glob){
 
 int Programa::eval(){
     list<Decl *>::iterator i = declaracoes->end();
-    bool isMain = true;
     DeclSub *main;
 
     if ((*i)->getTipo() == "funcao"){
         main = static_cast<DeclSub *>(*i);
 
         if(main->getId() != "main"){
-            isMain = false;
-        } 
+            cout << "Erro: Ultima declaracao do programa deve ser a funcao main!\n";
+            return 0;
+        } else if(main->getTipoRetorno() != "main") {
+            cout << "Erro: A funcao main deve retornar um tipo inteiro!\n";
+            return 0;
+        }
     } else {
-        isMain = false;
-    }
-
-    if (!isMain){
         cout << "Erro: Ultima declaracao do programa deve ser a funcao main!\n";
         return 0;
     }

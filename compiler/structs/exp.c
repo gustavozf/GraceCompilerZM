@@ -273,7 +273,10 @@ int VarExp::eval(){
     }
 
     if(this->position != nullptr){
-        cond2 = (this->position->getTipo() == "int") ? 1 : 0;
+       if (this->position->getTipo() != "int"){
+           cout << "Erro! Acesso de arranjo por meio de um valor não inteiro ("<< this->position->getTipo() <<")!\n";
+           cond2 = 0;
+       }
     }
     
     return cond1 && cond2;

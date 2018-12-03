@@ -1,9 +1,5 @@
-#include <iostream>
-#include <string>
-#include <list>
+#include "common.h"
 #include "prog.h"
-
-using namespace std;
 
 #ifndef EXP_H
 #define EXP_H

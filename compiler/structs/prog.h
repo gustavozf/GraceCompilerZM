@@ -1,9 +1,4 @@
-#include <iostream>
-#include <string>
-#include <list>
-#include <map>
-
-using namespace std;
+#include "common.h"
 
 #ifndef PROG_H
 #define PROG_H

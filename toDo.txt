@@ -1,19 +1,13 @@
 To do list:
 
 Semantica:
-	- Programa
-		* subrotina "main" que tem "return"  0 ou outro num
 	- Comandos
 		- For
 			* inicializacao e passo devem ser analisadas como Atribuicao
-			* expressao condicional = tipo logico
 		- Stop
 			* cercado (in)diretamente por um while/for
 		- Skip
 			* cercado (in)diretamente por um while/for
-		- Return
-			* funcao = tipo da expressao igual ao retorno declarado
-			* procedimento = retorno sem expressao
 	
 	
 	

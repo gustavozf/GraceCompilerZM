@@ -28,6 +28,8 @@ void yyerror(const char *s);
 
 Programa *raiz = nullptr;
 Escopo *escopoAtual = new Escopo(nullptr);
+stack<DeclSub *> *pilhaSubprog = new stack<DeclSub *>();
+stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %}
 
 /* Uniao que representa o valores basicos possiveis.
@@ -208,13 +210,13 @@ decSub:
 	;
 
 decProc:
-	T_DEF T_ID "(" listaParametros ")" bloco { $$ = new DeclSub($2, $4, $6); }
-	| T_DEF T_ID "(" ")" bloco				 { $$ = new DeclSub($2, $5); }
+	T_DEF T_ID "(" listaParametros ")" bloco { $$ = new DeclSub($2, $4, $6, pilhaSubprog); }
+	| T_DEF T_ID "(" ")" bloco				 { $$ = new DeclSub($2, $5, pilhaSubprog); }
 	;
 
 decFun:
-	T_DEF T_ID "(" listaParametros ")" ":" tipo bloco	{ $$ = new DeclSub($2, $4, $7, $8); }
-	| T_DEF T_ID "(" ")" ":" tipo bloco					{ $$ = new DeclSub($2, $6, $7); }
+	T_DEF T_ID "(" listaParametros ")" ":" tipo bloco	{ $$ = new DeclSub($2, $4, $7, $8, pilhaSubprog); }
+	| T_DEF T_ID "(" ")" ":" tipo bloco					{ $$ = new DeclSub($2, $6, $7, pilhaSubprog); }
 	; 
 
 listaParametros:
@@ -307,8 +309,8 @@ cmdSkip:
 	;
 
 cmdReturn:
-	T_RETURN ";"				{$$ = new RetCmd();}
-	| T_RETURN expressao ";"	{$$ = new RetCmd($2);}
+	T_RETURN ";"				{$$ = new RetCmd(pilhaSubprog);}
+	| T_RETURN expressao ";"	{$$ = new RetCmd($2, pilhaSubprog);}
 	//| T_RETURN 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	//| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;

@@ -1,4 +1,5 @@
 #include "dec.h"
+#include "cmd.h" 
 
 // ---------------------------------------------- StringTipoVar
 StringTipoVar::StringTipoVar(){
@@ -211,37 +212,41 @@ void DeclVar::addTabSimb(Escopo *atual){
 
 // ---------------------------------------------------------------- DeclSub
 // Declaracao de Procedimento
-DeclSub::DeclSub(string id1, list<SpecParam *> *lista, Cmd *block){
+DeclSub::DeclSub(string id1, list<SpecParam *> *lista, Cmd *block, stack<DeclSub *> *pilhaSub){
     tipo = "procedimento";
     id = id1;
     listaParam = lista;
     retorno = nullptr; 
     bloco = block;
+    pilhaSubprog = pilhaSub;
 }
 
-DeclSub::DeclSub(string id1, Cmd *block){
+DeclSub::DeclSub(string id1, Cmd *block, stack<DeclSub *> *pilhaSub){
     tipo = "procedimento";
     id = id1;
     listaParam = new list<SpecParam *>(); // lista vazia
     retorno = nullptr;
     bloco = block;
+    pilhaSubprog = pilhaSub;
 }
 
 // Declaracao de Funcao
-DeclSub::DeclSub(string id1, list<SpecParam *> *lista, TipoVar *ret, Cmd *block){
+DeclSub::DeclSub(string id1, list<SpecParam *> *lista, TipoVar *ret, Cmd *block, stack<DeclSub *> *pilhaSub){
     tipo = "funcao";
     id = id1;
     listaParam = lista;
     retorno = ret;
     bloco = block;
+    pilhaSubprog = pilhaSub;
 }
 
-DeclSub::DeclSub(string id1, TipoVar *ret, Cmd *block){
+DeclSub::DeclSub(string id1, TipoVar *ret, Cmd *block, stack<DeclSub *> *pilhaSub){
     tipo = "funcao";
     id = id1;
     listaParam = new list<SpecParam *>(); // lista vazia
     retorno = ret;
     bloco = block;
+    pilhaSubprog = pilhaSub;
 }
 
 string DeclSub::codeGen(){
@@ -257,7 +262,19 @@ string DeclSub::getId(){
 }
 
 int DeclSub::eval(){
+    pilhaSubprog->push(this);
+    // chamar o eval() das outras estruturas
+    pilhaSubprog->pop();
+
     return 1;
+}
+
+string DeclSub::getTipoRetorno(){
+    if(retorno == nullptr){
+        return "";
+    }
+
+    return this->retorno->getTipo();
 }
 
 void DeclSub::addTabSimb(Escopo *atual){

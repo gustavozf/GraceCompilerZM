@@ -130,9 +130,9 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 /* Declaracao de Tipos */
 %type <sval> tiposAtrib atribAgreg
 %type <tipoVar> tipo
-%type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip
-%type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco 
-%type <exp> expressao atrib-ini atrib-passo valor variavel
+%type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip atrib-ini
+%type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco atrib-passo
+%type <exp> expressao valor variavel
 %type <decl> decVar declaracao decSub decProc decFun
 %type <param> param
 %type <specVar> specVar
@@ -291,11 +291,11 @@ cmdFor:
 	;
 
 atrib-ini:
-	T_ID "=" T_NUM 		 	{$$ = new AtribFor($1, $3, escopoAtual);}
+	variavel "=" expressao 		 	{ $$ = new AtribCmd($1, $2, $3);}
 	;
 
 atrib-passo:
-	T_ID atribAgreg T_NUM 	{$$ = new AtribFor($1, $2, $3, escopoAtual);}
+	variavel atribAgreg expressao 	{ $$ = new AtribCmd($1, $2, $3);}
 	;
 
 cmdStop:

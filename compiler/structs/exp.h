@@ -97,9 +97,11 @@ class TerExp : public Exp{
         string getTipo();
 };
 
-
+/*
 class AtribFor : public Exp{
     private:
+        //Exp *exp;
+        //VarExp *var;
         string type, id, num;
         Escopo *atual;
 
@@ -109,7 +111,7 @@ class AtribFor : public Exp{
         int eval();
         string codeGen();
         string getTipo();
-};
+};*/
 
 class ValExp : public Exp{
     private:

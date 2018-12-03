@@ -37,14 +37,26 @@ class WhileCmd : public Cmd{
         string codeGen();
 };
 
+class AtribCmd : public Cmd{
+    private:
+        string type;
+        Exp *exp;
+        VarExp *var;
+
+    public:
+        AtribCmd(Exp *varia, string typ, Exp *ex);
+        int eval();
+        string codeGen();  
+};
+
 class ForCmd : public Cmd{
     private:
         Exp *exp;
-        AtribFor *atribIni, *atribPasso;
+        AtribCmd *atribIni, *atribPasso;
         Cmd* comando;
         stack<Cmd *> *pilhaCmdRepet;
     public:
-        ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep);
+        ForCmd(Cmd *atriIni, Exp *ex, Cmd *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep);
         int eval();
         string codeGen();
 };
@@ -57,18 +69,6 @@ class StopSkipCmd : public Cmd{
         StopSkipCmd(string comando, stack<Cmd *> *pilhaCmdRep);
         int eval();
         string codeGen();
-};
-
-class AtribCmd : public Cmd{
-    private:
-        string type;
-        Exp *exp;
-        VarExp *var;
-
-    public:
-        AtribCmd(Exp *varia, string typ, Exp *ex);
-        int eval();
-        string codeGen();  
 };
 
 class ReadCmd : public Cmd{

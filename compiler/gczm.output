@@ -85,9 +85,9 @@ Gramática
 
    59 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando
 
-   60 atrib-ini: T_ID "=" T_NUM
+   60 atrib-ini: variavel "=" expressao
 
-   61 atrib-passo: T_ID atribAgreg T_NUM
+   61 atrib-passo: variavel atribAgreg expressao
 
    62 cmdStop: T_STOP ";"
 
@@ -188,8 +188,8 @@ T_FALSE (273) 20
 "%=" (301) 52
 "?" (302) 94
 ":" (303) 6 27 28 31 94
-T_ID (304) 13 14 15 16 25 26 27 28 34 35 60 61 66 67 95 96 97 98
-T_NUM (305) 10 22 60 61
+T_ID (304) 13 14 15 16 25 26 27 28 34 35 66 67 95 96 97 98
+T_NUM (305) 10 22
 T_LIT_STRING (306) 21
 T_NEG_UNAR (307)
 T_THEN (308)
@@ -271,10 +271,10 @@ comandos (89)
     à esquerda: 74 75, à direita: 71 72 74
 expressao (90)
     à esquerda: 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92
-    93 94 95 96, à direita: 14 15 16 17 18 48 56 57 58 59 65 78 79
-    80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 98
+    93 94 95 96, à direita: 14 15 16 17 18 48 56 57 58 59 60 61 65
+    78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 98
 variavel (91)
-    à esquerda: 97 98, à direita: 48 68 77
+    à esquerda: 97 98, à direita: 48 60 61 68 77
 
 
 Estado 0
@@ -2173,9 +2173,10 @@ Estado 128
 
    59 cmdFor: T_FOR "(" . atrib-ini ";" expressao ";" atrib-passo ")" comando
 
-    T_ID  deslocar, e ir ao estado 160
+    T_ID  deslocar, e ir ao estado 131
 
-    atrib-ini  ir ao estado 161
+    atrib-ini  ir ao estado 160
+    variavel   ir ao estado 161
 
 
 Estado 129
@@ -2558,16 +2559,16 @@ Estado 159
 
 Estado 160
 
-   60 atrib-ini: T_ID . "=" T_NUM
+   59 cmdFor: T_FOR "(" atrib-ini . ";" expressao ";" atrib-passo ")" comando
 
-    "="  deslocar, e ir ao estado 175
+    ";"  deslocar, e ir ao estado 175
 
 
 Estado 161
 
-   59 cmdFor: T_FOR "(" atrib-ini . ";" expressao ";" atrib-passo ")" comando
+   60 atrib-ini: variavel . "=" expressao
 
-    ";"  deslocar, e ir ao estado 176
+    "="  deslocar, e ir ao estado 176
 
 
 Estado 162
@@ -2793,14 +2794,25 @@ Estado 174
 
 Estado 175
 
-   60 atrib-ini: T_ID "=" . T_NUM
+   59 cmdFor: T_FOR "(" atrib-ini ";" . expressao ";" atrib-passo ")" comando
 
-    T_NUM  deslocar, e ir ao estado 183
+    T_TRUE        deslocar, e ir ao estado 27
+    T_FALSE       deslocar, e ir ao estado 28
+    "("           deslocar, e ir ao estado 29
+    "-"           deslocar, e ir ao estado 30
+    "!"           deslocar, e ir ao estado 31
+    T_ID          deslocar, e ir ao estado 32
+    T_NUM         deslocar, e ir ao estado 33
+    T_LIT_STRING  deslocar, e ir ao estado 34
+
+    valor      ir ao estado 35
+    expressao  ir ao estado 183
+    variavel   ir ao estado 37
 
 
 Estado 176
 
-   59 cmdFor: T_FOR "(" atrib-ini ";" . expressao ";" atrib-passo ")" comando
+   60 atrib-ini: variavel "=" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -2887,13 +2899,6 @@ Estado 182
 
 Estado 183
 
-   60 atrib-ini: T_ID "=" T_NUM .
-
-    $padrão  reduzir usando a regra 60 (atrib-ini)
-
-
-Estado 184
-
    59 cmdFor: T_FOR "(" atrib-ini ";" expressao . ";" atrib-passo ")" comando
    81 expressao: expressao . "*" expressao
    82          | expressao . "/" expressao
@@ -2925,6 +2930,42 @@ Estado 184
     "||"  deslocar, e ir ao estado 69
     "&&"  deslocar, e ir ao estado 70
     "?"   deslocar, e ir ao estado 71
+
+
+Estado 184
+
+   60 atrib-ini: variavel "=" expressao .
+   81 expressao: expressao . "*" expressao
+   82          | expressao . "/" expressao
+   83          | expressao . "%" expressao
+   84          | expressao . "+" expressao
+   85          | expressao . "-" expressao
+   86          | expressao . "<" expressao
+   87          | expressao . "<=" expressao
+   88          | expressao . ">" expressao
+   89          | expressao . ">=" expressao
+   90          | expressao . "==" expressao
+   91          | expressao . "!=" expressao
+   92          | expressao . "&&" expressao
+   93          | expressao . "||" expressao
+   94          | expressao . "?" expressao ":" expressao
+
+    "+"   deslocar, e ir ao estado 58
+    "-"   deslocar, e ir ao estado 59
+    "*"   deslocar, e ir ao estado 60
+    "/"   deslocar, e ir ao estado 61
+    "%"   deslocar, e ir ao estado 62
+    "=="  deslocar, e ir ao estado 63
+    "!="  deslocar, e ir ao estado 64
+    ">"   deslocar, e ir ao estado 65
+    ">="  deslocar, e ir ao estado 66
+    "<"   deslocar, e ir ao estado 67
+    "<="  deslocar, e ir ao estado 68
+    "||"  deslocar, e ir ao estado 69
+    "&&"  deslocar, e ir ao estado 70
+    "?"   deslocar, e ir ao estado 71
+
+    $padrão  reduzir usando a regra 60 (atrib-ini)
 
 
 Estado 185
@@ -2976,9 +3017,10 @@ Estado 188
 
    59 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" . atrib-passo ")" comando
 
-    T_ID  deslocar, e ir ao estado 190
+    T_ID  deslocar, e ir ao estado 131
 
-    atrib-passo  ir ao estado 191
+    atrib-passo  ir ao estado 190
+    variavel     ir ao estado 191
 
 
 Estado 189
@@ -2990,7 +3032,14 @@ Estado 189
 
 Estado 190
 
-   61 atrib-passo: T_ID . atribAgreg T_NUM
+   59 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo . ")" comando
+
+    ")"  deslocar, e ir ao estado 192
+
+
+Estado 191
+
+   61 atrib-passo: variavel . atribAgreg expressao
 
     "+="  deslocar, e ir ao estado 144
     "-="  deslocar, e ir ao estado 145
@@ -2998,24 +3047,10 @@ Estado 190
     "/="  deslocar, e ir ao estado 147
     "%="  deslocar, e ir ao estado 148
 
-    atribAgreg  ir ao estado 192
-
-
-Estado 191
-
-   59 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo . ")" comando
-
-    ")"  deslocar, e ir ao estado 193
+    atribAgreg  ir ao estado 193
 
 
 Estado 192
-
-   61 atrib-passo: T_ID atribAgreg . T_NUM
-
-    T_NUM  deslocar, e ir ao estado 194
-
-
-Estado 193
 
    59 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" . comando
 
@@ -3030,7 +3065,7 @@ Estado 193
     "{"       deslocar, e ir ao estado 44
     T_ID      deslocar, e ir ao estado 82
 
-    comando         ir ao estado 195
+    comando         ir ao estado 194
     cmdSimples      ir ao estado 85
     cmdAtrib        ir ao estado 86
     cmdIf           ir ao estado 87
@@ -3046,15 +3081,62 @@ Estado 193
     variavel        ir ao estado 98
 
 
+Estado 193
+
+   61 atrib-passo: variavel atribAgreg . expressao
+
+    T_TRUE        deslocar, e ir ao estado 27
+    T_FALSE       deslocar, e ir ao estado 28
+    "("           deslocar, e ir ao estado 29
+    "-"           deslocar, e ir ao estado 30
+    "!"           deslocar, e ir ao estado 31
+    T_ID          deslocar, e ir ao estado 32
+    T_NUM         deslocar, e ir ao estado 33
+    T_LIT_STRING  deslocar, e ir ao estado 34
+
+    valor      ir ao estado 35
+    expressao  ir ao estado 195
+    variavel   ir ao estado 37
+
+
 Estado 194
-
-   61 atrib-passo: T_ID atribAgreg T_NUM .
-
-    $padrão  reduzir usando a regra 61 (atrib-passo)
-
-
-Estado 195
 
    59 cmdFor: T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando .
 
     $padrão  reduzir usando a regra 59 (cmdFor)
+
+
+Estado 195
+
+   61 atrib-passo: variavel atribAgreg expressao .
+   81 expressao: expressao . "*" expressao
+   82          | expressao . "/" expressao
+   83          | expressao . "%" expressao
+   84          | expressao . "+" expressao
+   85          | expressao . "-" expressao
+   86          | expressao . "<" expressao
+   87          | expressao . "<=" expressao
+   88          | expressao . ">" expressao
+   89          | expressao . ">=" expressao
+   90          | expressao . "==" expressao
+   91          | expressao . "!=" expressao
+   92          | expressao . "&&" expressao
+   93          | expressao . "||" expressao
+   94          | expressao . "?" expressao ":" expressao
+
+    "+"   deslocar, e ir ao estado 58
+    "-"   deslocar, e ir ao estado 59
+    "*"   deslocar, e ir ao estado 60
+    "/"   deslocar, e ir ao estado 61
+    "%"   deslocar, e ir ao estado 62
+    "=="  deslocar, e ir ao estado 63
+    "!="  deslocar, e ir ao estado 64
+    ">"   deslocar, e ir ao estado 65
+    ">="  deslocar, e ir ao estado 66
+    "<"   deslocar, e ir ao estado 67
+    "<="  deslocar, e ir ao estado 68
+    "||"  deslocar, e ir ao estado 69
+    "&&"  deslocar, e ir ao estado 70
+    "?"   deslocar, e ir ao estado 71
+
+    $padrão  reduzir usando a regra 61 (atrib-passo)

@@ -44,10 +44,10 @@ string WhileCmd::codeGen(){
 }
 
 // ----------------------------------------------ForCmd
-ForCmd::ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep){
+ForCmd::ForCmd(Cmd *atriIni, Exp *ex, Cmd *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep){
     exp = ex;
-    atribIni = static_cast<AtribFor *>(atriIni);
-    atribPasso = static_cast<AtribFor *>(atriPasso);
+    atribIni = static_cast<AtribCmd *>(atriIni);
+    atribPasso = static_cast<AtribCmd *>(atriPasso);
     comando = cman;
     pilhaCmdRepet = pilhaCmdRep;
 }

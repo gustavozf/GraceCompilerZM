@@ -183,6 +183,7 @@ string TerExp::getTipo(){
     }
 }
 
+/*
 // ---------------------------------------------------------- AtribFor
 AtribFor::AtribFor(string id1, string typ, string nume, Escopo *atual1){
     id = id1;
@@ -209,7 +210,7 @@ string AtribFor::codeGen(){
 string AtribFor::getTipo(){
     return "";
 }
-
+*/
 // ---------------------------------------------------------- ValExp
 ValExp::ValExp(string val, string typ){
     valor = val;

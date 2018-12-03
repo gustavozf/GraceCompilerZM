@@ -4,10 +4,6 @@ Semantica:
 	- Comandos
 		- For
 			* inicializacao e passo devem ser analisadas como Atribuicao
-		- Stop
-			* cercado (in)diretamente por um while/for
-		- Skip
-			* cercado (in)diretamente por um while/for
 	
 	
 	

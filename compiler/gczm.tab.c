@@ -1849,13 +1849,13 @@ yyreduce:
 
   case 59:
 #line 286 "gczm.y" /* yacc.c:1646  */
-    {(yyval.cmd) = new WhileCmd((yyvsp[-2].exp), (yyvsp[0].cmd));}
+    {(yyval.cmd) = new WhileCmd((yyvsp[-2].exp), (yyvsp[0].cmd), pilhaCmdRepet);}
 #line 1854 "gczm.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
 #line 290 "gczm.y" /* yacc.c:1646  */
-    {(yyval.cmd) = new ForCmd((yyvsp[-6].exp), (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].cmd));}
+    {(yyval.cmd) = new ForCmd((yyvsp[-6].exp), (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].cmd), pilhaCmdRepet);}
 #line 1860 "gczm.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1873,13 +1873,13 @@ yyreduce:
 
   case 63:
 #line 302 "gczm.y" /* yacc.c:1646  */
-    {(yyval.cmd) = new StopSkipCmd((yyvsp[-1].sval));}
+    {(yyval.cmd) = new StopSkipCmd((yyvsp[-1].sval), pilhaCmdRepet);}
 #line 1878 "gczm.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
 #line 307 "gczm.y" /* yacc.c:1646  */
-    {(yyval.cmd) = new StopSkipCmd((yyvsp[-1].sval));}
+    {(yyval.cmd) = new StopSkipCmd((yyvsp[-1].sval), pilhaCmdRepet);}
 #line 1884 "gczm.tab.c" /* yacc.c:1646  */
     break;
 

@@ -19,24 +19,71 @@ string IfCmd::codeGen(){
 }
 
 // ------------------------------------------- WhileCmd
-WhileCmd::WhileCmd(Exp *cnd, Cmd *cmd){
+WhileCmd::WhileCmd(Exp *cnd, Cmd *cmd, stack<Cmd *> *pilhaCmdRep){
     condicao = cnd; comando = cmd;
+    pilhaCmdRepet = pilhaCmdRep;
 }
 
 int WhileCmd::eval(){
-    return (condicao->getTipo() == "bool");
+    pilhaCmdRepet->push(this);
+    int retorno = 1;
+
+    if(condicao->getTipo() != "bool"){
+        cout << "Erro Sematico: a expressao de um comando while deve ser de tipo booleano (encontrado = "<< condicao->getTipo() <<"!\n";
+        retorno = 0;
+    }
+
+    // chamar os outros metodos
+
+    pilhaCmdRepet->pop();
+    return retorno;
 }
 
 string WhileCmd::codeGen(){
     return "";
 }
 
+// ----------------------------------------------ForCmd
+ForCmd::ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep){
+    exp = ex;
+    atribIni = static_cast<AtribFor *>(atriIni);
+    atribPasso = static_cast<AtribFor *>(atriPasso);
+    comando = cman;
+    pilhaCmdRepet = pilhaCmdRep;
+}
+
+int ForCmd::eval(){
+    int cond[3] = {true, true, true};
+
+    pilhaCmdRepet->push(this);
+
+    if (this->exp->getTipo() != "bool"){
+        cout << "Erro Semantico: Expressao condicional do comando for deve retornar um tipo logico (encontrado: "<< this->exp->getTipo()  <<")!\n";
+        cond[0] = false;
+    }
+
+    // chamar os outros metodos
+
+    pilhaCmdRepet->pop();
+
+    return cond[0] && cond[1] && cond[2];
+}
+
+string ForCmd::codeGen(){
+    return "";
+}
+
 //-------------------------------------------- StopSkipCmd
-StopSkipCmd::StopSkipCmd(string comando){
+StopSkipCmd::StopSkipCmd(string comando, stack<Cmd *> *pilhaCmdRep){
     cmd = comando;
+    pilhaCmdRepet = pilhaCmdRep;
 }
 
 int StopSkipCmd::eval(){
+    if(pilhaCmdRepet->size() == 0){
+        cout << "Erro Semantico: o comando "<<cmd<<" deve estar involvido diretamente ou indiretamente por um laco de repeticao!\n";
+    }
+
     return 1;
 }
 
@@ -132,35 +179,13 @@ ReadCmd::ReadCmd(Exp* varia){
 
 int ReadCmd::eval(){
     if(!var->isInEscopo()){
-        cout << "Erro: Var (" << var->getId() << ") nao visivel ao escopo em que foi chamada!\n";
+        cout << "Erro Semantico: Var (" << var->getId() << ") nao visivel ao escopo em que foi chamada!\n";
     }
 
     return 1;
 }
 
 string ReadCmd::codeGen(){
-    return "";
-}
-// ----------------------------------------------ForCmd
-ForCmd::ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman){
-    exp = ex;
-    atribIni = static_cast<AtribFor *>(atriIni);
-    atribPasso = static_cast<AtribFor *>(atriPasso);
-    comando = cman;
-}
-
-int ForCmd::eval(){
-    int cond[3] = {true, true, true};
-
-    if (this->exp->getTipo() != "bool"){
-        cout << "Erro! Expressao condicional do comando for deve retornar um tipo logico (encontrado: "<< this->exp->getTipo()  <<")!\n";
-        cond[0] = false;
-    }
-
-    return cond[0] && cond[1] && cond[2];
-}
-
-string ForCmd::codeGen(){
     return "";
 }
 

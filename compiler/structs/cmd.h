@@ -30,9 +30,9 @@ class WhileCmd : public Cmd{
     private:
         Exp *condicao;
         Cmd *comando;
-
+        stack<Cmd *> *pilhaCmdRepet;
     public:
-        WhileCmd(Exp *cnd, Cmd *cmd);
+        WhileCmd(Exp *cnd, Cmd *cmd, stack<Cmd *> *pilhaCmdRep);
         int eval();
         string codeGen();
 };
@@ -42,9 +42,9 @@ class ForCmd : public Cmd{
         Exp *exp;
         AtribFor *atribIni, *atribPasso;
         Cmd* comando;
-
+        stack<Cmd *> *pilhaCmdRepet;
     public:
-        ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman);
+        ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep);
         int eval();
         string codeGen();
 };
@@ -52,9 +52,9 @@ class ForCmd : public Cmd{
 class StopSkipCmd : public Cmd{
     private:
         string cmd;
-
+        stack<Cmd *> *pilhaCmdRepet;
     public:
-        StopSkipCmd(string comando);
+        StopSkipCmd(string comando, stack<Cmd *> *pilhaCmdRep);
         int eval();
         string codeGen();
 };

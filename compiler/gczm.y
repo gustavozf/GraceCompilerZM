@@ -283,11 +283,11 @@ cmdIf:
 	;
 
 cmdWhile:
-	T_WHILE "(" expressao ")" comando {$$ = new WhileCmd($3, $5);}
+	T_WHILE "(" expressao ")" comando {$$ = new WhileCmd($3, $5, pilhaCmdRepet);}
 	;
 
 cmdFor:
-	T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando {$$ = new ForCmd($3, $5, $7, $9);}
+	T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando {$$ = new ForCmd($3, $5, $7, $9, pilhaCmdRepet);}
 	;
 
 atrib-ini:
@@ -299,12 +299,12 @@ atrib-passo:
 	;
 
 cmdStop:
-	T_STOP ";"  {$$ = new StopSkipCmd($1);}
+	T_STOP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet);}
 	//| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdSkip:
-	T_SKIP ";"  {$$ = new StopSkipCmd($1);}
+	T_SKIP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet);}
 	//| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 

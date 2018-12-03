@@ -1111,7 +1111,7 @@ YY_RULE_SETUP
 case 53:
 YY_RULE_SETUP
 #line 121 "gczm.l"
-{cout<<"Token Ilegal: "<<yytext <<"!";}
+{cout<<"Token Ilegal (l: "<< num_linhas <<", c: "<< num_carac <<"): '"<<yytext <<"'\n";}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP

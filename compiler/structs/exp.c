@@ -6,12 +6,17 @@ AritmExp::AritmExp(Exp* expr1, Exp* expr2, string ope){
 }
     
 int AritmExp::eval(){
+    int ret = 1;
+
     if (this->getTipo() == "error"){
-        cout<<"Erro: Pode ser que os tipos não sejam apropriados para a operação aritmética!\n";
-        return 0;
+        cout<<"Erro Semantico: Os tipos não são apropriados para a operação aritmética!\n";
+        ret = 0;
     }
 
-    return 1;
+    e1->eval();
+    e2->eval();
+
+    return ret;
 }
 
 string AritmExp::codeGen(){
@@ -32,11 +37,17 @@ RelExp::RelExp(Exp* expr1, Exp* expr2, string ope){
 }
     
 int RelExp::eval(){
+    int ret = 1;
+
     if (this->getTipo() == "error"){
-        cout<<"Erro: Pode ser que os tipos não sejam apropriados para a operação relacional!\n";
-        return 0;
+        cout<<"Erro Semantico: Os tipos não são apropriados para a operação relacional!\n";
+        ret = 0;
     }
-    return 1;
+
+    e1->eval();
+    e2->eval();
+
+    return ret;
 }
 
 string RelExp::codeGen(){
@@ -57,11 +68,17 @@ LogExp::LogExp(Exp* expr1, Exp* expr2, string ope){
 }
     
 int LogExp::eval(){
+    int ret = 1;
+
     if (this->getTipo() == "error"){
-        cout<<"Erro: Pode ser que os tipos não sejam apropriados para a operação lógica!\n";
-        return 0;
+        cout<<"Erro Semantico: Os tipos não são apropriados para a operação lógica!\n";
+        ret = 0;
     }
-    return 1;
+
+    e1->eval();
+    e2->eval();
+
+    return ret;
 }
 
 string LogExp::codeGen(){
@@ -82,12 +99,17 @@ IgExp::IgExp(Exp* expr1, Exp* expr2, string ope){
 }
     
 int IgExp::eval(){
+    int ret = 1;
+
     if (this->getTipo() == "error"){
-        cout<<"Erro: Pode ser que os tipos não sejam apropriados para a operação de igualdade!\n";
-        return 0;
+        cout<<"Erro Semantico: Os tipos nao sao apropriados para a operação de igualdade!\n";
+        ret = 0;
     }
     
-    return 1;
+    e1->eval();
+    e2->eval();
+
+    return ret;
 }
 
 string IgExp::codeGen(){
@@ -108,12 +130,16 @@ NegUnExp::NegUnExp(Exp* expr){
 }
 
 int NegUnExp::eval(){
+    int ret = 1;
+
     if (this->getTipo() == "error"){
-        cout<<"Erro: Pode ser que o tipo não seja apropriado para a operação de negação unária!\n";
-        return 0;
+        cout<<"Erro Semantico: O tipo não eh apropriado para a operação de negação unária!\n";
+        ret = 0;
     }
     
-    return 1;
+    e1->eval();
+
+    return ret;
 }
 
 string NegUnExp::codeGen(){
@@ -134,12 +160,16 @@ NegExp::NegExp(Exp* expr){
 }
 
 int NegExp::eval(){
+    int ret = 1;
+
     if (this->getTipo() == "error"){
-        cout<<"Erro: Pode ser que o tipo não seja apropriado para a operação de negação!\n";
-        return 0;
+        cout<<"Erro Semantico: O tipo não eh apropriado para a operação de negação!\n";
+        ret = 0;
     }
 
-    return 1;
+    e1->eval();
+
+    return ret;
 }
 
 string NegExp::codeGen(){
@@ -163,12 +193,18 @@ TerExp::TerExp(Exp* expr1, Exp* expr2, Exp* expr3){
 }
 
 int TerExp::eval(){
+    int ret = 1;
+
     if (this->getTipo() == "error"){
         cout<<"Erro: Uso inapropriado da operacao ternaria!\n";
-        return 0;
+        ret = 0;
     }
 
-    return 1;
+    e1->eval();
+    e2->eval();
+    e3->eval();
+
+    return ret;
 }
 
 string TerExp::codeGen(){
@@ -183,34 +219,6 @@ string TerExp::getTipo(){
     }
 }
 
-/*
-// ---------------------------------------------------------- AtribFor
-AtribFor::AtribFor(string id1, string typ, string nume, Escopo *atual1){
-    id = id1;
-    type = typ;
-    num = nume;
-    atual = atual1;
-}
-
-AtribFor::AtribFor(string id1, string nume, Escopo *atual1){
-    id = id1;
-    type = "=";
-    num = nume;
-    atual = atual1;
-}
-
-int AtribFor::eval(){
-    return 1;
-}
-
-string AtribFor::codeGen(){
-    return "";
-}
-
-string AtribFor::getTipo(){
-    return "";
-}
-*/
 // ---------------------------------------------------------- ValExp
 ValExp::ValExp(string val, string typ){
     valor = val;
@@ -266,21 +274,23 @@ bool VarExp::isInEscopo(){
 
 
 int VarExp::eval(){
-    int cond1 = 1, cond2 = 1;
+    int ret = 1;
 
     if(!this->isInEscopo()){
         cout << "Erro: Var (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
-        cond1 = 0;
+        ret = 0;
     }
 
     if(this->position != nullptr){
        if (this->position->getTipo() != "int"){
            cout << "Erro! Acesso de arranjo por meio de um valor não inteiro ("<< this->position->getTipo() <<")!\n";
-           cond2 = 0;
+           ret = 0;
        }
+
+       this->position->eval();
     }
     
-    return cond1 && cond2;
+    return ret;
 }
 
 string VarExp::getId(){
@@ -310,6 +320,8 @@ FuncExp::FuncExp(string id1, list<Exp *> *exps, Escopo *atual1){
     id = id1;
     expressoes = exps;
     atual = atual1;
+    tipo = "";
+    this->isInEscopo();
 }
 
 bool FuncExp::isInEscopo(){
@@ -321,6 +333,9 @@ bool FuncExp::isInEscopo(){
 
         if (!encontrado){
             i = i->getPai();
+        } else {
+            this->atual = i;
+            this->tipo = i->getElemTab(this->id)->tipo;
         }
     }
 
@@ -328,11 +343,22 @@ bool FuncExp::isInEscopo(){
 }
 
 int FuncExp::eval(){
+    int ret = 1;
+
     if(!this->isInEscopo()){
         cout << "Erro: Funcao (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
+        ret = 0;
     }
 
-    return 1;
+    if(expressoes != nullptr){
+        list<Exp *>::iterator i;
+
+        for(i = expressoes->begin(); i != expressoes->end(); ++i){
+            (*i)->eval();
+        }
+    }
+
+    return ret;
 }
 
 string FuncExp::codeGen(){
@@ -340,5 +366,5 @@ string FuncExp::codeGen(){
 }
 
 string FuncExp::getTipo(){
-    return "";
+    return this->tipo;
 }

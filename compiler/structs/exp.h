@@ -97,22 +97,6 @@ class TerExp : public Exp{
         string getTipo();
 };
 
-/*
-class AtribFor : public Exp{
-    private:
-        //Exp *exp;
-        //VarExp *var;
-        string type, id, num;
-        Escopo *atual;
-
-    public:
-        AtribFor(string id1, string typ, string nume, Escopo *atual1);
-        AtribFor(string id1, string nume, Escopo *atual1);
-        int eval();
-        string codeGen();
-        string getTipo();
-};*/
-
 class ValExp : public Exp{
     private:
         string valor, type;
@@ -146,6 +130,7 @@ class FuncExp : public Exp{
         string id;
         list<Exp *> *expressoes;
         Escopo *atual;
+        string tipo;
 
     public:
         FuncExp(string id1, Escopo *atual1);

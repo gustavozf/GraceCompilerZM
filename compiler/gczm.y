@@ -58,6 +58,7 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 	list<Decl *> *cnjDecl;
 }
 
+
 /* Tokens */
 // constant-strings
 %token <sval> T_BOOL
@@ -130,8 +131,8 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 /* Declaracao de Tipos */
 %type <sval> tiposAtrib atribAgreg
 %type <tipoVar> tipo
-%type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip atrib-ini
-%type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco atrib-passo
+%type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip
+%type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco cmdAtribFor
 %type <exp> expressao valor variavel
 %type <decl> decVar declaracao decSub decProc decFun
 %type <param> param
@@ -287,15 +288,11 @@ cmdWhile:
 	;
 
 cmdFor:
-	T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando {$$ = new ForCmd($3, $5, $7, $9, pilhaCmdRepet);}
+	T_FOR "(" cmdAtribFor ";" expressao ";" cmdAtribFor ")" comando {$$ = new ForCmd($3, $5, $7, $9, pilhaCmdRepet);}
 	;
 
-atrib-ini:
-	variavel "=" expressao 		 	{ $$ = new AtribCmd($1, $2, $3);}
-	;
-
-atrib-passo:
-	variavel atribAgreg expressao 	{ $$ = new AtribCmd($1, $2, $3);}
+cmdAtribFor:
+	variavel tiposAtrib expressao	{ $$ = new AtribCmd($1, $2, $3); }
 	;
 
 cmdStop:
@@ -309,10 +306,10 @@ cmdSkip:
 	;
 
 cmdReturn:
-	T_RETURN ";"				{$$ = new RetCmd(pilhaSubprog);}
-	| T_RETURN expressao ";"	{$$ = new RetCmd($2, pilhaSubprog);}
-	//| T_RETURN 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
-	//| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	T_RETURN ";"					{$$ = new RetCmd(pilhaSubprog);}
+	| T_RETURN expressao ";"		{$$ = new RetCmd($2, pilhaSubprog);}
+	//| T_RETURN error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_RETURN expressao error	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ------------------------- Chamada Procedimento
@@ -344,9 +341,9 @@ bloco:
 	| "{" declaracoes comandos blocoEnd				{ $$ = new BlocoCmd($2, $3); 
 													  escopoAtual = new Escopo(escopoAtual);
 													}
-	//| "{" declaracoes 							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	//| "{" comandos								{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	//| "{"declaracoes comandos						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{" declaracoes error						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{" comandos	error							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{"declaracoes comandos error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	;
 
 blocoEnd:

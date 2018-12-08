@@ -119,10 +119,13 @@ class BlocoCmd : public Cmd{
     private:
         list<Decl *> *declaracoes;
         list<Cmd *> *comandos;
+        Escopo *atual;
     public:
-        BlocoCmd(list<Decl *> *decl);
-        BlocoCmd(list<Cmd *> *com);
-        BlocoCmd(list<Decl *> *decl, list<Cmd *> *com);
+        BlocoCmd(list<Decl *> *decl, Escopo* at);
+        BlocoCmd(list<Cmd *> *com, Escopo* at);
+        BlocoCmd(list<Decl *> *decl, list<Cmd *> *com, Escopo* at);
+
+        Escopo* getEscopo();
 
         int eval();
         string codeGen();

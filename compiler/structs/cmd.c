@@ -236,19 +236,26 @@ string ReadCmd::codeGen(){
 
 // -------------------------------------------- BlocoCmd
 
-BlocoCmd::BlocoCmd(list<Decl *> *decl){
+BlocoCmd::BlocoCmd(list<Decl *> *decl, Escopo* at){
     declaracoes = decl;
     comandos = nullptr;
+    atual = at;
 }
 
-BlocoCmd::BlocoCmd(list<Cmd *> *com){
+BlocoCmd::BlocoCmd(list<Cmd *> *com, Escopo* at){
     declaracoes = nullptr;
     comandos = com;
+    atual = at;
 }
 
-BlocoCmd::BlocoCmd(list<Decl *> *decl, list<Cmd *> *com){
+BlocoCmd::BlocoCmd(list<Decl *> *decl, list<Cmd *> *com, Escopo* at){
     declaracoes = decl;
     comandos = com;
+    atual = at;
+}
+
+Escopo* BlocoCmd::getEscopo(){
+    return this->atual;
 }
 
 int BlocoCmd::eval(){
@@ -362,19 +369,20 @@ int Programa::eval(){
     list<Decl *>::iterator i = declaracoes->end();
     DeclSub *main;
     int ret = 1;
+    cout << "entrou aqui no eval do programa\n";
 
     if ((*i)->getTipo() == "funcao"){
         main = static_cast<DeclSub *>(*i);
 
         if(main->getId() != "main"){
-            cout << "Erro: Ultima declaracao do programa deve ser a funcao main!\n";
+            cout << "Erro Semantico: Ultima declaracao do programa deve ser a funcao main!\n";
             ret = 0;
         } else if(main->getTipoRetorno() != "main") {
-            cout << "Erro: A funcao main deve retornar um tipo inteiro!\n";
+            cout << "Erro Semantico: A funcao main deve retornar um tipo inteiro!\n";
             ret = 0;
         }
     } else {
-        cout << "Erro: Ultima declaracao do programa deve ser a funcao main!\n";
+        cout << "Erro Semantico: Ultima declaracao do programa deve ser a funcao main!\n";
         ret = 0;
     }
 

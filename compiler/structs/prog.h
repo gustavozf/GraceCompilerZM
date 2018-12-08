@@ -26,7 +26,7 @@ class ElemTab{
         bool agregado;
         list<string > *params;
 
-        // var simples e agreg
+        // var/param simples e agreg
         ElemTab(string cat, string type, bool agreg); 
         // func e proc
         ElemTab(string cat, string ret, int nParams, list<string > *tipos);

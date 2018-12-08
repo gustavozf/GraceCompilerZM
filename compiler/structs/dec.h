@@ -6,6 +6,7 @@
 #define DEC_H
 
 class Cmd;
+class BlocoCmd;
 
 class TipoVar{
     public:
@@ -136,7 +137,7 @@ class DeclSub : public Decl{
         string id, tipo;
         TipoVar *retorno;
         list<SpecParam *> *listaParam;
-        Cmd *bloco;
+        BlocoCmd *bloco;
         stack<DeclSub *> *pilhaSubprog;
     public:
         // Declaracao de Procedimento

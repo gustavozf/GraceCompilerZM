@@ -150,7 +150,11 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %%
 	/* Gramatica */
 programa: 
-	declaracoes { $$ = new Programa($1, escopoAtual); raiz = $$; cout << "Programa reconhecido!\n";}
+	declaracoes { $$ = new Programa($1, escopoAtual); 
+				  raiz = $$; 
+				  cout << "Programa reconhecido!\nRealizando Analise Semantica...\n";
+				  raiz->eval();
+				}
 	;
 
 declaracoes: 
@@ -332,14 +336,17 @@ cmdWrite:
 
 // ----------------------------------- Blocos
 bloco:
-	  "{" declaracoes blocoEnd						{ $$ = new BlocoCmd($2); 
-	  												  escopoAtual = new Escopo(escopoAtual);
+	  "{" declaracoes blocoEnd						{ 
+	  													escopoAtual = new Escopo(escopoAtual);
+		  												$$ = new BlocoCmd($2, escopoAtual); 
 	  												}
-	| "{" comandos blocoEnd							{ $$ = new BlocoCmd($2); 
-													  escopoAtual = new Escopo(escopoAtual);
+	| "{" comandos blocoEnd							{ 
+														escopoAtual = new Escopo(escopoAtual);
+														$$ = new BlocoCmd($2, escopoAtual); 
 													}
-	| "{" declaracoes comandos blocoEnd				{ $$ = new BlocoCmd($2, $3); 
-													  escopoAtual = new Escopo(escopoAtual);
+	| "{" declaracoes comandos blocoEnd				{ 
+														escopoAtual = new Escopo(escopoAtual);
+														$$ = new BlocoCmd($2, $3, escopoAtual); 
 													}
 	//| "{" declaracoes error						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{" comandos	error							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
@@ -390,7 +397,7 @@ variavel:
 
 /* Codificacao C++ */
 int main(int argc, char *argv[]){
-	yydebug = 0;
+	yydebug = 1;
 
 	if(argc < 2){
 		cout << "ERRO: Eh necessario passar o nome do arquivo de entrada!\n";

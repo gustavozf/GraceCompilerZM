@@ -72,6 +72,10 @@ string SpecVarSimples::codeGen(){
 }
 
 int SpecVarSimples::eval(){
+    if (inicializacao != nullptr){
+        inicializacao->eval();
+    }
+
     return 1;
 }
 
@@ -85,7 +89,11 @@ bool SpecVarSimples::isArranjo(){
 
 bool SpecVarSimples::confereTipagem(string tipo){
     if(inicializacao != nullptr){
-        return (tipo == inicializacao->getTipo());
+        if (tipo != inicializacao->getTipo()){
+            cout << "Erro semantico: inicializacao de variavel ("<< id 
+            <<") de tipo incorreto! ("<<inicializacao->getTipo() << " != "<<tipo <<")\n";
+            return false;
+        }
     }
 
     return true;
@@ -109,6 +117,14 @@ string SpecVarArranjo::codeGen(){
 }
 
 int SpecVarArranjo::eval(){
+    if (inicializacao != nullptr){
+        list<Exp *>::iterator i;
+
+        for (i = inicializacao->begin(); i != inicializacao->end(); ++i){
+            (*i)->eval();
+        }
+    }
+
     return 1;
 }
 
@@ -129,7 +145,10 @@ bool SpecVarArranjo::confereTipagem(string tipo){
         for(i=this->inicializacao->begin(); i != this->inicializacao->end(); ++i){
             count++;
             if ((*i)->getTipo() != tipo){
-                cout << "Erro: parametro #" << count << " da inicializacao possui tipo incorreto (" << (*i)->getTipo() <<")\n";
+                cout << "Erro Semantico: parametro #" << count 
+                << " da inicializacao de variavel  arranjo ("<<id
+                <<") possui tipo incorreto (" << (*i)->getTipo() << " != " <<tipo <<")\n";
+
                 retorno = false;
             }    
         }
@@ -185,9 +204,14 @@ int DeclVar::eval(){
     int retorno = 1;
 
     for(i = this->listaSpecVar->begin(); i != this->listaSpecVar->end(); ++i){
-        if(!(*i)->confereTipagem(this->tipo->getTipo())){
+        if(!(*i)->confereTipagem(this->getTipo())){
             retorno = 0;
         }
+    }
+
+    // chama as avaliacoes das partes
+    for(i = this->listaSpecVar->begin(); i != this->listaSpecVar->end(); ++i){
+        (*i)->eval();
     }
 
     return retorno;
@@ -263,7 +287,10 @@ string DeclSub::getId(){
 
 int DeclSub::eval(){
     pilhaSubprog->push(this);
-    // chamar o eval() das outras estruturas
+    
+    // chamar a avaliacao das outras estruturas
+    bloco->eval();
+    
     pilhaSubprog->pop();
 
     return 1;
@@ -292,7 +319,7 @@ void DeclSub::addTabSimb(Escopo *atual){
     }
 
     atual->addElem( id, 
-                    new ElemTab(tipo, 
+                    new ElemTab(tipo, // categoria
                                 (retorno == nullptr) ? "" : retorno->getTipo(), 
                                 numParams, 
                                 tipos)

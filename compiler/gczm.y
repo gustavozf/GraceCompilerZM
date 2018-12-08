@@ -27,7 +27,8 @@ extern int num_carac;
 void yyerror(const char *s);
 
 Programa *raiz = nullptr;
-Escopo *escopoAtual = new Escopo(nullptr);
+Escopo *escopoAtual = new Escopo(nullptr, 0);
+int countEscopos = 1;
 stack<DeclSub *> *pilhaSubprog = new stack<DeclSub *>();
 stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %}
@@ -152,7 +153,7 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 programa: 
 	declaracoes { $$ = new Programa($1, escopoAtual); 
 				  raiz = $$; 
-				  cout << "Programa reconhecido!\nRealizando Analise Semantica...\n";
+				  cout << "\nPrograma reconhecido!\nRealizando Analise Semantica...\n";
 				  raiz->eval();
 				}
 	;
@@ -336,26 +337,24 @@ cmdWrite:
 
 // ----------------------------------- Blocos
 bloco:
-	  "{" declaracoes blocoEnd						{ 
-	  													escopoAtual = new Escopo(escopoAtual);
-		  												$$ = new BlocoCmd($2, escopoAtual); 
-	  												}
-	| "{" comandos blocoEnd							{ 
-														escopoAtual = new Escopo(escopoAtual);
-														$$ = new BlocoCmd($2, escopoAtual); 
-													}
-	| "{" declaracoes comandos blocoEnd				{ 
-														escopoAtual = new Escopo(escopoAtual);
-														$$ = new BlocoCmd($2, $3, escopoAtual); 
-													}
+	  blocoBegin declaracoes blocoEnd				{	$$ = new BlocoCmd($2, escopoAtual);		}
+	| blocoBegin comandos blocoEnd					{	$$ = new BlocoCmd($2, escopoAtual);		}
+	| blocoBegin declaracoes comandos blocoEnd		{	$$ = new BlocoCmd($2, $3, escopoAtual);	}
 	//| "{" declaracoes error						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{" comandos	error							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{"declaracoes comandos error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	;
 
-blocoEnd:
-	"}" { escopoAtual = escopoAtual->getPai(); }
+blocoBegin:
+	"{" { 
+			escopoAtual = new Escopo(escopoAtual, countEscopos);
+			countEscopos++;
+		}
 	;
+
+blocoEnd:
+	"}" {escopoAtual = escopoAtual->getPai(); }
+	;	
 
 comandos: 
 	  comandos comando	{ $$ = $1; $$->push_back($2); 				 }
@@ -397,7 +396,7 @@ variavel:
 
 /* Codificacao C++ */
 int main(int argc, char *argv[]){
-	yydebug = 1;
+	yydebug = 0;
 
 	if(argc < 2){
 		cout << "ERRO: Eh necessario passar o nome do arquivo de entrada!\n";

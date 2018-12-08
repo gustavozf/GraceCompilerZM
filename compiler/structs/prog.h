@@ -37,13 +37,15 @@ class Escopo{
     private:
         map<string, ElemTab *> tabelaSimbolos;
         Escopo *pai;
+        int idEsc;
 
     public:
-        Escopo(Escopo *papi);
+        Escopo(Escopo *papi, int id1);
         void addElem(string id, ElemTab *elem);
         Escopo* getPai();
         bool checkInserido(string id);
         ElemTab* getElemTab(string id);
+        int getId();
 };
 
 #endif

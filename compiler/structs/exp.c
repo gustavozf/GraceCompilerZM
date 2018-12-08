@@ -196,7 +196,7 @@ int TerExp::eval(){
     int ret = 1;
 
     if (this->getTipo() == "error"){
-        cout<<"Erro: Uso inapropriado da operacao ternaria!\n";
+        cout<<"Erro Semantico: Uso inapropriado da operacao ternaria!\n";
         ret = 0;
     }
 
@@ -242,16 +242,14 @@ VarExp::VarExp(string id1, Exp *pos, Escopo* atual1){
     id = id1;
     position = pos;
     atual = atual1;
-    tipo = "";
-    this->isInEscopo();
+    //tipo = "";
 }
 
 VarExp::VarExp(string id2, Escopo* atual1){
     id = id2;
     position = nullptr;
     atual = atual1;
-    tipo = "";
-    this->isInEscopo();
+    //tipo = "";
 }
 
 bool VarExp::isInEscopo(){
@@ -259,13 +257,14 @@ bool VarExp::isInEscopo(){
     Escopo* i = this->atual;
 
     while((!encontrado) && (i != nullptr)){
+        //i->printId();
         encontrado = i->checkInserido(this->id);
         
         if(!encontrado){
             i = i->getPai();
-        }else{
-            this->atual = i;
-            this->tipo = i->getElemTab(this->id)->tipo;
+        } else{
+            this->atual = i; // PROAVELMENTE ESTA ERRADO
+            //this->tipo = i->getElemTab(this->id)->tipo;
         }
     }
 
@@ -277,13 +276,13 @@ int VarExp::eval(){
     int ret = 1;
 
     if(!this->isInEscopo()){
-        cout << "Erro: Var (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
+        cout << "Erro Semantico: Var (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
         ret = 0;
     }
 
     if(this->position != nullptr){
        if (this->position->getTipo() != "int"){
-           cout << "Erro! Acesso de arranjo por meio de um valor não inteiro ("<< this->position->getTipo() <<")!\n";
+           cout << "Erro Semantico: Acesso de arranjo por meio de um valor não inteiro ("<< this->position->getTipo() <<")!\n";
            ret = 0;
        }
 
@@ -306,7 +305,24 @@ string VarExp::codeGen(){
 }
 
 string VarExp::getTipo(){
-    return this->tipo;
+    bool encontrado = false;
+    Escopo* i = this->atual;
+
+    //cout << "\nIncio do while, VarExp::getTipo\n";
+    while((!encontrado) && (i != nullptr)){
+        //i->printId();
+        encontrado = i->checkInserido(this->id);
+        
+        if(!encontrado){
+            i = i->getPai();
+        }else{
+            //this->atual = i;
+            return i->getElemTab(this->id)->tipo;
+        }
+    }
+
+    return "error";
+
 }
 
 // -------------------------------------------------- FuncExp
@@ -320,8 +336,7 @@ FuncExp::FuncExp(string id1, list<Exp *> *exps, Escopo *atual1){
     id = id1;
     expressoes = exps;
     atual = atual1;
-    tipo = "";
-    this->isInEscopo();
+    //tipo = "";
 }
 
 bool FuncExp::isInEscopo(){
@@ -329,14 +344,15 @@ bool FuncExp::isInEscopo(){
     Escopo *i = this->atual;
 
     while((i != nullptr) && (!encontrado)){
+        //i->printId();
         encontrado = i->checkInserido(id);
 
         if (!encontrado){
             i = i->getPai();
-        } else {
+        } /*else {
             this->atual = i;
-            this->tipo = i->getElemTab(this->id)->tipo;
-        }
+            //this->tipo = i->getElemTab(this->id)->tipo;
+        }*/
     }
 
     return encontrado;
@@ -346,7 +362,7 @@ int FuncExp::eval(){
     int ret = 1;
 
     if(!this->isInEscopo()){
-        cout << "Erro: Funcao (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
+        cout << "Erro Semantico: Funcao (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
         ret = 0;
     }
 
@@ -361,10 +377,26 @@ int FuncExp::eval(){
     return ret;
 }
 
-string FuncExp::codeGen(){
-    return "";
-}
 
 string FuncExp::getTipo(){
-    return this->tipo;
+    bool encontrado = false;
+    Escopo *i = this->atual;
+
+    while((i != nullptr) && (!encontrado)){
+        //i->printId();
+        encontrado = i->checkInserido(id);
+
+        if (!encontrado){
+            i = i->getPai();
+        } else {
+            return i->getElemTab(this->id)->tipo;
+        }
+    }
+
+
+    return "error";
+}
+
+string FuncExp::codeGen(){
+    return "";
 }

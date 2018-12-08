@@ -333,6 +333,7 @@ void DeclSub::addTabSimb(Escopo *atual){
         parametros = (*i)->getCnjParam();
         // para cada um, o adiciona na tabela de simbolos do escopo do bloco
         for(k = parametros->begin(); k != parametros->end(); ++k){
+            cout << "Inserindo parametro ao escopo!\n";
             escopoBloco->addElem((*k)->getId(),
                                     new ElemTab("param", tipo, (*k)->getArranjo()));
         }

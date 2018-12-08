@@ -44,7 +44,7 @@ int WhileCmd::eval(){
     int retorno = 1;
 
     if(condicao->getTipo() != "bool"){
-        cout << "Erro Sematico: a expressao de um comando while deve ser de tipo booleano (encontrado = "<< condicao->getTipo() <<"!\n";
+        cout << "Erro Semantico: a expressao de um comando while deve ser de tipo booleano (encontrado = "<< condicao->getTipo() <<")!\n";
         retorno = 0;
     }
 
@@ -327,16 +327,19 @@ int ProcCmd::eval(){
             cout << "Erro Semantico: Numero de parametros incompativel na chamada do procedimento ("<< this->id <<")!\n";
             ret = 0; 
         } else {
-            j = proc->params->begin();
 
-            for(i = this->expressoes->begin(); i != this->expressoes->end(); ++i){
-                count++;
-                if((*j) != (*i)->getTipo()){
-                    igual = false;
-                    cout << "Erro Semantico: Parametro #"<< count << " da chamada de procedimento '" << this->id << "' possui tipo incorreto!\n";
+            if (this->expressoes != nullptr){
+                j = proc->params->begin();
+
+                for(i = this->expressoes->begin(); i != this->expressoes->end(); ++i){
+                    count++;
+                    if((*j) != (*i)->getTipo()){
+                        igual = false;
+                        cout << "Erro Semantico: Parametro #"<< count << " da chamada de procedimento '" << this->id << "' possui tipo incorreto!\n";
+                    }
+
+                    ++j;
                 }
-
-                ++j;
             }
 
             if(!igual) ret = 0;
@@ -366,18 +369,18 @@ Programa::Programa(list<Decl *> *decl, Escopo *glob){
 }
 
 int Programa::eval(){
-    list<Decl *>::iterator i = declaracoes->end();
-    DeclSub *main;
+    list<Decl *>::iterator i = declaracoes->end(); --i;
+    DeclSub *ultimaFunc;
     int ret = 1;
-    cout << "entrou aqui no eval do programa\n";
 
     if ((*i)->getTipo() == "funcao"){
-        main = static_cast<DeclSub *>(*i);
+        ultimaFunc = static_cast<DeclSub *>(*i);
 
-        if(main->getId() != "main"){
+        if(ultimaFunc->getId() != "main"){
             cout << "Erro Semantico: Ultima declaracao do programa deve ser a funcao main!\n";
             ret = 0;
-        } else if(main->getTipoRetorno() != "main") {
+        } else if(ultimaFunc->getTipoRetorno() != "int") {
+            cout << ultimaFunc->getTipoRetorno() << endl;
             cout << "Erro Semantico: A funcao main deve retornar um tipo inteiro!\n";
             ret = 0;
         }

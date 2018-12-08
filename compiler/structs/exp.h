@@ -110,7 +110,7 @@ class ValExp : public Exp{
 
 class VarExp : public Exp{
     private:
-        string id, tipo;
+        string id; //, tipo;
         Exp *position;
         Escopo *atual;
 
@@ -130,7 +130,7 @@ class FuncExp : public Exp{
         string id;
         list<Exp *> *expressoes;
         Escopo *atual;
-        string tipo;
+        //string tipo;
 
     public:
         FuncExp(string id1, Escopo *atual1);

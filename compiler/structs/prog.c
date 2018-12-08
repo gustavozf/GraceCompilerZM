@@ -19,13 +19,15 @@ ElemTab::ElemTab(string cat, string ret, int nParams, list<string > *tipos){
 }
 
 // ========================================= Escopo
-Escopo::Escopo(Escopo *papi){
+Escopo::Escopo(Escopo *papi, int id1){
     pai = papi;
+    idEsc = id1;
 }
 void Escopo::addElem(string id, ElemTab *elem){
     if (this->checkInserido(id)){
-        cout << "Aviso: redeclaração de ID ("<<id<<") em um mesmo escopo!" <<endl;
+        cout << "Aviso: redeclaração de ID ('"<<id<<"') em um mesmo escopo ("<< getId() <<")!" <<endl;
     } else {
+        cout << "Novo elemento inserido na TS (Escopo " << getId() << "): '"<< id << "'" << endl;
         tabelaSimbolos[id] = elem;
     }
 }
@@ -44,4 +46,8 @@ ElemTab* Escopo::getElemTab(string id){
     }else{
         return nullptr;
     }
+}
+
+int Escopo::getId(){
+    return idEsc;
 }

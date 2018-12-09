@@ -117,5 +117,5 @@ int num_carac = 1;
 \n {num_linhas++; num_carac = 1;}
 
 	/* Elimina Demais Caracteres Indesejados */
-. {cout<<"Token Ilegal: "<<yytext <<"!";}
+. {cout<<"Token Ilegal (l: "<< num_linhas <<", c: "<< num_carac <<"): '"<<yytext <<"'\n";}
 %%

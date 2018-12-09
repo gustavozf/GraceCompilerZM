@@ -1,13 +1,12 @@
-#include <iostream>
-#include <string>
-#include <list>
+#include "common.h"
 #include "exp.h"
 #include "prog.h"
 
-using namespace std;
-
 #ifndef DEC_H
 #define DEC_H
+
+class Cmd;
+class BlocoCmd;
 
 class TipoVar{
     public:
@@ -59,6 +58,7 @@ class SpecVar {
         virtual int eval() = 0;
         virtual string getId() = 0;
         virtual bool isArranjo() = 0;
+        virtual bool confereTipagem(string tipo) = 0;
 };
 
 class SpecVarSimples : public SpecVar {
@@ -72,6 +72,7 @@ class SpecVarSimples : public SpecVar {
         int eval();
         string getId();
         bool isArranjo();
+        bool confereTipagem(string tipo);
 };
 
 class SpecVarArranjo : public SpecVar {
@@ -86,6 +87,7 @@ class SpecVarArranjo : public SpecVar {
         int eval();
         string getId();
         bool isArranjo();
+        bool confereTipagem(string tipo);
 };
 
 
@@ -130,27 +132,28 @@ class DeclVar : public Decl{
         string getTipo();
 };
 
-#include "cmd.h"
 class DeclSub : public Decl{
     private:
         string id, tipo;
         TipoVar *retorno;
         list<SpecParam *> *listaParam;
-        Cmd *bloco;
+        BlocoCmd *bloco;
+        stack<DeclSub *> *pilhaSubprog;
     public:
         // Declaracao de Procedimento
-        DeclSub(string id1, list<SpecParam *> *lista, Cmd *block);
-        DeclSub(string id1, Cmd *block);
+        DeclSub(string id1, list<SpecParam *> *lista, Cmd *block, stack<DeclSub *> *pilhaSub);
+        DeclSub(string id1, Cmd *block, stack<DeclSub *> *pilhaSub);
 
         // Declaracao de Funcao
-        DeclSub(string id1, list<SpecParam *> *lista, TipoVar *ret, Cmd *block);
-        DeclSub(string id1, TipoVar *ret, Cmd *block);
+        DeclSub(string id1, list<SpecParam *> *lista, TipoVar *ret, Cmd *block, stack<DeclSub *> *pilhaSub);
+        DeclSub(string id1, TipoVar *ret, Cmd *block, stack<DeclSub *> *pilhaSub);
 
         string codeGen();
         int eval();
         void addTabSimb(Escopo *atual);
         string getTipo();
         string getId();
+        string getTipoRetorno();
 };
 
 #endif

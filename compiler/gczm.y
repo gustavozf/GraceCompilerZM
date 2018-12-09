@@ -27,7 +27,10 @@ extern int num_carac;
 void yyerror(const char *s);
 
 Programa *raiz = nullptr;
-Escopo *escopoAtual = new Escopo(nullptr);
+Escopo *escopoAtual = new Escopo(nullptr, 0);
+int countEscopos = 1;
+stack<DeclSub *> *pilhaSubprog = new stack<DeclSub *>();
+stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %}
 
 /* Uniao que representa o valores basicos possiveis.
@@ -46,6 +49,7 @@ Escopo *escopoAtual = new Escopo(nullptr);
 	Param *param;
 	SpecParam *specParam;
 	Programa *programa;
+	Escopo *escopo;
 
 	// Listas
 	list<Exp *> *cnjExp;
@@ -55,6 +59,7 @@ Escopo *escopoAtual = new Escopo(nullptr);
 	list<SpecParam *> *cnjSpecParam;
 	list<Decl *> *cnjDecl;
 }
+
 
 /* Tokens */
 // constant-strings
@@ -129,8 +134,8 @@ Escopo *escopoAtual = new Escopo(nullptr);
 %type <sval> tiposAtrib atribAgreg
 %type <tipoVar> tipo
 %type <cmd> cmdSimples cmdIf cmdAtrib cmdWhile cmdFor cmdStop cmdSkip
-%type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco 
-%type <exp> expressao atrib-ini atrib-passo valor variavel
+%type <cmd> cmdReturn cmdChamadaProc cmdRead cmdWrite comando bloco cmdAtribFor
+%type <exp> expressao valor variavel
 %type <decl> decVar declaracao decSub decProc decFun
 %type <param> param
 %type <specVar> specVar
@@ -144,10 +149,17 @@ Escopo *escopoAtual = new Escopo(nullptr);
 %type <cnjDecl> declaracoes
 %type <cnjSpecParam> listaParametros
 
+%type <escopo> blocoBegin
+
 %%
 	/* Gramatica */
 programa: 
-	declaracoes { $$ = new Programa($1, escopoAtual); raiz = $$; cout << "Programa reconhecido!\n";}
+	declaracoes { $$ = new Programa($1, escopoAtual); 
+				  raiz = $$; 
+				  cout << "\nPrograma reconhecido!\nRealizando Análise Semântica...\n";
+				  raiz->eval();
+				  cout << "Análise Semântica Realizada!\n";
+				}
 	;
 
 declaracoes: 
@@ -167,7 +179,7 @@ declaracao:
 // ------------------------------- Declaracao de Variaveis
 decVar:
 	T_VAR listaSpecVars ":" tipo ";"		{ $$ = new DeclVar($2, $4); }
-	//| T_VAR listaSpecVars ":" tipo		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_VAR error ":" tipo ";"		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tipo:
@@ -195,10 +207,10 @@ cnjExpr:
 	;
 
 valor:
-	T_TRUE			{ $$ = new ValExp($1, "bool");   }
-	| T_FALSE		{ $$ = new ValExp($1, "bool");   }
-	| T_LIT_STRING	{ $$ = new ValExp($1, "string"); }
-	| T_NUM			{ $$ = new ValExp($1, "int");	 }
+	T_TRUE			{ $$ = new ValExp($1, "bool", num_linhas);   }
+	| T_FALSE		{ $$ = new ValExp($1, "bool", num_linhas);   }
+	| T_LIT_STRING	{ $$ = new ValExp($1, "string", num_linhas); }
+	| T_NUM			{ $$ = new ValExp($1, "int", num_linhas);	 }
 	;
 
 // -------------------------------- Declaracao de Subprocessos
@@ -208,13 +220,13 @@ decSub:
 	;
 
 decProc:
-	T_DEF T_ID "(" listaParametros ")" bloco { $$ = new DeclSub($2, $4, $6); }
-	| T_DEF T_ID "(" ")" bloco				 { $$ = new DeclSub($2, $5); }
+	T_DEF T_ID "(" listaParametros ")" bloco { $$ = new DeclSub($2, $4, $6, pilhaSubprog); }
+	| T_DEF T_ID "(" ")" bloco				 { $$ = new DeclSub($2, $5, pilhaSubprog); }
 	;
 
 decFun:
-	T_DEF T_ID "(" listaParametros ")" ":" tipo bloco	{ $$ = new DeclSub($2, $4, $7, $8); }
-	| T_DEF T_ID "(" ")" ":" tipo bloco					{ $$ = new DeclSub($2, $6, $7); }
+	T_DEF T_ID "(" listaParametros ")" ":" tipo bloco	{ $$ = new DeclSub($2, $4, $7, $8, pilhaSubprog); }
+	| T_DEF T_ID "(" ")" ":" tipo bloco					{ $$ = new DeclSub($2, $6, $7, pilhaSubprog); }
 	; 
 
 listaParametros:
@@ -281,36 +293,32 @@ cmdIf:
 	;
 
 cmdWhile:
-	T_WHILE "(" expressao ")" comando {$$ = new WhileCmd($3, $5);}
+	T_WHILE "(" expressao ")" comando {$$ = new WhileCmd($3, $5, pilhaCmdRepet);}
 	;
 
 cmdFor:
-	T_FOR "(" atrib-ini ";" expressao ";" atrib-passo ")" comando {$$ = new ForCmd($3, $5, $7, $9);}
+	T_FOR "(" cmdAtribFor ";" expressao ";" cmdAtribFor ")" comando {$$ = new ForCmd($3, $5, $7, $9, pilhaCmdRepet);}
 	;
 
-atrib-ini:
-	T_ID "=" T_NUM 		 	{$$ = new AtribFor($1, $3, escopoAtual);}
-	;
-
-atrib-passo:
-	T_ID atribAgreg T_NUM 	{$$ = new AtribFor($1, $2, $3, escopoAtual);}
+cmdAtribFor:
+	variavel tiposAtrib expressao	{ $$ = new AtribCmd($1, $2, $3); }
 	;
 
 cmdStop:
-	T_STOP ";"  {$$ = new StopSkipCmd($1);}
+	T_STOP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet);}
 	//| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdSkip:
-	T_SKIP ";"  {$$ = new StopSkipCmd($1);}
+	T_SKIP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet);}
 	//| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdReturn:
-	T_RETURN ";"				{$$ = new RetCmd();}
-	| T_RETURN expressao ";"	{$$ = new RetCmd($2);}
-	//| T_RETURN 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
-	//| T_RETURN expressao 		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	T_RETURN ";"					{$$ = new RetCmd(pilhaSubprog);}
+	| T_RETURN expressao ";"		{$$ = new RetCmd($2, pilhaSubprog);}
+	//| T_RETURN error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_RETURN expressao error	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ------------------------- Chamada Procedimento
@@ -333,23 +341,25 @@ cmdWrite:
 
 // ----------------------------------- Blocos
 bloco:
-	  "{" declaracoes blocoEnd						{ $$ = new BlocoCmd($2); 
-	  												  escopoAtual = new Escopo(escopoAtual);
-	  												}
-	| "{" comandos blocoEnd							{ $$ = new BlocoCmd($2); 
-													  escopoAtual = new Escopo(escopoAtual);
-													}
-	| "{" declaracoes comandos blocoEnd				{ $$ = new BlocoCmd($2, $3); 
-													  escopoAtual = new Escopo(escopoAtual);
-													}
-	//| "{" declaracoes 							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	//| "{" comandos								{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	//| "{"declaracoes comandos						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	  blocoBegin declaracoes blocoEnd				{	$$ = new BlocoCmd($2, $1);		}
+	| blocoBegin comandos blocoEnd					{	$$ = new BlocoCmd($2, $1);		}
+	| blocoBegin declaracoes comandos blocoEnd		{	$$ = new BlocoCmd($2, $3, $1);	}
+	//| "{" declaracoes error						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{" comandos	error							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	//| "{"declaracoes comandos error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
+	;
+
+blocoBegin:
+	"{" { 
+			escopoAtual = new Escopo(escopoAtual, countEscopos);
+			countEscopos++;
+			$$ = escopoAtual;
+		}
 	;
 
 blocoEnd:
-	"}" { escopoAtual = escopoAtual->getPai(); }
-	;
+	"}" {escopoAtual = escopoAtual->getPai(); }
+	;	
 
 comandos: 
 	  comandos comando	{ $$ = $1; $$->push_back($2); 				 }
@@ -359,32 +369,32 @@ comandos:
 // ----------------------------------- Expressoes
 
 expressao:
-	valor										{	$$ = $1;								}
-	| variavel									{	$$ = $1;								}
-	| "(" expressao ")"							{	$$ = $2;								}
-	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2);		  			}
-	| "!" expressao					 			{	$$ = new NegExp($2);					}
-	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "/" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "%" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "+" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "-" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "<" expressao		 			{	$$ = new RelExp($1, $3, $2);			}
-	| expressao "<=" expressao  	 			{	$$ = new RelExp($1, $3, $2);			}
-	| expressao ">" expressao		 			{	$$ = new RelExp($1, $3, $2);			}
-	| expressao ">=" expressao		 			{	$$ = new RelExp($1, $3, $2);			}
-	| expressao "==" expressao		 			{	$$ = new IgExp($1, $3, $2);				}
-	| expressao "!=" expressao		 			{	$$ = new IgExp($1, $3, $2);				}
-	| expressao "&&" expressao		 			{	$$ = new LogExp($1, $3, $2);			}
-	| expressao "||" expressao		 			{	$$ = new LogExp($1, $3, $2);			}
-	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5);			}
-	| T_ID "(" ")" 								{	$$ = new FuncExp($1, escopoAtual); 		}
-	| T_ID "(" cnjExpr ")"						{	$$ = new FuncExp($1, $3, escopoAtual);  }
+	  "(" expressao ")"							{	$$ = $2;											}
+	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2, num_linhas);		  			}
+	| "!" expressao					 			{	$$ = new NegExp($2, num_linhas);					}
+	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);			}
+	| expressao "/" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);		 	}
+	| expressao "%" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);		 	}
+	| expressao "+" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);		 	}
+	| expressao "-" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);		 	}
+	| expressao "<" expressao		 			{	$$ = new RelExp($1, $3, $2, num_linhas);			}
+	| expressao "<=" expressao  	 			{	$$ = new RelExp($1, $3, $2, num_linhas);			}
+	| expressao ">" expressao		 			{	$$ = new RelExp($1, $3, $2, num_linhas);			}
+	| expressao ">=" expressao		 			{	$$ = new RelExp($1, $3, $2, num_linhas);			}
+	| expressao "==" expressao		 			{	$$ = new IgExp($1, $3, $2, num_linhas);				}
+	| expressao "!=" expressao		 			{	$$ = new IgExp($1, $3, $2, num_linhas);				}
+	| expressao "&&" expressao		 			{	$$ = new LogExp($1, $3, $2, num_linhas);			}
+	| expressao "||" expressao		 			{	$$ = new LogExp($1, $3, $2, num_linhas);			}
+	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5, num_linhas);			}
+	| T_ID "(" ")" 								{	$$ = new FuncExp($1, escopoAtual, num_linhas); 		}
+	| T_ID "(" cnjExpr ")"						{	$$ = new FuncExp($1, $3, escopoAtual, num_linhas);  }
+	| variavel									{	$$ = $1;											}
+	| valor										{	$$ = $1;											}
 	;
 
 variavel:
-	T_ID						{ $$ = new VarExp($1, escopoAtual);     }
-	| T_ID "[" expressao "]"	{ $$ = new VarExp($1, $3, escopoAtual); }
+	T_ID						{ $$ = new VarExp($1, escopoAtual, num_linhas);     }
+	| T_ID "[" expressao "]"	{ $$ = new VarExp($1, $3, escopoAtual, num_linhas); }
 	;
 
 %%

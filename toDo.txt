@@ -16,10 +16,6 @@ Semantica:
 		- Return
 			* funcao = tipo da expressao igual ao retorno declarado
 			* procedimento = retorno sem expressao
-	- Expressoes
-		- Uso de Variavel
-			* tipo resultante = declarado
-			* agregadas = expressao de acesso tem que ser int
 	
 	
 			

@@ -1,14 +1,12 @@
-#include <iostream>
-#include <string>
-#include <list>
+#include "common.h"
 #include "exp.h"
 #include "prog.h"
-#include "dec.h"
-
-using namespace std;
 
 #ifndef CMD_H
 #define CMD_H
+
+class Decl;
+class DeclSub;
 
 class Cmd{
     public:
@@ -32,44 +30,11 @@ class WhileCmd : public Cmd{
     private:
         Exp *condicao;
         Cmd *comando;
-
+        stack<Cmd *> *pilhaCmdRepet;
     public:
-        WhileCmd(Exp *cnd, Cmd *cmd);
+        WhileCmd(Exp *cnd, Cmd *cmd, stack<Cmd *> *pilhaCmdRep);
         int eval();
         string codeGen();
-};
-
-class ForCmd : public Cmd{
-    private:
-        Exp *exp, *atribIni, *atribPasso;;
-        Cmd* comando;
-
-    public:
-        ForCmd(Exp *atriIni, Exp *ex, Exp *atriPasso, Cmd* cman);
-        int eval();
-        string codeGen();
-};
-
-class StopSkipCmd : public Cmd{
-    private:
-        string cmd;
-
-    public:
-        StopSkipCmd(string comando);
-        int eval();
-        string codeGen();
-};
-
-
-class RetCmd : public Cmd{
-    private:
-        Exp *retorno;
-
-    public:
-        RetCmd(Exp *ret);
-        RetCmd();
-        int eval();
-        string codeGen();    
 };
 
 class AtribCmd : public Cmd{
@@ -82,6 +47,28 @@ class AtribCmd : public Cmd{
         AtribCmd(Exp *varia, string typ, Exp *ex);
         int eval();
         string codeGen();  
+};
+
+class ForCmd : public Cmd{
+    private:
+        Exp *exp;
+        AtribCmd *atribIni, *atribPasso;
+        Cmd* comando;
+        stack<Cmd *> *pilhaCmdRepet;
+    public:
+        ForCmd(Cmd *atriIni, Exp *ex, Cmd *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep);
+        int eval();
+        string codeGen();
+};
+
+class StopSkipCmd : public Cmd{
+    private:
+        string cmd;
+        stack<Cmd *> *pilhaCmdRepet;
+    public:
+        StopSkipCmd(string comando, stack<Cmd *> *pilhaCmdRep);
+        int eval();
+        string codeGen();
 };
 
 class ReadCmd : public Cmd{
@@ -102,21 +89,6 @@ class WriteCmd : public Cmd{
         string codeGen();
 };  
 
-
-class BlocoCmd : public Cmd{
-    private:
-        list<Decl *> *declaracoes;
-        list<Cmd *> *comandos;
-    public:
-        BlocoCmd(list<Decl *> *decl);
-        BlocoCmd(list<Cmd *> *com);
-        BlocoCmd(list<Decl *> *decl, list<Cmd *> *com);
-
-        int eval();
-        string codeGen();
-};
-
-
 class ProcCmd : public Cmd{
     private:
         string id;
@@ -127,6 +99,34 @@ class ProcCmd : public Cmd{
         ProcCmd(string id1, Escopo *atual1);
         ProcCmd(string id1, list<Exp *> *exps, Escopo *atual1);
         bool isInEscopo();
+        int eval();
+        string codeGen();
+};
+
+class RetCmd : public Cmd{
+    private:
+        Exp *retorno;
+        stack<DeclSub *> *pilhaSubprog;
+
+    public:
+        RetCmd(Exp *ret, stack<DeclSub *> *pilhaSub);
+        RetCmd(stack<DeclSub *> *pilhaSub);
+        int eval();
+        string codeGen();    
+};
+
+class BlocoCmd : public Cmd{
+    private:
+        list<Decl *> *declaracoes;
+        list<Cmd *> *comandos;
+        Escopo *atual;
+    public:
+        BlocoCmd(list<Decl *> *decl, Escopo* at);
+        BlocoCmd(list<Cmd *> *com, Escopo* at);
+        BlocoCmd(list<Decl *> *decl, list<Cmd *> *com, Escopo* at);
+
+        Escopo* getEscopo();
+
         int eval();
         string codeGen();
 };

@@ -1,9 +1,4 @@
-#include <iostream>
-#include <string>
-#include <list>
-#include <map>
-
-using namespace std;
+#include "common.h"
 
 #ifndef PROG_H
 #define PROG_H
@@ -31,7 +26,7 @@ class ElemTab{
         bool agregado;
         list<string > *params;
 
-        // var simples e agreg
+        // var/param simples e agreg
         ElemTab(string cat, string type, bool agreg); 
         // func e proc
         ElemTab(string cat, string ret, int nParams, list<string > *tipos);
@@ -42,13 +37,15 @@ class Escopo{
     private:
         map<string, ElemTab *> tabelaSimbolos;
         Escopo *pai;
+        int idEsc;
 
     public:
-        Escopo(Escopo *papi);
+        Escopo(Escopo *papi, int id1);
         void addElem(string id, ElemTab *elem);
         Escopo* getPai();
         bool checkInserido(string id);
         ElemTab* getElemTab(string id);
+        int getId();
 };
 
 #endif

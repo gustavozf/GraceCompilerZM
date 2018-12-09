@@ -7,6 +7,8 @@ HEADERS = ./structs/cmd.o ./structs/exp.o ./structs/prog.o ./structs/dec.o
 # ===============================================
 
 all: $(NOME).tab.c lex.yy.c
+	cd structs && make
+	cd ..
 	$(CC) -DYYDEBUG=1 $(NOME).tab.c lex.yy.c -ll -o $(NOME) $(HEADERS)
 
 # Flex (Analisador Lexico)
@@ -22,7 +24,12 @@ $(NOME).tab.c: $(NOME).y
 
 clean:
 	rm lex.yy.c
+	#rm lex.yy.o
 	rm $(NOME).tab.h
+	#rm $(NOME).tab.o
 	rm $(NOME).tab.c
 	rm $(NOME).output
 	rm $(NOME)
+
+	cd structs && make clean
+	cd ..

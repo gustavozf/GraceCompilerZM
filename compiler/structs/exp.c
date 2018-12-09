@@ -108,7 +108,7 @@ int IgExp::eval(){
     int ret = 1;
 
     if (this->getTipo() == "error"){
-        cout<<"Erro Semantico (l: " << line <<"): Os tipos nao sao apropriados para a operação de igualdade!\n";
+        cout<<"Erro Semantico (l: " << line <<"): Os tipos não são apropriados para a operação de igualdade!\n";
         ret = 0;
     }
     
@@ -140,7 +140,7 @@ int NegUnExp::eval(){
     int ret = 1;
 
     if (this->getTipo() == "error"){
-        cout<<"Erro Semântico (l: " << line <<"): O tipo não eh apropriado para a operação de negação unária!\n";
+        cout<<"Erro Semântico (l: " << line <<"): O tipo não é apropriado para a operação de negação unária!\n";
         ret = 0;
     }
     
@@ -171,7 +171,7 @@ int NegExp::eval(){
     int ret = 1;
 
     if (this->getTipo() == "error"){
-        cout<<"Erro Semantico (l: " << line <<"): O tipo não eh apropriado para a operação de negação!\n";
+        cout<<"Erro Semantico (l: " << line <<"): O tipo não é apropriado para a operação de negação!\n";
         ret = 0;
     }
 
@@ -205,7 +205,7 @@ int TerExp::eval(){
     int ret = 1;
 
     if (this->getTipo() == "error"){
-        cout<<"Erro Semantico (l: " << line <<"): Uso inapropriado da operacao ternaria!\n";
+        cout<<"Erro Semântico (l: " << line <<"): Uso inapropriado da operação ternária!\n";
         ret = 0;
     }
 
@@ -288,13 +288,13 @@ int VarExp::eval(){
     int ret = 1;
 
     if(!this->isInEscopo()){
-        cout << "Erro Semantico (l: " << line <<"): Var '" << this->id << "' nao visivel ao escopo em que foi chamada!\n";
+        cout << "Erro Semântico (l: " << line <<"): Variável '" << this->id << "' não visível ao escopo em que foi chamada!\n";
         ret = 0;
     }
 
     if(this->position != nullptr){
        if (this->position->getTipo() != "int"){
-           cout << "Erro Semantico (l: " << line <<"): Acesso de arranjo por meio de um valor não inteiro ("<< this->position->getTipo() <<")!\n";
+           cout << "Erro Semântico (l: " << line <<"): Acesso de arranjo por meio de um valor não inteiro ("<< this->position->getTipo() <<")!\n";
            ret = 0;
        }
 
@@ -377,13 +377,13 @@ int FuncExp::eval(){
     int ret = 1;
 
     if(!this->isInEscopo()){
-        cout << "Erro Semântico: Função '" << this->id << "' não visível ao escopo em que foi chamada!\n";
+        cout << "Erro Semântico (l: "<<line<<"): Função '" << this->id << "' não visível ao escopo em que foi chamada!\n";
         ret = 0;
     } else {
         proc = this->getElemTab();
         if (this->expressoes != nullptr){
             if(proc->numParams != this->expressoes->size()){
-                cout << "Erro Semântico: Número de parâmetros incompatível na chamada da função '"<< this->id <<"'!\n";
+                cout << "Erro Semântico (l: "<<line<<"): Número de parâmetros incompatível na chamada da função '"<< this->id <<"'!\n";
                 ret = 0; 
             } else {
                 j = proc->params->begin();
@@ -391,14 +391,14 @@ int FuncExp::eval(){
                     count++;
                     if((*j) != (*i)->getTipo()){
                         igual = false;
-                        cout << "Erro Semântico: Parâmetro #"<< count << " da chamada da função'" << this->id << "' possui tipo incorreto!\n";
+                        cout << "Erro Semântico (l: "<<line<<"): Parâmetro #"<< count << " da chamada da função'" << this->id << "' possui tipo incorreto!\n";
                     }
                     ++j;
                 }
             }
             if(!igual) ret = 0;
         } else if (proc->numParams > 0){
-            cout << "Erro Semântico: Número de parâmetros incompatível na chamada da função '"<< this->id <<"'!\n";
+            cout << "Erro Semântico (l: "<<line<<"): Número de parâmetros incompatível na chamada da função '"<< this->id <<"'!\n";
             ret = 0;
         }
     }

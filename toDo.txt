@@ -6,7 +6,6 @@ To do list:
 	* comandos
 - parametros de subprogamas
 	* diferencias variaveis simples de arranjos
-	* seg fault quando passamos 0 parametros
 - arrumar a precedencia
 	
 			

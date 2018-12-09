@@ -340,7 +340,8 @@ int ProcCmd::eval(){
         if (this->expressoes != nullptr){
 
             if(proc->numParams != this->expressoes->size()){
-                cout << "Erro Semântico (l: " << line <<"): Número de parâmetros incompatível na chamada do procedimento '"<< this->id <<"'!\n";
+                cout << "Erro Semântico (l: " << line <<"): Número de parâmetros incompatível na chamada do procedimento '"<< this->id 
+                        <<"' (Quantidade esperada: "<< proc->numParams  << ")!\n";
                 ret = 0; 
             } else {
                 j = proc->params->begin();
@@ -349,7 +350,8 @@ int ProcCmd::eval(){
                     count++;
                     if((*j) != (*i)->getTipo()){
                         igual = false;
-                        cout << "Erro Semântico (l: " << line <<"): Parâmetro #"<< count << " da chamada de procedimento '" << this->id << "' possui tipo incorreto!\n";
+                        cout << "Erro Semântico (l: " << line <<"): Parâmetro #"<< count << " da chamada de procedimento '" <<
+                                this->id << "' possui tipo incorreto (" << (*j) << " != " << (*i)->getTipo() << ")!\n";
                     }
 
                     ++j;
@@ -358,7 +360,8 @@ int ProcCmd::eval(){
 
             if(!igual) ret = 0;
         } else if (proc->numParams > 0){
-            cout << "Erro Semântico (l: " << line <<"): Número de parâmetros incompatível na chamada do procedimento '"<< this->id <<"'!\n";
+            cout << "Erro Semântico (l: " << line <<"): Número de parâmetros incompatível na chamada do procedimento '"<< this->id 
+                        <<"' (Quantidade esperada: "<< proc->numParams  << ")!\n";
             ret = 0;
         }
 

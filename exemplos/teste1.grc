@@ -18,9 +18,14 @@ def func1(x,y: int; z : bool ) : bool{
     return true;
 }
 
+def func2(k[] : int) : int{
+    return k[1];
+}
+
 def main() : int {
     var i : int;
     var j : bool;
+    var w[2] = {4,5} : int;
 
     // parametro passado, quando nao deveria
     proc1(10);
@@ -31,6 +36,12 @@ def main() : int {
     y = func1(10, 15);
     // atribuicao com tipos de parametros errados
     j = func1(true, false, "bob");
+
+    // acesso com tipo não inteiro
+    i = w["a"];
+    // parametro da um "int" e nao um "array(int)"
+    i = func2(w[1]);
+    i = func2(w, 2);
 
     return 0;
 }

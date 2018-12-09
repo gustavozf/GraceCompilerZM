@@ -315,6 +315,7 @@ string VarExp::codeGen(){
 string VarExp::getTipo(){
     bool encontrado = false;
     Escopo* i = this->atual;
+    ElemTab *aux;
 
     //cout << "\nIncio do while, VarExp::getTipo\n";
     while((!encontrado) && (i != nullptr)){
@@ -324,8 +325,15 @@ string VarExp::getTipo(){
         if(!encontrado){
             i = i->getPai();
         }else{
-            //this->atual = i;
-            return i->getElemTab(this->id)->tipo;
+            aux = i->getElemTab(this->id);
+            // Se a variavel for de tipo agregado, e estiver sendo chamada
+            // sem acesso, ela é do tipo "array(tipo)"
+            if (aux->agregado && (this->position == nullptr)){
+                return string("array(") + aux->tipo + string(")");
+            } else {
+                // caso contrario é somente "tipo"
+                return aux->tipo;
+            }
         }
     }
 
@@ -383,7 +391,8 @@ int FuncExp::eval(){
         proc = this->getElemTab();
         if (this->expressoes != nullptr){
             if(proc->numParams != this->expressoes->size()){
-                cout << "Erro Semântico (l: "<<line<<"): Número de parâmetros incompatível na chamada da função '"<< this->id <<"'!\n";
+                cout << "Erro Semântico (l: "<<line<<"): Número de parâmetros incompatível na chamada da função '"<< this->id 
+                        <<"' (Quantidade esperada: "<< proc->numParams  << ")!\n";
                 ret = 0; 
             } else {
                 j = proc->params->begin();
@@ -391,14 +400,16 @@ int FuncExp::eval(){
                     count++;
                     if((*j) != (*i)->getTipo()){
                         igual = false;
-                        cout << "Erro Semântico (l: "<<line<<"): Parâmetro #"<< count << " da chamada da função'" << this->id << "' possui tipo incorreto!\n";
+                        cout << "Erro Semântico (l: "<<line<<"): Parâmetro #"<< count << " da chamada da função'" <<
+                                 this->id << "' possui tipo incorreto (" << (*j) << " != " << (*i)->getTipo() << ")!\n";
                     }
                     ++j;
                 }
             }
             if(!igual) ret = 0;
         } else if (proc->numParams > 0){
-            cout << "Erro Semântico (l: "<<line<<"): Número de parâmetros incompatível na chamada da função '"<< this->id <<"'!\n";
+            cout << "Erro Semântico (l: "<<line<<"): Número de parâmetros incompatível na chamada da função '"<< this->id 
+                    <<"' (Quantidade esperada: "<< proc->numParams  << ")!\n";
             ret = 0;
         }
     }

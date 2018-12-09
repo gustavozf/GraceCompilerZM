@@ -318,6 +318,7 @@ void DeclSub::addTabSimb(Escopo *atual){
     list<Param *>::iterator k;
     list<Param *> *parametros;
     string tipo;
+    bool isArranjo;
 
     //cout << "Escopo do bloco ("<<id<<"): "<<escopoBloco->getId() <<endl;
     // Olha pra cada espeficicacao de parametro "id1, id2, ... , idN : tipo"
@@ -329,18 +330,27 @@ void DeclSub::addTabSimb(Escopo *atual){
         // pega o tipo
         tipo = (*i)->getTipo();
 
-        // adiciona N vezes em uma lista o "tipo"
-        for(j=0; j < tam; j++){
-            tipos->push_back(tipo);
-        }
+        /*for(j=0; j < tam; j++){
+             tipos->push_back(tipo);
+        }*/
 
         // pega o conjunto de IDs
         parametros = (*i)->getCnjParam();
         // para cada um, o adiciona na tabela de simbolos do escopo do bloco
         for(k = parametros->begin(); k != parametros->end(); ++k){
+            isArranjo = (*k)->getArranjo();
+
+            // adiciona N vezes em uma lista o "tipo"
+            if (isArranjo){
+                // se for arranjo, adiciona "array(tipo)"
+                tipos->push_back(string("array(") + tipo + string(")"));
+            } else {
+                // caso contrário, "tipo"
+                tipos->push_back(tipo);
+            }
             //cout << "Inserindo parametro ao escopo!\n";
             escopoBloco->addElem((*k)->getId(),
-                                    new ElemTab("param", tipo, (*k)->getArranjo()));
+                                    new ElemTab("param", tipo, isArranjo));
         }
         
     }

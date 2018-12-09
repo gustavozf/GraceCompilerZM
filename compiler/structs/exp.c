@@ -369,33 +369,36 @@ bool FuncExp::isInEscopo(){
 }
 
 int FuncExp::eval(){
-    ist<Exp *>::iterator i;
+    list<Exp *>::iterator i;
     list<string >::iterator j;
     ElemTab* proc;
     int count = 0;
     bool igual = true;
+    int ret = 1;
 
     if(!this->isInEscopo()){
         cout << "Erro Semântico: Função '" << this->id << "' não visível ao escopo em que foi chamada!\n";
-        return 0;
+        ret = 0;
     } else {
-        proc = this->atual->getElemTab(this->id);
+        proc = this->getElemTab();
 
         if(proc->numParams != this->expressoes->size()){
             cout << "Erro Semântico: Número de parâmetros incompatível na chamada da função '"<< this->id <<"'!\n";
-            return 0; 
+            ret = 0; 
         } else {
-            j = proc->params->begin();
 
-            for(i = this->expressoes->begin(); i != this->expressoes->end(); ++i){
-                count++;
-                if((*j) != (*i)->getTipo()){
-                    igual = false;
-                    cout << "Erro Semântico: Parâmetro #"<< count << " da chamada da função'" << this->id << "' possui tipo incorreto!\n";
+            if (this->expressoes != nullptr){
+                j = proc->params->begin();
+                for(i = this->expressoes->begin(); i != this->expressoes->end(); ++i){
+                    count++;
+                    if((*j) != (*i)->getTipo()){
+                        igual = false;
+                        cout << "Erro Semântico: Parâmetro #"<< count << " da chamada da função'" << this->id << "' possui tipo incorreto!\n";
+                    }
+                    ++j;
                 }
-                ++j;
             }
-            if(!igual) return 0;
+            if(!igual) ret = 0;
         }
     }
 
@@ -410,6 +413,24 @@ int FuncExp::eval(){
     return ret;
 }
 
+ElemTab* FuncExp::getElemTab(){
+    bool encontrado = false;
+    Escopo *i = this->atual;
+
+    while((i != nullptr) && (!encontrado)){
+        //i->printId();
+        encontrado = i->checkInserido(id);
+
+        if (!encontrado){
+            i = i->getPai();
+        } else {
+            return i->getElemTab(this->id);
+        }
+    }
+
+
+    return nullptr;    
+}
 
 string FuncExp::getTipo(){
     bool encontrado = false;

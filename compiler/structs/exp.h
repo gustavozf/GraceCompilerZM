@@ -148,6 +148,7 @@ class FuncExp : public Exp{
         bool isInEscopo();
         string codeGen();
         string getTipo();
+        ElemTab* getElemTab();
 };
 
 #endif

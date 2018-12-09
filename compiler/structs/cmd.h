@@ -101,6 +101,8 @@ class ProcCmd : public Cmd{
         bool isInEscopo();
         int eval();
         string codeGen();
+        ElemTab* getElemTab();
+
 };
 
 class RetCmd : public Cmd{

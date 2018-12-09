@@ -327,7 +327,7 @@ int ProcCmd::eval(){
         cout << "Erro Semantico: Procedimento '" << this->id << "' nao visivel ao escopo em que foi chamado!\n";
         ret = 0;
     } else {
-        proc = this->atual->getElemTab(this->id);
+        proc = getElemTab();
 
         if(proc->numParams != this->expressoes->size()){
             cout << "Erro Semantico: Numero de parametros incompativel na chamada do procedimento '"<< this->id <<"'!\n";
@@ -361,6 +361,25 @@ int ProcCmd::eval(){
     }
 
     return ret;
+}
+
+ElemTab* ProcCmd::getElemTab(){
+    bool encontrado = false;
+    Escopo *i = this->atual;
+
+    while((i != nullptr) && (!encontrado)){
+        //i->printId();
+        encontrado = i->checkInserido(id);
+
+        if (!encontrado){
+            i = i->getPai();
+        } else {
+            return i->getElemTab(this->id);
+        }
+    }
+
+
+    return nullptr;    
 }
 
 string ProcCmd::codeGen(){

@@ -21,9 +21,16 @@ def bubblesort(v[]: int; n: int) {
     }
 }
 
+def foo(x,y : int) : int{
+    return 3;
+}
+
+def foo2(){
+    write "eh isso ai";
+}
+
 def main(): int {
-    var i: int;
-    var x : bool;
+    var i,x: int;
     write "Digite os valores do arranjo:\n";
 
     for (i=0; i<10; i+=1) {
@@ -31,7 +38,9 @@ def main(): int {
         read v[i];
     }
 
-    x = 10 + true;
+    foo2();
+
+    //x = foo();
 
     bubblesort(v, 10);
 

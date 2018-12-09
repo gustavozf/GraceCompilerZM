@@ -21,7 +21,7 @@ def bubblesort(v[]: int; n: int) {
     }
 }
 
-def foo(x,y : int) : int{
+def foo() : int{
     return 3;
 }
 
@@ -38,9 +38,9 @@ def main(): int {
         read v[i];
     }
 
-    foo2();
+    foo2(1,2);
 
-    //x = foo();
+    x = foo(1,2);
 
     bubblesort(v, 10);
 

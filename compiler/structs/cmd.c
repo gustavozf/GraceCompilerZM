@@ -328,13 +328,12 @@ int ProcCmd::eval(){
         ret = 0;
     } else {
         proc = getElemTab();
+        if (this->expressoes != nullptr){
 
-        if(proc->numParams != this->expressoes->size()){
-            cout << "Erro Semantico: Numero de parametros incompativel na chamada do procedimento '"<< this->id <<"'!\n";
-            ret = 0; 
-        } else {
-
-            if (this->expressoes != nullptr){
+            if(proc->numParams != this->expressoes->size()){
+                cout << "Erro Semantico: Numero de parametros incompativel na chamada do procedimento '"<< this->id <<"'!\n";
+                ret = 0; 
+            } else {
                 j = proc->params->begin();
 
                 for(i = this->expressoes->begin(); i != this->expressoes->end(); ++i){
@@ -349,6 +348,9 @@ int ProcCmd::eval(){
             }
 
             if(!igual) ret = 0;
+        } else if (proc->numParams > 0){
+            cout << "Erro Semântico: Número de parâmetros incompatível na chamada do procedimento '"<< this->id <<"'!\n";
+            ret = 0;
         }
 
     }

@@ -172,7 +172,7 @@ AtribCmd::AtribCmd(Exp *varia, string typ, Exp *ex, int line1){
     var = static_cast<VarExp *>(varia);
     type = typ;
     exp = ex;
-    line1 = line;
+    line = line1;
 }
 
 int AtribCmd::eval(){

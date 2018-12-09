@@ -154,7 +154,7 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %%
 	/* Gramatica */
 programa: 
-	declaracoes { $$ = new Programa($1, escopoAtual); 
+	declaracoes { $$ = new Programa($1, escopoAtual, num_linhas); 
 				  raiz = $$; 
 				  cout << "\nPrograma reconhecido!\nRealizando Análise Semântica...\n";
 				  raiz->eval();
@@ -194,10 +194,10 @@ listaSpecVars:
 	;
 
 specVar:
-	T_ID 											{ $$ = new SpecVarSimples($1); 		   }					 
-	| T_ID "=" expressao 						 	{ $$ = new SpecVarSimples($1, $3); 	   }
-	| T_ID "[" expressao "]" 					 	{ $$ = new SpecVarArranjo($1, $3);	   }
-	| T_ID "[" expressao "]" "=" "{" cnjExpr "}"	{ $$ = new SpecVarArranjo($1, $3, $7); } 
+	T_ID 											{ $$ = new SpecVarSimples($1, num_linhas); 		   }					 
+	| T_ID "=" expressao 						 	{ $$ = new SpecVarSimples($1, $3, num_linhas); 	   }
+	| T_ID "[" expressao "]" 					 	{ $$ = new SpecVarArranjo($1, $3, num_linhas);	   }
+	| T_ID "[" expressao "]" "=" "{" cnjExpr "}"	{ $$ = new SpecVarArranjo($1, $3, $7, num_linhas); } 
 	;
 
 cnjExpr:
@@ -268,7 +268,8 @@ cmdSimples:
 
 // ------------------------------- Atribuicoes
 cmdAtrib:
-	variavel tiposAtrib expressao ";" 	{ $$ = new AtribCmd($1, $2, $3);}
+	variavel tiposAtrib expressao ";" 	{ $$ = new AtribCmd($1, $2, $3, num_linhas);}
+	//| variavel tiposAtrib expressao 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tiposAtrib:
@@ -286,44 +287,50 @@ atribAgreg:
 
 // ------------------------------ Estruturas Basicas
 cmdIf:
-	T_IF "(" expressao ")" comando %prec T_THEN		{$$ = new IfCmd($3, $5);     }
-	| T_IF "(" expressao ")" comando T_ELSE comando {$$ = new IfCmd($3, $5, $7); }
+	T_IF "(" expressao ")" comando %prec T_THEN		{$$ = new IfCmd($3, $5, num_linhas);     }
+	| T_IF "(" expressao ")" comando T_ELSE comando {$$ = new IfCmd($3, $5, $7, num_linhas); }
 	;
 
 cmdWhile:
-	T_WHILE "(" expressao ")" comando {$$ = new WhileCmd($3, $5, pilhaCmdRepet);}
+	T_WHILE "(" expressao ")" comando {$$ = new WhileCmd($3, $5, pilhaCmdRepet, num_linhas);}
 	;
 
 cmdFor:
-	T_FOR "(" cmdAtribFor ";" expressao ";" cmdAtribFor ")" comando {$$ = new ForCmd($3, $5, $7, $9, pilhaCmdRepet);}
-	| T_FOR "(" error ")" comando { cout << "Error no FOR\n"; }
+	T_FOR "(" cmdAtribFor ";" expressao ";" cmdAtribFor ")" comando {$$ = new ForCmd($3, $5, $7, $9, pilhaCmdRepet, num_linhas);}
 	;
 
 cmdAtribFor:
-	variavel tiposAtrib expressao	{ $$ = new AtribCmd($1, $2, $3); }
+	variavel tiposAtrib expressao	{ $$ = new AtribCmd($1, $2, $3, num_linhas); }
 	;
 
 cmdStop:
-	T_STOP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet);}
+	T_STOP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas);}
+	//| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdSkip:
-	T_SKIP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet);}
+	T_SKIP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas);}
+	//| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdReturn:
-	T_RETURN ";"					{$$ = new RetCmd(pilhaSubprog);}
-	| T_RETURN expressao ";"		{$$ = new RetCmd($2, pilhaSubprog);}
+	T_RETURN ";"					{$$ = new RetCmd(pilhaSubprog, num_linhas);}
+	| T_RETURN expressao ";"		{$$ = new RetCmd($2, pilhaSubprog, num_linhas);}
+	//| T_RETURN error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_RETURN expressao error	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
-	T_ID "(" ")" ";"				{ $$ = new ProcCmd($1, escopoAtual);     }
-	| T_ID "(" cnjExpr ")" ";"		{ $$ = new ProcCmd($1, $3, escopoAtual); }
+	T_ID "(" ")" ";"				{ $$ = new ProcCmd($1, escopoAtual, num_linhas);     }
+	| T_ID "(" cnjExpr ")" ";"		{ $$ = new ProcCmd($1, $3, escopoAtual, num_linhas); }
+	//| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdRead:
-	T_READ variavel ";"		{ $$ = new ReadCmd($2); }
+	T_READ variavel ";"		{ $$ = new ReadCmd($2, num_linhas); }
+	//| T_READ variavel 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdWrite:

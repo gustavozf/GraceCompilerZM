@@ -109,6 +109,7 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %token <sval> T_ATRIB_MOD        "%="
 %token <sval> T_COND_OP_TER      "?"
 %token <sval> T_DOIS_PON         ":"
+%token <sval> T_ERROR
 
 // tokens que assumem valores
 // %token <TIPO> <NOME>
@@ -269,7 +270,6 @@ cmdSimples:
 // ------------------------------- Atribuicoes
 cmdAtrib:
 	variavel tiposAtrib expressao ";" 	{ $$ = new AtribCmd($1, $2, $3, num_linhas);}
-	//| variavel tiposAtrib expressao 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tiposAtrib:
@@ -305,32 +305,25 @@ cmdAtribFor:
 
 cmdStop:
 	T_STOP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas);}
-	//| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdSkip:
 	T_SKIP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas);}
-	//| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdReturn:
 	T_RETURN ";"					{$$ = new RetCmd(pilhaSubprog, num_linhas);}
 	| T_RETURN expressao ";"		{$$ = new RetCmd($2, pilhaSubprog, num_linhas);}
-	//| T_RETURN error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
-	//| T_RETURN expressao error	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
 	T_ID "(" ")" ";"				{ $$ = new ProcCmd($1, escopoAtual, num_linhas);     }
 	| T_ID "(" cnjExpr ")" ";"		{ $$ = new ProcCmd($1, $3, escopoAtual, num_linhas); }
-	//| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
-	//| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdRead:
 	T_READ variavel ";"		{ $$ = new ReadCmd($2, num_linhas); }
-	//| T_READ variavel 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdWrite:

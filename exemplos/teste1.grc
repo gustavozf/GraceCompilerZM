@@ -1,9 +1,11 @@
-def proc1(){    
+def proc1(){
+    var @x, y&, z : int;
     // retorno nao deveria possuir valor
     return 10;
 }
 
 def func1(x,y: int; z : bool ) : bool{
+    var _ : bool;
     
     // operacao relacional incorreta entre int e bool
     if (x > z){

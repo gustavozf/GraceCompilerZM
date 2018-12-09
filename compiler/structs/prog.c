@@ -27,7 +27,7 @@ void Escopo::addElem(string id, ElemTab *elem){
     if (this->checkInserido(id)){
         cout << "Aviso: redeclaração de ID ('"<<id<<"') em um mesmo escopo ("<< getId() <<")!" <<endl;
     } else {
-        cout << "Novo elemento inserido na TS (Escopo " << getId() << "): '"<< id << "'" << endl;
+        //cout << "Novo elemento inserido na TS (Escopo " << getId() << "): '"<< id << "'" << endl;
         tabelaSimbolos[id] = elem;
     }
 }

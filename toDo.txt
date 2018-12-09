@@ -1,8 +1,11 @@
 To do list:
 
 - 3 exemplos
+
+- Erro Lexico
+	* variavel que comeca negocios invalidos
 - parametros de subprogamas
-	* diferencias variaveis simples de arranjos
+	* diferencias variaveis simples de arranjos // Zanoni
 	
 			
 		

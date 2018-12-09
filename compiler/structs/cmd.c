@@ -340,7 +340,7 @@ int ProcCmd::eval(){
         if (this->expressoes != nullptr){
 
             if(proc->numParams != this->expressoes->size()){
-                cout << "Erro Semâmtico (l: " << line <<"): Número de parâmetros incompatível na chamada do procedimento '"<< this->id <<"'!\n";
+                cout << "Erro Semântico (l: " << line <<"): Número de parâmetros incompatível na chamada do procedimento '"<< this->id <<"'!\n";
                 ret = 0; 
             } else {
                 j = proc->params->begin();

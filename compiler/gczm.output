@@ -1,3 +1,8 @@
+Terminais sem uso na gramática
+
+   T_ERROR
+
+
 Gramática
 
     0 $accept: programa $end
@@ -188,92 +193,93 @@ T_FALSE (273) 20
 "%=" (301) 52
 "?" (302) 94
 ":" (303) 6 27 28 31 94
-T_ID (304) 13 14 15 16 25 26 27 28 34 35 65 66 95 96 97 98
-T_NUM (305) 10 22
-T_LIT_STRING (306) 21
-T_NEG_UNAR (307)
-T_THEN (308)
+T_ERROR (304)
+T_ID (305) 13 14 15 16 25 26 27 28 34 35 65 66 95 96 97 98
+T_NUM (306) 10 22
+T_LIT_STRING (307) 21
+T_NEG_UNAR (308)
+T_THEN (309)
 
 
 Não terminais com as regras onde eles aparecem
 
-$accept (54)
+$accept (55)
     à esquerda: 0
-programa (55)
+programa (56)
     à esquerda: 1, à direita: 0
-declaracoes (56)
+declaracoes (57)
     à esquerda: 2 3, à direita: 1 2 69 71
-declaracao (57)
+declaracao (58)
     à esquerda: 4 5, à direita: 2 3
-decVar (58)
+decVar (59)
     à esquerda: 6, à direita: 4
-tipo (59)
+tipo (60)
     à esquerda: 7 8 9 10, à direita: 6 27 28 31
-listaSpecVars (60)
+listaSpecVars (61)
     à esquerda: 11 12, à direita: 6 11
-specVar (61)
+specVar (62)
     à esquerda: 13 14 15 16, à direita: 11 12
-cnjExpr (62)
+cnjExpr (63)
     à esquerda: 17 18, à direita: 16 17 66 68 96
-valor (63)
+valor (64)
     à esquerda: 19 20 21 22, à direita: 77
-decSub (64)
+decSub (65)
     à esquerda: 23 24, à direita: 5
-decProc (65)
+decProc (66)
     à esquerda: 25 26, à direita: 23
-decFun (66)
+decFun (67)
     à esquerda: 27 28, à direita: 24
-listaParametros (67)
+listaParametros (68)
     à esquerda: 29 30, à direita: 25 27 29
-specParams (68)
+specParams (69)
     à esquerda: 31, à direita: 29 30
-specParamsN (69)
+specParamsN (70)
     à esquerda: 32 33, à direita: 31 32
-param (70)
+param (71)
     à esquerda: 34 35, à direita: 32 33
-comando (71)
+comando (72)
     à esquerda: 36 37, à direita: 56 57 58 59 74 75
-cmdSimples (72)
+cmdSimples (73)
     à esquerda: 38 39 40 41 42 43 44 45 46 47, à direita: 36
-cmdAtrib (73)
+cmdAtrib (74)
     à esquerda: 48, à direita: 38
-tiposAtrib (74)
+tiposAtrib (75)
     à esquerda: 49 50, à direita: 48 60
-atribAgreg (75)
+atribAgreg (76)
     à esquerda: 51 52 53 54 55, à direita: 49
-cmdIf (76)
+cmdIf (77)
     à esquerda: 56 57, à direita: 39
-cmdWhile (77)
+cmdWhile (78)
     à esquerda: 58, à direita: 40
-cmdFor (78)
+cmdFor (79)
     à esquerda: 59, à direita: 41
-cmdAtribFor (79)
+cmdAtribFor (80)
     à esquerda: 60, à direita: 59
-cmdStop (80)
+cmdStop (81)
     à esquerda: 61, à direita: 42
-cmdSkip (81)
+cmdSkip (82)
     à esquerda: 62, à direita: 43
-cmdReturn (82)
+cmdReturn (83)
     à esquerda: 63 64, à direita: 44
-cmdChamadaProc (83)
+cmdChamadaProc (84)
     à esquerda: 65 66, à direita: 45
-cmdRead (84)
+cmdRead (85)
     à esquerda: 67, à direita: 46
-cmdWrite (85)
+cmdWrite (86)
     à esquerda: 68, à direita: 47
-bloco (86)
+bloco (87)
     à esquerda: 69 70 71, à direita: 25 26 27 28 37
-blocoBegin (87)
+blocoBegin (88)
     à esquerda: 72, à direita: 69 70 71
-blocoEnd (88)
+blocoEnd (89)
     à esquerda: 73, à direita: 69 70 71
-comandos (89)
+comandos (90)
     à esquerda: 74 75, à direita: 70 71 74
-expressao (90)
+expressao (91)
     à esquerda: 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92
     93 94 95 96, à direita: 14 15 16 17 18 48 56 57 58 59 60 64 78
     79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 98
-variavel (91)
+variavel (92)
     à esquerda: 97 98, à direita: 48 60 67 76
 
 

@@ -319,7 +319,7 @@ void DeclSub::addTabSimb(Escopo *atual){
     list<Param *> *parametros;
     string tipo;
 
-    cout << "Escopo do bloco ("<<id<<"): "<<escopoBloco->getId() <<endl;
+    //cout << "Escopo do bloco ("<<id<<"): "<<escopoBloco->getId() <<endl;
     // Olha pra cada espeficicacao de parametro "id1, id2, ... , idN : tipo"
     for(i=listaParam->begin(); i != listaParam->end(); ++i){
         // pega a quantidade "N"
@@ -338,7 +338,7 @@ void DeclSub::addTabSimb(Escopo *atual){
         parametros = (*i)->getCnjParam();
         // para cada um, o adiciona na tabela de simbolos do escopo do bloco
         for(k = parametros->begin(); k != parametros->end(); ++k){
-            cout << "Inserindo parametro ao escopo!\n";
+            //cout << "Inserindo parametro ao escopo!\n";
             escopoBloco->addElem((*k)->getId(),
                                     new ElemTab("param", tipo, (*k)->getArranjo()));
         }

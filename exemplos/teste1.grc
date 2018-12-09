@@ -4,6 +4,10 @@ def proc1(){
     return 10;
 }
 
+def proc2(y[] : bool){
+    return;
+}
+
 def func1(x,y: int; z : bool ) : bool{
     var _ : bool;
     
@@ -29,6 +33,9 @@ def main() : int {
 
     // parametro passado, quando nao deveria
     proc1(10);
+    // parametros de forma errada
+    proc2(w);
+    proc2(w[0]);
 
     // atribuicao de tipo incorreto
     i = func1(10, 15, true);
@@ -41,7 +48,10 @@ def main() : int {
     i = w["a"];
     // parametro da um "int" e nao um "array(int)"
     i = func2(w[1]);
-    i = func2(w, 2);
+
+    // chamada de procedimentos e funcoes que nao existem
+    i = naoExisto();
+    naoExistoTambem();
 
     return 0;
 }

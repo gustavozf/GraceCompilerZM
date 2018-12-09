@@ -376,13 +376,13 @@ int FuncExp::eval(){
     bool igual = true;
 
     if(!this->isInEscopo()){
-        cout << "Erro: Funcao '" << this->id << "' nao visivel ao escopo em que foi chamada!\n";
+        cout << "Erro Semântico: Função '" << this->id << "' não visível ao escopo em que foi chamada!\n";
         return 0;
     } else {
         proc = this->atual->getElemTab(this->id);
 
         if(proc->numParams != this->expressoes->size()){
-            cout << "Erro: Numero de parametros incompativel na chamada da funcao '"<< this->id <<"'!\n";
+            cout << "Erro Semântico: Número de parâmetros incompatível na chamada da função '"<< this->id <<"'!\n";
             return 0; 
         } else {
             j = proc->params->begin();
@@ -391,7 +391,7 @@ int FuncExp::eval(){
                 count++;
                 if((*j) != (*i)->getTipo()){
                     igual = false;
-                    cout << "Erro: Parametro #"<< count << " da chamada da funcao'" << this->id << "' possui tipo incorreto!\n";
+                    cout << "Erro Semântico: Parâmetro #"<< count << " da chamada da função'" << this->id << "' possui tipo incorreto!\n";
                 }
                 ++j;
             }

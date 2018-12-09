@@ -301,10 +301,13 @@ bool FuncExp::isInEscopo(){
     Escopo *i = this->atual;
 
     while((i != nullptr) && (!encontrado)){
-        encontrado = i->checkInserido(id);
+        encontrado = i->checkInserido(this->id);
 
         if (!encontrado){
             i = i->getPai();
+        }else {
+            this->atual = i;
+            this->tipo = i->getElemTab(this->id)->tipo;
         }
     }
 
@@ -312,8 +315,34 @@ bool FuncExp::isInEscopo(){
 }
 
 int FuncExp::eval(){
+    ist<Exp *>::iterator i;
+    list<string >::iterator j;
+    ElemTab* proc;
+    int count = 0;
+    bool igual = true;
+
     if(!this->isInEscopo()){
         cout << "Erro: Funcao (" << this->id << ") nao visivel ao escopo em que foi chamada!\n";
+        return 0;
+    } else {
+        proc = this->atual->getElemTab(this->id);
+
+        if(proc->numParams != this->expressoes->size()){
+            cout << "Erro: Numero de parametros incompativel na chamada da funcao ("<< this->id <<")!\n";
+            return 0; 
+        } else {
+            j = proc->params->begin();
+
+            for(i = this->expressoes->begin(); i != this->expressoes->end(); ++i){
+                count++;
+                if((*j) != (*i)->getTipo()){
+                    igual = false;
+                    cout << "Erro: Parametro #"<< count << " da chamada da funcao'" << this->id << "' possui tipo incorreto!\n";
+                }
+                ++j;
+            }
+            if(!igual) return 0;
+        }
     }
 
     return 1;

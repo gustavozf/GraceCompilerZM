@@ -20,9 +20,6 @@ Semantica:
 		- Uso de Variavel
 			* tipo resultante = declarado
 			* agregadas = expressao de acesso tem que ser int
-		- Chamada de Funcao
-			* os argumentos fornecidos devem ter mesmo tipo e quantidade dos declarados
-			* tipo resultante eh igual ao tipo declarado na funcao	
 	
 	
 			

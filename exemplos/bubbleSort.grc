@@ -31,6 +31,8 @@ def main(): int {
         read v[i];
     }
 
+    x = 10 + true;
+
     bubblesort(v, 10);
 
     write "Arranjo ordenado:\nA = ";

@@ -324,7 +324,7 @@ int ProcCmd::eval(){
     bool igual = true;
     
     if(!this->isInEscopo()){
-        cout << "Erro Semantico: Procedimento (" << this->id << ") nao visivel ao escopo em que foi chamado!\n";
+        cout << "Erro Semantico: Procedimento '" << this->id << "' nao visivel ao escopo em que foi chamado!\n";
         ret = 0;
     } else {
         proc = this->atual->getElemTab(this->id);

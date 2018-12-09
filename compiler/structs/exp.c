@@ -140,7 +140,7 @@ int NegUnExp::eval(){
     int ret = 1;
 
     if (this->getTipo() == "error"){
-        cout<<"Erro Semantico (l: " << line <<"): O tipo não eh apropriado para a operação de negação unária!\n";
+        cout<<"Erro Semântico (l: " << line <<"): O tipo não eh apropriado para a operação de negação unária!\n";
         ret = 0;
     }
     

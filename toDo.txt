@@ -1,12 +1,12 @@
 To do list:
 
-Semantica:
-	- Comandos
-		- For
-			* inicializacao e passo devem ser analisadas como Atribuicao
-				-> lado esquerdo = variavel declarada e visivel ao escopo
-				-> lado direito = expressao do tipo igual a variavel do lado esquerdo
-	
+- 3 exemplos
+- passar as linhas para:
+	* declaracoes
+	* comandos
+- parametros de subprogamas
+	* diferencias variaveis simples de arranjos
+- arrumar a precedencia
 	
 			
 		

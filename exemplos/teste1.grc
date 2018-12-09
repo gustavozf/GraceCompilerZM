@@ -1,0 +1,34 @@
+def proc1(){    
+    // retorno nao deveria possuir valor
+    return 10;
+}
+
+def func1(x,y: int; z : bool ) : bool{
+    
+    // operacao relacional incorreta entre int e bool
+    if (x > z){
+        return false;
+    } else {
+        // retorno com tipo incorreto
+        return 2;
+    }
+
+    return true;
+}
+
+def main() : int {
+    var i : int;
+    var j : bool;
+
+    // parametro passado, quando nao deveria
+    proc1(10);
+
+    // atribuicao de tipo incorreto
+    i = func1(10, 15, true);
+    // atribuicao sem declaracao e com numero de parametros errados
+    y = func1(10, 15);
+    // atribuicao com tipos de parametros errados
+    j = func1(true, false, "bob");
+
+    return 0;
+}

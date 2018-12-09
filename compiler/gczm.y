@@ -117,16 +117,16 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %token <sval> T_LIT_STRING
 
 /* Ordem de precedencia */
-%right T_NEG_UNAR
-%right T_NOT
-%left T_MULTIPLICACAO T_DIVISAO T_MODULO 
-%left T_ADICAO T_SUBTRACAO
-%left T_MENOR T_MENOR_IGUAL
-%left T_MAIOR T_MAIOR_IGUAL
-%left T_EQ_LOGICA T_DIF_LOGICA
-%left T_AND
-%left T_OR
-%right T_COND_OP_TER T_DOIS_PON
+%right T_COND_OP_TER T_DOIS_PON // 10
+%left T_OR // 9
+%left T_AND // 8
+%left T_EQ_LOGICA T_DIF_LOGICA // 7
+%left T_MAIOR T_MAIOR_IGUAL // 6
+%left T_MENOR T_MENOR_IGUAL // 5
+%left T_ADICAO T_SUBTRACAO // 4
+%left T_MULTIPLICACAO T_DIVISAO T_MODULO // 3
+%right T_NOT // 2
+%right T_NEG_UNAR  // 1
 
 %right T_THEN T_ELSE
 
@@ -179,7 +179,6 @@ declaracao:
 // ------------------------------- Declaracao de Variaveis
 decVar:
 	T_VAR listaSpecVars ":" tipo ";"		{ $$ = new DeclVar($2, $4); }
-	//| T_VAR error ":" tipo ";"		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tipo:
@@ -270,7 +269,6 @@ cmdSimples:
 // ------------------------------- Atribuicoes
 cmdAtrib:
 	variavel tiposAtrib expressao ";" 	{ $$ = new AtribCmd($1, $2, $3);}
-	//| variavel tiposAtrib expressao 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tiposAtrib:
@@ -298,6 +296,7 @@ cmdWhile:
 
 cmdFor:
 	T_FOR "(" cmdAtribFor ";" expressao ";" cmdAtribFor ")" comando {$$ = new ForCmd($3, $5, $7, $9, pilhaCmdRepet);}
+	| T_FOR "(" error ")" comando { cout << "Error no FOR\n"; }
 	;
 
 cmdAtribFor:
@@ -306,37 +305,29 @@ cmdAtribFor:
 
 cmdStop:
 	T_STOP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet);}
-	//| T_STOP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdSkip:
 	T_SKIP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet);}
-	//| T_SKIP 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdReturn:
 	T_RETURN ";"					{$$ = new RetCmd(pilhaSubprog);}
 	| T_RETURN expressao ";"		{$$ = new RetCmd($2, pilhaSubprog);}
-	//| T_RETURN error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
-	//| T_RETURN expressao error	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
 	T_ID "(" ")" ";"				{ $$ = new ProcCmd($1, escopoAtual);     }
 	| T_ID "(" cnjExpr ")" ";"		{ $$ = new ProcCmd($1, $3, escopoAtual); }
-	//| T_ID "(" ")" 				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
-	//| T_ID "(" cnjExpr ")"	 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdRead:
 	T_READ variavel ";"		{ $$ = new ReadCmd($2); }
-	//| T_READ variavel 	{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 cmdWrite:
 	T_WRITE cnjExpr ";"		{ $$ = new WriteCmd($2); }
-	//| T_WRITE cnjExpr		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 // ----------------------------------- Blocos
@@ -344,9 +335,6 @@ bloco:
 	  blocoBegin declaracoes blocoEnd				{	$$ = new BlocoCmd($2, $1);		}
 	| blocoBegin comandos blocoEnd					{	$$ = new BlocoCmd($2, $1);		}
 	| blocoBegin declaracoes comandos blocoEnd		{	$$ = new BlocoCmd($2, $3, $1);	}
-	//| "{" declaracoes error						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	//| "{" comandos	error							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
-	//| "{"declaracoes comandos error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	;
 
 blocoBegin:
@@ -369,7 +357,9 @@ comandos:
 // ----------------------------------- Expressoes
 
 expressao:
-	  "(" expressao ")"							{	$$ = $2;											}
+	 variavel									{	$$ = $1;											}
+	| valor										{	$$ = $1;											}
+	|  "(" expressao ")"						{	$$ = $2;											}
 	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2, num_linhas);		  			}
 	| "!" expressao					 			{	$$ = new NegExp($2, num_linhas);					}
 	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);			}
@@ -388,8 +378,6 @@ expressao:
 	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5, num_linhas);			}
 	| T_ID "(" ")" 								{	$$ = new FuncExp($1, escopoAtual, num_linhas); 		}
 	| T_ID "(" cnjExpr ")"						{	$$ = new FuncExp($1, $3, escopoAtual, num_linhas);  }
-	| variavel									{	$$ = $1;											}
-	| valor										{	$$ = $1;											}
 	;
 
 variavel:

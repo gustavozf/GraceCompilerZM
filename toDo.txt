@@ -6,7 +6,6 @@ To do list:
 	* comandos
 - parametros de subprogamas
 	* diferencias variaveis simples de arranjos
-- arrumar a precedencia
 	
 			
 		

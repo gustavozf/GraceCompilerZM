@@ -64,10 +64,11 @@ class SpecVar {
 class SpecVarSimples : public SpecVar {
     private:
         Exp *inicializacao;
-    
+        int line;
+
     public:
-        SpecVarSimples(string id1, Exp *ini);
-        SpecVarSimples(string id1);
+        SpecVarSimples(string id1, Exp *ini, int line1);
+        SpecVarSimples(string id1, int line1);
         string codeGen();
         int eval();
         string getId();
@@ -79,10 +80,11 @@ class SpecVarArranjo : public SpecVar {
     private:
         Exp *tam;
         list<Exp *> *inicializacao;
+        int line;
     
     public:
-        SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini);
-        SpecVarArranjo(string id1, Exp *tama);
+        SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini, int line1);
+        SpecVarArranjo(string id1, Exp *tama, int line1);
         string codeGen();
         int eval();
         string getId();

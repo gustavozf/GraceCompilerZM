@@ -2,19 +2,19 @@
 #include "dec.h"
 
 // ------------------------------------------- IfCmd
-IfCmd::IfCmd(Exp *cnd, Cmd *thn){
-    condicao = cnd; then = thn; els = nullptr;
+IfCmd::IfCmd(Exp *cnd, Cmd *thn, int line1){
+    condicao = cnd; then = thn; els = nullptr; line = line1;
 }
 
-IfCmd::IfCmd(Exp *cnd, Cmd *thn, Cmd *elz){
-    condicao = cnd; then = thn; els = elz;
+IfCmd::IfCmd(Exp *cnd, Cmd *thn, Cmd *elz, int line1){
+    condicao = cnd; then = thn; els = elz; line = line1;
 }
 
 int IfCmd::eval(){
     int retorno = 1;
 
     if (condicao->getTipo() != "bool") {
-        cout << "Erro Semantico: condicao do comando if deve ser do tipo booleano (encontrado = " << condicao->getTipo() << ")!" <<endl;
+        cout << "Erro Semântico (l: " << line <<"): condição do comando if deve ser do tipo booleano (encontrado = " << condicao->getTipo() << ")!" <<endl;
         retorno = 0;
     }
 
@@ -34,9 +34,10 @@ string IfCmd::codeGen(){
 }
 
 // ------------------------------------------- WhileCmd
-WhileCmd::WhileCmd(Exp *cnd, Cmd *cmd, stack<Cmd *> *pilhaCmdRep){
+WhileCmd::WhileCmd(Exp *cnd, Cmd *cmd, stack<Cmd *> *pilhaCmdRep, int line1){
     condicao = cnd; comando = cmd;
     pilhaCmdRepet = pilhaCmdRep;
+    line = line1;
 }
 
 int WhileCmd::eval(){
@@ -44,7 +45,7 @@ int WhileCmd::eval(){
     int retorno = 1;
 
     if(condicao->getTipo() != "bool"){
-        cout << "Erro Semantico: a expressao de um comando while deve ser de tipo booleano (encontrado = "<< condicao->getTipo() <<")!\n";
+        cout << "Erro Semântico (l: " << line <<"): a expressão de um comando while deve ser de tipo booleano (encontrado = "<< condicao->getTipo() <<")!\n";
         retorno = 0;
     }
 
@@ -62,12 +63,13 @@ string WhileCmd::codeGen(){
 }
 
 // ----------------------------------------------ForCmd
-ForCmd::ForCmd(Cmd *atriIni, Exp *ex, Cmd *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep){
+ForCmd::ForCmd(Cmd *atriIni, Exp *ex, Cmd *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep, int line1){
     exp = ex;
     atribIni = static_cast<AtribCmd *>(atriIni);
     atribPasso = static_cast<AtribCmd *>(atriPasso);
     comando = cman;
     pilhaCmdRepet = pilhaCmdRep;
+    line = line1;
 }
 
 int ForCmd::eval(){
@@ -76,7 +78,7 @@ int ForCmd::eval(){
     pilhaCmdRepet->push(this);
 
     if (this->exp->getTipo() != "bool"){
-        cout << "Erro Semantico: Expressao condicional do comando for deve retornar um tipo logico (encontrado: "<< this->exp->getTipo()  <<")!\n";
+        cout << "Erro Semântico (l: " << line <<"): Expressão condicional do comando for deve retornar um tipo lógico (encontrado: "<< this->exp->getTipo()  <<")!\n";
         cond = 0;
     }
 
@@ -96,14 +98,15 @@ string ForCmd::codeGen(){
 }
 
 //-------------------------------------------- StopSkipCmd
-StopSkipCmd::StopSkipCmd(string comando, stack<Cmd *> *pilhaCmdRep){
+StopSkipCmd::StopSkipCmd(string comando, stack<Cmd *> *pilhaCmdRep, int line1){
     cmd = comando;
     pilhaCmdRepet = pilhaCmdRep;
+    line = line1;
 }
 
 int StopSkipCmd::eval(){
     if(pilhaCmdRepet->size() == 0){
-        cout << "Erro Semantico: o comando "<<cmd<<" deve estar involvido diretamente ou indiretamente por um laco de repeticao!\n";
+        cout << "Erro Semântico (l: " << line <<"): o comando "<<cmd<<" deve estar envolvido diretamente ou indiretamente por um laço de repetição!\n";
         return 0;
     }
 
@@ -115,14 +118,16 @@ string StopSkipCmd::codeGen(){
 }
 
 //-------------------------------------------- RetCmd
-RetCmd::RetCmd(Exp *ret, stack<DeclSub *> *pilhaSub){
+RetCmd::RetCmd(Exp *ret, stack<DeclSub *> *pilhaSub, int line1){
     retorno = ret;
     pilhaSubprog = pilhaSub;
+    line = line1;
 }
 
-RetCmd::RetCmd(stack<DeclSub *> *pilhaSub){
+RetCmd::RetCmd(stack<DeclSub *> *pilhaSub, int line1){
     retorno = nullptr;
     pilhaSubprog = pilhaSub;
+    line = line1;
 }
 
 int RetCmd::eval(){
@@ -130,21 +135,21 @@ int RetCmd::eval(){
     int ret = 1;
 
     if(pilhaSubprog->size() == 0){
-        cout << "Erro Semantico: retorno fora de subprograma!\n";
+        cout << "Erro Semântico (l: " << line <<"): retorno fora de subprograma!\n";
         ret = 0;
     } else {
         subprog = pilhaSubprog->top();
 
         if ((subprog->getTipo() == "procedimento") && (retorno != nullptr)){
-            cout << "Erro Semantico: retorno de procedimento nao deve conter uma expressao!\n";
+            cout << "Erro Semântico (l: " << line <<"): retorno de procedimento não deve conter uma expressão!\n";
             ret = 0;
         } else {
             if ((subprog->getTipo() == "funcao")){
                 if (retorno == nullptr){
-                    cout << "Erro Semantico: retorno de funcao deve conter uma expressao!\n";
+                    cout << "Erro Semântico (l: " << line <<"): retorno de função deve conter uma expressão!\n";
                     ret = 0;
                 } else if ((subprog->getTipoRetorno() != retorno->getTipo())){
-                    cout << "Erro Semantico: retorno de tipo incopativel com o tipo declarado na funcao!\n";
+                    cout << "Erro Semântico (l: " << line <<"): retorno de tipo incopatível com o tipo declarado na função!\n";
                     ret = 0;
                 }
             }
@@ -163,10 +168,11 @@ string RetCmd::codeGen(){
 }
 
 // ----------------------------------------------AtribCmd
-AtribCmd::AtribCmd(Exp *varia, string typ, Exp *ex){
+AtribCmd::AtribCmd(Exp *varia, string typ, Exp *ex, int line1){
     var = static_cast<VarExp *>(varia);
     type = typ;
     exp = ex;
+    line1 = line;
 }
 
 int AtribCmd::eval(){
@@ -174,17 +180,17 @@ int AtribCmd::eval(){
     string expTipo;
 
     if(!var->isInEscopo()){
-        cout << "Erro Semântico: Variável '" << var->getId() << "' não visível ao escopo em que foi chamada!\n";
+        cout << "Erro Semântico (l: " << line <<"): Variável '" << var->getId() << "' não visível ao escopo em que foi chamada!\n";
 
         ret = 0;
     }else{
         expTipo = exp->getTipo();
 
         if (expTipo == ""){
-            cout << "Erro Semântico: Chamada de procedimento não pode ser utilizada para realizar uma atribuição!\n";
+            cout << "Erro Semântico (l: " << line <<"): Chamada de procedimento não pode ser utilizada para realizar uma atribuição!\n";
             ret = 0;
         } else if(var->getTipo() != expTipo){
-            cout << "Erro Semântico: Atribuicao de tipos incompatíveis ("<< var->getTipo() << " != " << exp->getTipo() <<")!\n";
+            cout << "Erro Semântico (l: " << line <<"): Atribuicao de tipos incompatíveis ("<< var->getTipo() << " != " << exp->getTipo() <<")!\n";
             ret = 0;
         }
     }
@@ -219,15 +225,16 @@ string WriteCmd::codeGen(){
 }
 
 // --------------------------------------------ReadCmd
-ReadCmd::ReadCmd(Exp* varia){
+ReadCmd::ReadCmd(Exp* varia, int line1){
     var = static_cast<VarExp *>(varia);
+    line = line1;
 }
 
 int ReadCmd::eval(){
     int ret = 1;
 
     if(!var->isInEscopo()){
-        cout << "Erro Semantico: Var (" << var->getId() << ") nao visivel ao escopo em que foi chamada!\n";
+        cout << "Erro Semântico (l: " << line <<"): Var (" << var->getId() << ") não visível ao escopo em que foi chamada!\n";
         ret = 0;
     }
 
@@ -287,16 +294,18 @@ string BlocoCmd::codeGen(){
 }
 
 // ------------------------------------------------------ ProcCmd
-ProcCmd::ProcCmd(string id1, Escopo *atual1){
+ProcCmd::ProcCmd(string id1, Escopo *atual1, int line1){
     id = id1;
     expressoes = nullptr;
     atual = atual1;
+    line = line1;
 }
 
-ProcCmd::ProcCmd(string id1, list<Exp *> *exps, Escopo *atual1){
+ProcCmd::ProcCmd(string id1, list<Exp *> *exps, Escopo *atual1, int line1){
     id = id1;
     expressoes = exps;
     atual = atual1;
+    line = line1;
 }
 
 bool ProcCmd::isInEscopo(){
@@ -324,14 +333,14 @@ int ProcCmd::eval(){
     bool igual = true;
     
     if(!this->isInEscopo()){
-        cout << "Erro Semantico: Procedimento '" << this->id << "' nao visivel ao escopo em que foi chamado!\n";
+        cout << "Erro Semântico (l: " << line <<"): Procedimento '" << this->id << "' não visível ao escopo em que foi chamado!\n";
         ret = 0;
     } else {
         proc = getElemTab();
         if (this->expressoes != nullptr){
 
             if(proc->numParams != this->expressoes->size()){
-                cout << "Erro Semantico: Numero de parametros incompativel na chamada do procedimento '"<< this->id <<"'!\n";
+                cout << "Erro Semâmtico (l: " << line <<"): Número de parâmetros incompatível na chamada do procedimento '"<< this->id <<"'!\n";
                 ret = 0; 
             } else {
                 j = proc->params->begin();
@@ -340,7 +349,7 @@ int ProcCmd::eval(){
                     count++;
                     if((*j) != (*i)->getTipo()){
                         igual = false;
-                        cout << "Erro Semantico: Parametro #"<< count << " da chamada de procedimento '" << this->id << "' possui tipo incorreto!\n";
+                        cout << "Erro Semântico (l: " << line <<"): Parâmetro #"<< count << " da chamada de procedimento '" << this->id << "' possui tipo incorreto!\n";
                     }
 
                     ++j;
@@ -349,7 +358,7 @@ int ProcCmd::eval(){
 
             if(!igual) ret = 0;
         } else if (proc->numParams > 0){
-            cout << "Erro Semântico: Número de parâmetros incompatível na chamada do procedimento '"<< this->id <<"'!\n";
+            cout << "Erro Semântico (l: " << line <<"): Número de parâmetros incompatível na chamada do procedimento '"<< this->id <<"'!\n";
             ret = 0;
         }
 
@@ -390,9 +399,10 @@ string ProcCmd::codeGen(){
 
 
 // -------------------------------------------- Programa
-Programa::Programa(list<Decl *> *decl, Escopo *glob){
+Programa::Programa(list<Decl *> *decl, Escopo *glob, int line1){
     declaracoes = decl;
     global = glob;
+    line = line1;
 }
 
 int Programa::eval(){
@@ -404,15 +414,15 @@ int Programa::eval(){
         ultimaFunc = static_cast<DeclSub *>(*i);
 
         if(ultimaFunc->getId() != "main"){
-            cout << "Erro Semantico: Ultima declaracao do programa deve ser a funcao main!\n";
+            cout << "Erro Semântico (l: " << line <<"): Última declaração do programa deve ser a função main!\n";
             ret = 0;
         } else if(ultimaFunc->getTipoRetorno() != "int") {
             cout << ultimaFunc->getTipoRetorno() << endl;
-            cout << "Erro Semantico: A funcao main deve retornar um tipo inteiro!\n";
+            cout << "Erro Semântico (l: " << line <<"): A função main deve retornar um tipo inteiro!\n";
             ret = 0;
         }
     } else {
-        cout << "Erro Semantico: Ultima declaracao do programa deve ser a funcao main!\n";
+        cout << "Erro Semântico (l: " << line <<"): Última declaração do programa deve ser a função main!\n";
         ret = 0;
     }
 

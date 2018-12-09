@@ -315,6 +315,7 @@ void DeclSub::addTabSimb(Escopo *atual){
     list<Param *> *parametros;
     string tipo;
 
+    cout << "Escopo do bloco ("<<id<<"): "<<escopoBloco->getId() <<endl;
     // Olha pra cada espeficicacao de parametro "id1, id2, ... , idN : tipo"
     for(i=listaParam->begin(); i != listaParam->end(); ++i){
         // pega a quantidade "N"

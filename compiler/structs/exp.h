@@ -18,9 +18,10 @@ class AritmExp : public Exp{
     private:
         Exp *e1, *e2;
         string op;
+        int line;
         
     public:
-        AritmExp(Exp* expr1, Exp* expr2, string ope);
+        AritmExp(Exp* expr1, Exp* expr2, string ope, int line1);
         int eval();
         string codeGen();
         string getTipo();
@@ -31,9 +32,10 @@ class RelExp : public Exp{
     private:
         Exp *e1, *e2;
         string op;
-        
+        int line;
+
     public:
-        RelExp(Exp* expr1, Exp* expr2, string ope);
+        RelExp(Exp* expr1, Exp* expr2, string ope, int line1);
         int eval();
         string codeGen();
         string getTipo();
@@ -43,9 +45,10 @@ class LogExp : public Exp{
     private:
         Exp *e1, *e2;
         string op;
-        
+        int line;
+
     public:
-        LogExp(Exp* expr1, Exp* expr2, string ope);
+        LogExp(Exp* expr1, Exp* expr2, string ope, int line1);
         int eval();
         string codeGen();
         string getTipo();
@@ -56,9 +59,10 @@ class IgExp : public Exp {
     private:
         Exp *e1, *e2;
         string op;
-        
+        int line;
+    
     public:
-        IgExp(Exp* expr1, Exp* expr2, string ope);
+        IgExp(Exp* expr1, Exp* expr2, string ope, int line1);
         int eval();
         string codeGen();
         string getTipo();
@@ -67,9 +71,10 @@ class IgExp : public Exp {
 class NegUnExp : public Exp {
     private:
         Exp *e1;
+        int line;
 
     public:
-        NegUnExp(Exp* expr);
+        NegUnExp(Exp* expr, int line1);
         int eval();
         string codeGen();
         string getTipo();
@@ -78,9 +83,10 @@ class NegUnExp : public Exp {
 class NegExp : public Exp {
     private:
         Exp *e1;
+        int line;
 
     public:
-        NegExp(Exp* expr);
+        NegExp(Exp* expr, int line1);
         int eval();
         string codeGen();
         string getTipo();
@@ -89,9 +95,10 @@ class NegExp : public Exp {
 class TerExp : public Exp{
     private:
         Exp *e1, *e2, *e3;
-    
+        int line;
+
     public:
-        TerExp(Exp* expr1, Exp* expr2, Exp* expr3);
+        TerExp(Exp* expr1, Exp* expr2, Exp* expr3, int line1);
         int eval();
         string codeGen();
         string getTipo();
@@ -100,9 +107,10 @@ class TerExp : public Exp{
 class ValExp : public Exp{
     private:
         string valor, type;
+        int line;
     
     public:
-        ValExp(string val, string typ);
+        ValExp(string val, string typ, int line1);
         int eval();
         string codeGen();
         string getTipo();
@@ -113,16 +121,16 @@ class VarExp : public Exp{
         string id; //, tipo;
         Exp *position;
         Escopo *atual;
+        int line;
 
     public:
-        VarExp(string id1, Exp *pos, Escopo* atual1);
-        VarExp(string id2, Escopo* atual1);
+        VarExp(string id1, Exp *pos, Escopo* atual1, int line1);
+        VarExp(string id2, Escopo* atual1, int line1);
         int eval();
         bool isInEscopo();
         string codeGen();
         string getTipo();
         string getId();
-        Escopo* getEscopo();
 };
 
 class FuncExp : public Exp{
@@ -130,11 +138,12 @@ class FuncExp : public Exp{
         string id;
         list<Exp *> *expressoes;
         Escopo *atual;
+        int line;
         //string tipo;
 
     public:
-        FuncExp(string id1, Escopo *atual1);
-        FuncExp(string id1, list<Exp *> *exps, Escopo *atual1);
+        FuncExp(string id1, Escopo *atual1, int line1);
+        FuncExp(string id1, list<Exp *> *exps, Escopo *atual1, int line1);
         int eval();
         bool isInEscopo();
         string codeGen();

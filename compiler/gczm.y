@@ -49,6 +49,7 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 	Param *param;
 	SpecParam *specParam;
 	Programa *programa;
+	Escopo *escopo;
 
 	// Listas
 	list<Exp *> *cnjExp;
@@ -148,13 +149,16 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %type <cnjDecl> declaracoes
 %type <cnjSpecParam> listaParametros
 
+%type <escopo> blocoBegin
+
 %%
 	/* Gramatica */
 programa: 
 	declaracoes { $$ = new Programa($1, escopoAtual); 
 				  raiz = $$; 
-				  cout << "\nPrograma reconhecido!\nRealizando Analise Semantica...\n";
+				  cout << "\nPrograma reconhecido!\nRealizando Análise Semântica...\n";
 				  raiz->eval();
+				  cout << "Análise Semântica Realizada!\n";
 				}
 	;
 
@@ -175,7 +179,7 @@ declaracao:
 // ------------------------------- Declaracao de Variaveis
 decVar:
 	T_VAR listaSpecVars ":" tipo ";"		{ $$ = new DeclVar($2, $4); }
-	//| T_VAR listaSpecVars ":" tipo		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
+	//| T_VAR error ":" tipo ";"		{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um ; \n";}
 	;
 
 tipo:
@@ -203,10 +207,10 @@ cnjExpr:
 	;
 
 valor:
-	T_TRUE			{ $$ = new ValExp($1, "bool");   }
-	| T_FALSE		{ $$ = new ValExp($1, "bool");   }
-	| T_LIT_STRING	{ $$ = new ValExp($1, "string"); }
-	| T_NUM			{ $$ = new ValExp($1, "int");	 }
+	T_TRUE			{ $$ = new ValExp($1, "bool", num_linhas);   }
+	| T_FALSE		{ $$ = new ValExp($1, "bool", num_linhas);   }
+	| T_LIT_STRING	{ $$ = new ValExp($1, "string", num_linhas); }
+	| T_NUM			{ $$ = new ValExp($1, "int", num_linhas);	 }
 	;
 
 // -------------------------------- Declaracao de Subprocessos
@@ -337,9 +341,9 @@ cmdWrite:
 
 // ----------------------------------- Blocos
 bloco:
-	  blocoBegin declaracoes blocoEnd				{	$$ = new BlocoCmd($2, escopoAtual);		}
-	| blocoBegin comandos blocoEnd					{	$$ = new BlocoCmd($2, escopoAtual);		}
-	| blocoBegin declaracoes comandos blocoEnd		{	$$ = new BlocoCmd($2, $3, escopoAtual);	}
+	  blocoBegin declaracoes blocoEnd				{	$$ = new BlocoCmd($2, $1);		}
+	| blocoBegin comandos blocoEnd					{	$$ = new BlocoCmd($2, $1);		}
+	| blocoBegin declaracoes comandos blocoEnd		{	$$ = new BlocoCmd($2, $3, $1);	}
 	//| "{" declaracoes error						{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{" comandos	error							{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
 	//| "{"declaracoes comandos error				{cout << "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): Talvez esteja faltando um } \n";}
@@ -349,6 +353,7 @@ blocoBegin:
 	"{" { 
 			escopoAtual = new Escopo(escopoAtual, countEscopos);
 			countEscopos++;
+			$$ = escopoAtual;
 		}
 	;
 
@@ -364,32 +369,32 @@ comandos:
 // ----------------------------------- Expressoes
 
 expressao:
-	valor										{	$$ = $1;								}
-	| variavel									{	$$ = $1;								}
-	| "(" expressao ")"							{	$$ = $2;								}
-	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2);		  			}
-	| "!" expressao					 			{	$$ = new NegExp($2);					}
-	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "/" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "%" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "+" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "-" expressao		 			{	$$ = new AritmExp($1, $3, $2); 			}
-	| expressao "<" expressao		 			{	$$ = new RelExp($1, $3, $2);			}
-	| expressao "<=" expressao  	 			{	$$ = new RelExp($1, $3, $2);			}
-	| expressao ">" expressao		 			{	$$ = new RelExp($1, $3, $2);			}
-	| expressao ">=" expressao		 			{	$$ = new RelExp($1, $3, $2);			}
-	| expressao "==" expressao		 			{	$$ = new IgExp($1, $3, $2);				}
-	| expressao "!=" expressao		 			{	$$ = new IgExp($1, $3, $2);				}
-	| expressao "&&" expressao		 			{	$$ = new LogExp($1, $3, $2);			}
-	| expressao "||" expressao		 			{	$$ = new LogExp($1, $3, $2);			}
-	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5);			}
-	| T_ID "(" ")" 								{	$$ = new FuncExp($1, escopoAtual); 		}
-	| T_ID "(" cnjExpr ")"						{	$$ = new FuncExp($1, $3, escopoAtual);  }
+	  "(" expressao ")"							{	$$ = $2;											}
+	| "-" expressao %prec T_NEG_UNAR  			{	$$ = new NegUnExp($2, num_linhas);		  			}
+	| "!" expressao					 			{	$$ = new NegExp($2, num_linhas);					}
+	| expressao "*" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);			}
+	| expressao "/" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);		 	}
+	| expressao "%" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);		 	}
+	| expressao "+" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);		 	}
+	| expressao "-" expressao		 			{	$$ = new AritmExp($1, $3, $2, num_linhas);		 	}
+	| expressao "<" expressao		 			{	$$ = new RelExp($1, $3, $2, num_linhas);			}
+	| expressao "<=" expressao  	 			{	$$ = new RelExp($1, $3, $2, num_linhas);			}
+	| expressao ">" expressao		 			{	$$ = new RelExp($1, $3, $2, num_linhas);			}
+	| expressao ">=" expressao		 			{	$$ = new RelExp($1, $3, $2, num_linhas);			}
+	| expressao "==" expressao		 			{	$$ = new IgExp($1, $3, $2, num_linhas);				}
+	| expressao "!=" expressao		 			{	$$ = new IgExp($1, $3, $2, num_linhas);				}
+	| expressao "&&" expressao		 			{	$$ = new LogExp($1, $3, $2, num_linhas);			}
+	| expressao "||" expressao		 			{	$$ = new LogExp($1, $3, $2, num_linhas);			}
+	| expressao "?" expressao ":" expressao		{	$$ = new TerExp($1, $3, $5, num_linhas);			}
+	| T_ID "(" ")" 								{	$$ = new FuncExp($1, escopoAtual, num_linhas); 		}
+	| T_ID "(" cnjExpr ")"						{	$$ = new FuncExp($1, $3, escopoAtual, num_linhas);  }
+	| variavel									{	$$ = $1;											}
+	| valor										{	$$ = $1;											}
 	;
 
 variavel:
-	T_ID						{ $$ = new VarExp($1, escopoAtual);     }
-	| T_ID "[" expressao "]"	{ $$ = new VarExp($1, $3, escopoAtual); }
+	T_ID						{ $$ = new VarExp($1, escopoAtual, num_linhas);     }
+	| T_ID "[" expressao "]"	{ $$ = new VarExp($1, $3, escopoAtual, num_linhas); }
 	;
 
 %%

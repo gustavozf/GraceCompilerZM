@@ -14,7 +14,7 @@ int IfCmd::eval(){
     int retorno = 1;
 
     if (condicao->getTipo() != "bool") {
-        cout << "Erro Semantico: condicao do comando if deve ser do tipo booleano! (encontrado = " << condicao->getTipo() << endl;
+        cout << "Erro Semantico: condicao do comando if deve ser do tipo booleano (encontrado = " << condicao->getTipo() << ")!" <<endl;
         retorno = 0;
     }
 
@@ -171,14 +171,20 @@ AtribCmd::AtribCmd(Exp *varia, string typ, Exp *ex){
 
 int AtribCmd::eval(){
     int ret = 1;
+    string expTipo;
 
     if(!var->isInEscopo()){
-        cout << "Erro Semantico: Var (" << var->getId() << ") nao visivel ao escopo em que foi chamada!\n";
+        cout << "Erro Semântico: Variável '" << var->getId() << "' não visível ao escopo em que foi chamada!\n";
 
         ret = 0;
     }else{
-        if(!(var->getEscopo()->getElemTab(var->getId())->tipo == exp->getTipo())){
-            cout << "Erro Semantico: Atribuicao de tipos incompatíveis";
+        expTipo = exp->getTipo();
+
+        if (expTipo == ""){
+            cout << "Erro Semântico: Chamada de procedimento não pode ser utilizada para realizar uma atribuição!\n";
+            ret = 0;
+        } else if(var->getTipo() != expTipo){
+            cout << "Erro Semântico: Atribuicao de tipos incompatíveis ("<< var->getTipo() << " != " << exp->getTipo() <<")!\n";
             ret = 0;
         }
     }
@@ -324,7 +330,7 @@ int ProcCmd::eval(){
         proc = this->atual->getElemTab(this->id);
 
         if(proc->numParams != this->expressoes->size()){
-            cout << "Erro Semantico: Numero de parametros incompativel na chamada do procedimento ("<< this->id <<")!\n";
+            cout << "Erro Semantico: Numero de parametros incompativel na chamada do procedimento '"<< this->id <<"'!\n";
             ret = 0; 
         } else {
 

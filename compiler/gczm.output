@@ -112,27 +112,27 @@ Gramática
    74 comandos: comandos comando
    75         | comando
 
-   76 expressao: valor
-   77          | variavel
-   78          | "(" expressao ")"
-   79          | "-" expressao
-   80          | "!" expressao
-   81          | expressao "*" expressao
-   82          | expressao "/" expressao
-   83          | expressao "%" expressao
-   84          | expressao "+" expressao
-   85          | expressao "-" expressao
-   86          | expressao "<" expressao
-   87          | expressao "<=" expressao
-   88          | expressao ">" expressao
-   89          | expressao ">=" expressao
-   90          | expressao "==" expressao
-   91          | expressao "!=" expressao
-   92          | expressao "&&" expressao
-   93          | expressao "||" expressao
-   94          | expressao "?" expressao ":" expressao
-   95          | T_ID "(" ")"
-   96          | T_ID "(" cnjExpr ")"
+   76 expressao: "(" expressao ")"
+   77          | "-" expressao
+   78          | "!" expressao
+   79          | expressao "*" expressao
+   80          | expressao "/" expressao
+   81          | expressao "%" expressao
+   82          | expressao "+" expressao
+   83          | expressao "-" expressao
+   84          | expressao "<" expressao
+   85          | expressao "<=" expressao
+   86          | expressao ">" expressao
+   87          | expressao ">=" expressao
+   88          | expressao "==" expressao
+   89          | expressao "!=" expressao
+   90          | expressao "&&" expressao
+   91          | expressao "||" expressao
+   92          | expressao "?" expressao ":" expressao
+   93          | T_ID "(" ")"
+   94          | T_ID "(" cnjExpr ")"
+   95          | variavel
+   96          | valor
 
    97 variavel: T_ID
    98         | T_ID "[" expressao "]"
@@ -158,37 +158,37 @@ T_SKIP (270) 62
 T_STOP (271) 61
 T_TRUE (272) 19
 T_FALSE (273) 20
-"(" (274) 25 26 27 28 56 57 58 59 65 66 78 95 96
-")" (275) 25 26 27 28 56 57 58 59 65 66 78 95 96
+"(" (274) 25 26 27 28 56 57 58 59 65 66 76 93 94
+")" (275) 25 26 27 28 56 57 58 59 65 66 76 93 94
 "[" (276) 10 15 16 35 98
 "]" (277) 10 15 16 35 98
 "{" (278) 16 72
 "}" (279) 16 73
 "," (280) 11 17 32
 ";" (281) 6 29 48 59 61 62 63 64 65 66 67 68
-"+" (282) 84
-"-" (283) 79 85
-"*" (284) 81
-"/" (285) 82
-"%" (286) 83
-"==" (287) 90
-"!=" (288) 91
-">" (289) 88
-">=" (290) 89
-"<" (291) 86
-"<=" (292) 87
-"||" (293) 93
-"&&" (294) 92
-"!" (295) 80
+"+" (282) 82
+"-" (283) 77 83
+"*" (284) 79
+"/" (285) 80
+"%" (286) 81
+"==" (287) 88
+"!=" (288) 89
+">" (289) 86
+">=" (290) 87
+"<" (291) 84
+"<=" (292) 85
+"||" (293) 91
+"&&" (294) 90
+"!" (295) 78
 "=" (296) 14 16 50
 "+=" (297) 54
 "-=" (298) 55
 "*=" (299) 53
 "/=" (300) 51
 "%=" (301) 52
-"?" (302) 94
-":" (303) 6 27 28 31 94
-T_ID (304) 13 14 15 16 25 26 27 28 34 35 65 66 95 96 97 98
+"?" (302) 92
+":" (303) 6 27 28 31 92
+T_ID (304) 13 14 15 16 25 26 27 28 34 35 65 66 93 94 97 98
 T_NUM (305) 10 22
 T_LIT_STRING (306) 21
 T_NEG_UNAR (307)
@@ -214,9 +214,9 @@ listaSpecVars (60)
 specVar (61)
     à esquerda: 13 14 15 16, à direita: 11 12
 cnjExpr (62)
-    à esquerda: 17 18, à direita: 16 17 66 68 96
+    à esquerda: 17 18, à direita: 16 17 66 68 94
 valor (63)
-    à esquerda: 19 20 21 22, à direita: 76
+    à esquerda: 19 20 21 22, à direita: 96
 decSub (64)
     à esquerda: 23 24, à direita: 5
 decProc (65)
@@ -271,10 +271,10 @@ comandos (89)
     à esquerda: 74 75, à direita: 70 71 74
 expressao (90)
     à esquerda: 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92
-    93 94 95 96, à direita: 14 15 16 17 18 48 56 57 58 59 60 64 78
-    79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 98
+    93 94 95 96, à direita: 14 15 16 17 18 48 56 57 58 59 60 64 76
+    77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 98
 variavel (91)
-    à esquerda: 97 98, à direita: 48 60 67 77
+    à esquerda: 97 98, à direita: 48 60 67 95
 
 
 Estado 0
@@ -569,7 +569,7 @@ Estado 28
 
 Estado 29
 
-   78 expressao: "(" . expressao ")"
+   76 expressao: "(" . expressao ")"
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -587,7 +587,7 @@ Estado 29
 
 Estado 30
 
-   79 expressao: "-" . expressao
+   77 expressao: "-" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -605,7 +605,7 @@ Estado 30
 
 Estado 31
 
-   80 expressao: "!" . expressao
+   78 expressao: "!" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -623,8 +623,8 @@ Estado 31
 
 Estado 32
 
-   95 expressao: T_ID . "(" ")"
-   96          | T_ID . "(" cnjExpr ")"
+   93 expressao: T_ID . "(" ")"
+   94          | T_ID . "(" cnjExpr ")"
    97 variavel: T_ID .
    98         | T_ID . "[" expressao "]"
 
@@ -650,29 +650,29 @@ Estado 34
 
 Estado 35
 
-   76 expressao: valor .
+   96 expressao: valor .
 
-    $padrão  reduzir usando a regra 76 (expressao)
+    $padrão  reduzir usando a regra 96 (expressao)
 
 
 Estado 36
 
    15 specVar: T_ID "[" expressao . "]"
    16        | T_ID "[" expressao . "]" "=" "{" cnjExpr "}"
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "]"   deslocar, e ir ao estado 58
     "+"   deslocar, e ir ao estado 59
@@ -693,28 +693,28 @@ Estado 36
 
 Estado 37
 
-   77 expressao: variavel .
+   95 expressao: variavel .
 
-    $padrão  reduzir usando a regra 77 (expressao)
+    $padrão  reduzir usando a regra 95 (expressao)
 
 
 Estado 38
 
    14 specVar: T_ID "=" expressao .
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
@@ -892,21 +892,21 @@ Estado 52
 
 Estado 53
 
-   78 expressao: "(" expressao . ")"
-   81          | expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   76 expressao: "(" expressao . ")"
+   79          | expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     ")"   deslocar, e ir ao estado 107
     "+"   deslocar, e ir ao estado 59
@@ -927,21 +927,21 @@ Estado 53
 
 Estado 54
 
-   79 expressao: "-" expressao .
-   81          | expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   77 expressao: "-" expressao .
+   79          | expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
@@ -958,26 +958,26 @@ Estado 54
     "&&"  deslocar, e ir ao estado 71
     "?"   deslocar, e ir ao estado 72
 
-    $padrão  reduzir usando a regra 79 (expressao)
+    $padrão  reduzir usando a regra 77 (expressao)
 
 
 Estado 55
 
-   80 expressao: "!" expressao .
-   81          | expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   78 expressao: "!" expressao .
+   79          | expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
@@ -994,13 +994,13 @@ Estado 55
     "&&"  deslocar, e ir ao estado 71
     "?"   deslocar, e ir ao estado 72
 
-    $padrão  reduzir usando a regra 80 (expressao)
+    $padrão  reduzir usando a regra 78 (expressao)
 
 
 Estado 56
 
-   95 expressao: T_ID "(" . ")"
-   96          | T_ID "(" . cnjExpr ")"
+   93 expressao: T_ID "(" . ")"
+   94          | T_ID "(" . cnjExpr ")"
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1048,7 +1048,7 @@ Estado 58
 
 Estado 59
 
-   84 expressao: expressao "+" . expressao
+   82 expressao: expressao "+" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1066,7 +1066,7 @@ Estado 59
 
 Estado 60
 
-   85 expressao: expressao "-" . expressao
+   83 expressao: expressao "-" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1084,7 +1084,7 @@ Estado 60
 
 Estado 61
 
-   81 expressao: expressao "*" . expressao
+   79 expressao: expressao "*" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1102,7 +1102,7 @@ Estado 61
 
 Estado 62
 
-   82 expressao: expressao "/" . expressao
+   80 expressao: expressao "/" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1120,7 +1120,7 @@ Estado 62
 
 Estado 63
 
-   83 expressao: expressao "%" . expressao
+   81 expressao: expressao "%" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1138,7 +1138,7 @@ Estado 63
 
 Estado 64
 
-   90 expressao: expressao "==" . expressao
+   88 expressao: expressao "==" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1156,7 +1156,7 @@ Estado 64
 
 Estado 65
 
-   91 expressao: expressao "!=" . expressao
+   89 expressao: expressao "!=" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1174,7 +1174,7 @@ Estado 65
 
 Estado 66
 
-   88 expressao: expressao ">" . expressao
+   86 expressao: expressao ">" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1192,7 +1192,7 @@ Estado 66
 
 Estado 67
 
-   89 expressao: expressao ">=" . expressao
+   87 expressao: expressao ">=" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1210,7 +1210,7 @@ Estado 67
 
 Estado 68
 
-   86 expressao: expressao "<" . expressao
+   84 expressao: expressao "<" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1228,7 +1228,7 @@ Estado 68
 
 Estado 69
 
-   87 expressao: expressao "<=" . expressao
+   85 expressao: expressao "<=" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1246,7 +1246,7 @@ Estado 69
 
 Estado 70
 
-   93 expressao: expressao "||" . expressao
+   91 expressao: expressao "||" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1264,7 +1264,7 @@ Estado 70
 
 Estado 71
 
-   92 expressao: expressao "&&" . expressao
+   90 expressao: expressao "&&" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1282,7 +1282,7 @@ Estado 71
 
 Estado 72
 
-   94 expressao: expressao "?" . expressao ":" expressao
+   92 expressao: expressao "?" . expressao ":" expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -1652,22 +1652,22 @@ Estado 106
 
 Estado 107
 
-   78 expressao: "(" expressao ")" .
+   76 expressao: "(" expressao ")" .
 
-    $padrão  reduzir usando a regra 78 (expressao)
+    $padrão  reduzir usando a regra 76 (expressao)
 
 
 Estado 108
 
-   95 expressao: T_ID "(" ")" .
+   93 expressao: T_ID "(" ")" .
 
-    $padrão  reduzir usando a regra 95 (expressao)
+    $padrão  reduzir usando a regra 93 (expressao)
 
 
 Estado 109
 
    17 cnjExpr: cnjExpr . "," expressao
-   96 expressao: T_ID "(" cnjExpr . ")"
+   94 expressao: T_ID "(" cnjExpr . ")"
 
     ")"  deslocar, e ir ao estado 154
     ","  deslocar, e ir ao estado 155
@@ -1676,20 +1676,20 @@ Estado 109
 Estado 110
 
    18 cnjExpr: expressao .
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
@@ -1711,20 +1711,20 @@ Estado 110
 
 Estado 111
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
    98 variavel: T_ID "[" expressao . "]"
 
     "]"   deslocar, e ir ao estado 156
@@ -1753,21 +1753,21 @@ Estado 112
 
 Estado 113
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   84          | expressao "+" expressao .
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   82          | expressao "+" expressao .
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "=="  deslocar, e ir ao estado 64
     "!="  deslocar, e ir ao estado 65
@@ -1779,26 +1779,26 @@ Estado 113
     "&&"  deslocar, e ir ao estado 71
     "?"   deslocar, e ir ao estado 72
 
-    $padrão  reduzir usando a regra 84 (expressao)
+    $padrão  reduzir usando a regra 82 (expressao)
 
 
 Estado 114
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   85          | expressao "-" expressao .
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   83          | expressao "-" expressao .
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "=="  deslocar, e ir ao estado 64
     "!="  deslocar, e ir ao estado 65
@@ -1810,26 +1810,92 @@ Estado 114
     "&&"  deslocar, e ir ao estado 71
     "?"   deslocar, e ir ao estado 72
 
-    $padrão  reduzir usando a regra 85 (expressao)
+    $padrão  reduzir usando a regra 83 (expressao)
 
 
 Estado 115
 
-   81 expressao: expressao . "*" expressao
-   81          | expressao "*" expressao .
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   79          | expressao "*" expressao .
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
+
+    "+"   deslocar, e ir ao estado 59
+    "-"   deslocar, e ir ao estado 60
+    "=="  deslocar, e ir ao estado 64
+    "!="  deslocar, e ir ao estado 65
+    ">"   deslocar, e ir ao estado 66
+    ">="  deslocar, e ir ao estado 67
+    "<"   deslocar, e ir ao estado 68
+    "<="  deslocar, e ir ao estado 69
+    "||"  deslocar, e ir ao estado 70
+    "&&"  deslocar, e ir ao estado 71
+    "?"   deslocar, e ir ao estado 72
+
+    $padrão  reduzir usando a regra 79 (expressao)
+
+
+Estado 116
+
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   80          | expressao "/" expressao .
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
+
+    "+"   deslocar, e ir ao estado 59
+    "-"   deslocar, e ir ao estado 60
+    "=="  deslocar, e ir ao estado 64
+    "!="  deslocar, e ir ao estado 65
+    ">"   deslocar, e ir ao estado 66
+    ">="  deslocar, e ir ao estado 67
+    "<"   deslocar, e ir ao estado 68
+    "<="  deslocar, e ir ao estado 69
+    "||"  deslocar, e ir ao estado 70
+    "&&"  deslocar, e ir ao estado 71
+    "?"   deslocar, e ir ao estado 72
+
+    $padrão  reduzir usando a regra 80 (expressao)
+
+
+Estado 117
+
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   81          | expressao "%" expressao .
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
@@ -1846,142 +1912,24 @@ Estado 115
     $padrão  reduzir usando a regra 81 (expressao)
 
 
-Estado 116
-
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   82          | expressao "/" expressao .
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
-
-    "+"   deslocar, e ir ao estado 59
-    "-"   deslocar, e ir ao estado 60
-    "=="  deslocar, e ir ao estado 64
-    "!="  deslocar, e ir ao estado 65
-    ">"   deslocar, e ir ao estado 66
-    ">="  deslocar, e ir ao estado 67
-    "<"   deslocar, e ir ao estado 68
-    "<="  deslocar, e ir ao estado 69
-    "||"  deslocar, e ir ao estado 70
-    "&&"  deslocar, e ir ao estado 71
-    "?"   deslocar, e ir ao estado 72
-
-    $padrão  reduzir usando a regra 82 (expressao)
-
-
-Estado 117
-
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   83          | expressao "%" expressao .
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
-
-    "+"   deslocar, e ir ao estado 59
-    "-"   deslocar, e ir ao estado 60
-    "=="  deslocar, e ir ao estado 64
-    "!="  deslocar, e ir ao estado 65
-    ">"   deslocar, e ir ao estado 66
-    ">="  deslocar, e ir ao estado 67
-    "<"   deslocar, e ir ao estado 68
-    "<="  deslocar, e ir ao estado 69
-    "||"  deslocar, e ir ao estado 70
-    "&&"  deslocar, e ir ao estado 71
-    "?"   deslocar, e ir ao estado 72
-
-    $padrão  reduzir usando a regra 83 (expressao)
-
-
 Estado 118
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   90          | expressao "==" expressao .
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   88          | expressao "==" expressao .
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
-    "||"  deslocar, e ir ao estado 70
-    "&&"  deslocar, e ir ao estado 71
-    "?"   deslocar, e ir ao estado 72
-
-    $padrão  reduzir usando a regra 90 (expressao)
-
-
-Estado 119
-
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   91          | expressao "!=" expressao .
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
-
-    "||"  deslocar, e ir ao estado 70
-    "&&"  deslocar, e ir ao estado 71
-    "?"   deslocar, e ir ao estado 72
-
-    $padrão  reduzir usando a regra 91 (expressao)
-
-
-Estado 120
-
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   88          | expressao ">" expressao .
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
-
-    "=="  deslocar, e ir ao estado 64
-    "!="  deslocar, e ir ao estado 65
     "||"  deslocar, e ir ao estado 70
     "&&"  deslocar, e ir ao estado 71
     "?"   deslocar, e ir ao estado 72
@@ -1989,26 +1937,24 @@ Estado 120
     $padrão  reduzir usando a regra 88 (expressao)
 
 
-Estado 121
+Estado 119
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   89          | expressao ">=" expressao .
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   89          | expressao "!=" expressao .
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
-    "=="  deslocar, e ir ao estado 64
-    "!="  deslocar, e ir ao estado 65
     "||"  deslocar, e ir ao estado 70
     "&&"  deslocar, e ir ao estado 71
     "?"   deslocar, e ir ao estado 72
@@ -2016,28 +1962,26 @@ Estado 121
     $padrão  reduzir usando a regra 89 (expressao)
 
 
-Estado 122
+Estado 120
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   86          | expressao "<" expressao .
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   86          | expressao ">" expressao .
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "=="  deslocar, e ir ao estado 64
     "!="  deslocar, e ir ao estado 65
-    ">"   deslocar, e ir ao estado 66
-    ">="  deslocar, e ir ao estado 67
     "||"  deslocar, e ir ao estado 70
     "&&"  deslocar, e ir ao estado 71
     "?"   deslocar, e ir ao estado 72
@@ -2045,23 +1989,50 @@ Estado 122
     $padrão  reduzir usando a regra 86 (expressao)
 
 
-Estado 123
+Estado 121
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   87          | expressao "<=" expressao .
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   87          | expressao ">=" expressao .
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
+
+    "=="  deslocar, e ir ao estado 64
+    "!="  deslocar, e ir ao estado 65
+    "||"  deslocar, e ir ao estado 70
+    "&&"  deslocar, e ir ao estado 71
+    "?"   deslocar, e ir ao estado 72
+
+    $padrão  reduzir usando a regra 87 (expressao)
+
+
+Estado 122
+
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   84          | expressao "<" expressao .
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "=="  deslocar, e ir ao estado 64
     "!="  deslocar, e ir ao estado 65
@@ -2071,73 +2042,102 @@ Estado 123
     "&&"  deslocar, e ir ao estado 71
     "?"   deslocar, e ir ao estado 72
 
-    $padrão  reduzir usando a regra 87 (expressao)
+    $padrão  reduzir usando a regra 84 (expressao)
+
+
+Estado 123
+
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   85          | expressao "<=" expressao .
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
+
+    "=="  deslocar, e ir ao estado 64
+    "!="  deslocar, e ir ao estado 65
+    ">"   deslocar, e ir ao estado 66
+    ">="  deslocar, e ir ao estado 67
+    "||"  deslocar, e ir ao estado 70
+    "&&"  deslocar, e ir ao estado 71
+    "?"   deslocar, e ir ao estado 72
+
+    $padrão  reduzir usando a regra 85 (expressao)
 
 
 Estado 124
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   93          | expressao "||" expressao .
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   91          | expressao "||" expressao .
+   92          | expressao . "?" expressao ":" expressao
 
     "?"  deslocar, e ir ao estado 72
 
-    $padrão  reduzir usando a regra 93 (expressao)
+    $padrão  reduzir usando a regra 91 (expressao)
 
 
 Estado 125
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   92          | expressao "&&" expressao .
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   90          | expressao "&&" expressao .
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "||"  deslocar, e ir ao estado 70
     "?"   deslocar, e ir ao estado 72
 
-    $padrão  reduzir usando a regra 92 (expressao)
+    $padrão  reduzir usando a regra 90 (expressao)
 
 
 Estado 126
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
-   94          | expressao "?" expressao . ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
+   92          | expressao "?" expressao . ":" expressao
 
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
@@ -2253,20 +2253,20 @@ Estado 135
 Estado 136
 
    64 cmdReturn: T_RETURN expressao . ";"
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     ";"   deslocar, e ir ao estado 166
     "+"   deslocar, e ir ao estado 59
@@ -2462,9 +2462,9 @@ Estado 153
 
 Estado 154
 
-   96 expressao: T_ID "(" cnjExpr ")" .
+   94 expressao: T_ID "(" cnjExpr ")" .
 
-    $padrão  reduzir usando a regra 96 (expressao)
+    $padrão  reduzir usando a regra 94 (expressao)
 
 
 Estado 155
@@ -2513,7 +2513,7 @@ Estado 157
 
 Estado 158
 
-   94 expressao: expressao "?" expressao ":" . expressao
+   92 expressao: expressao "?" expressao ":" . expressao
 
     T_TRUE        deslocar, e ir ao estado 27
     T_FALSE       deslocar, e ir ao estado 28
@@ -2540,20 +2540,20 @@ Estado 160
 
    56 cmdIf: T_IF "(" expressao . ")" comando
    57      | T_IF "(" expressao . ")" comando T_ELSE comando
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     ")"   deslocar, e ir ao estado 175
     "+"   deslocar, e ir ao estado 59
@@ -2597,20 +2597,20 @@ Estado 162
 Estado 163
 
    58 cmdWhile: T_WHILE "(" expressao . ")" comando
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     ")"   deslocar, e ir ao estado 178
     "+"   deslocar, e ir ao estado 59
@@ -2676,20 +2676,20 @@ Estado 169
 Estado 170
 
    48 cmdAtrib: variavel tiposAtrib expressao . ";"
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     ";"   deslocar, e ir ao estado 181
     "+"   deslocar, e ir ao estado 59
@@ -2718,20 +2718,20 @@ Estado 171
 Estado 172
 
    17 cnjExpr: cnjExpr "," expressao .
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60
@@ -2762,25 +2762,25 @@ Estado 173
 
 Estado 174
 
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
-   94          | expressao "?" expressao ":" expressao .
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
+   92          | expressao "?" expressao ":" expressao .
 
     "?"  deslocar, e ir ao estado 72
 
-    $padrão  reduzir usando a regra 94 (expressao)
+    $padrão  reduzir usando a regra 92 (expressao)
 
 
 Estado 175
@@ -2925,20 +2925,20 @@ Estado 183
 Estado 184
 
    59 cmdFor: T_FOR "(" cmdAtribFor ";" expressao . ";" cmdAtribFor ")" comando
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     ";"   deslocar, e ir ao estado 189
     "+"   deslocar, e ir ao estado 59
@@ -2960,20 +2960,20 @@ Estado 184
 Estado 185
 
    60 cmdAtribFor: variavel tiposAtrib expressao .
-   81 expressao: expressao . "*" expressao
-   82          | expressao . "/" expressao
-   83          | expressao . "%" expressao
-   84          | expressao . "+" expressao
-   85          | expressao . "-" expressao
-   86          | expressao . "<" expressao
-   87          | expressao . "<=" expressao
-   88          | expressao . ">" expressao
-   89          | expressao . ">=" expressao
-   90          | expressao . "==" expressao
-   91          | expressao . "!=" expressao
-   92          | expressao . "&&" expressao
-   93          | expressao . "||" expressao
-   94          | expressao . "?" expressao ":" expressao
+   79 expressao: expressao . "*" expressao
+   80          | expressao . "/" expressao
+   81          | expressao . "%" expressao
+   82          | expressao . "+" expressao
+   83          | expressao . "-" expressao
+   84          | expressao . "<" expressao
+   85          | expressao . "<=" expressao
+   86          | expressao . ">" expressao
+   87          | expressao . ">=" expressao
+   88          | expressao . "==" expressao
+   89          | expressao . "!=" expressao
+   90          | expressao . "&&" expressao
+   91          | expressao . "||" expressao
+   92          | expressao . "?" expressao ":" expressao
 
     "+"   deslocar, e ir ao estado 59
     "-"   deslocar, e ir ao estado 60

@@ -23,6 +23,7 @@ def bubblesort(v[]: int; n: int) {
 
 def main(): int {
     var i: int;
+    var x : bool;
     write "Digite os valores do arranjo:\n";
 
     for (i=0; i<10; i+=1) {

@@ -1,9 +1,6 @@
 To do list:
 
 - 3 exemplos
-- passar as linhas para:
-	* declaracoes
-	* comandos
 - parametros de subprogamas
 	* diferencias variaveis simples de arranjos
 	

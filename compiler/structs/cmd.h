@@ -18,10 +18,11 @@ class IfCmd : public Cmd{
     private:
         Exp *condicao;
         Cmd *then, *els;
+        int line;
 
     public:
-        IfCmd(Exp *cnd, Cmd *thn);
-        IfCmd(Exp *cnd, Cmd *thn, Cmd *elz);
+        IfCmd(Exp *cnd, Cmd *thn, int line1);
+        IfCmd(Exp *cnd, Cmd *thn, Cmd *elz, int line1);
         int eval();
         string codeGen();
 };
@@ -31,8 +32,10 @@ class WhileCmd : public Cmd{
         Exp *condicao;
         Cmd *comando;
         stack<Cmd *> *pilhaCmdRepet;
+        int line;
+
     public:
-        WhileCmd(Exp *cnd, Cmd *cmd, stack<Cmd *> *pilhaCmdRep);
+        WhileCmd(Exp *cnd, Cmd *cmd, stack<Cmd *> *pilhaCmdRep, int line1);
         int eval();
         string codeGen();
 };
@@ -42,9 +45,10 @@ class AtribCmd : public Cmd{
         string type;
         Exp *exp;
         VarExp *var;
+        int line;
 
     public:
-        AtribCmd(Exp *varia, string typ, Exp *ex);
+        AtribCmd(Exp *varia, string typ, Exp *ex, int line1);
         int eval();
         string codeGen();  
 };
@@ -55,8 +59,10 @@ class ForCmd : public Cmd{
         AtribCmd *atribIni, *atribPasso;
         Cmd* comando;
         stack<Cmd *> *pilhaCmdRepet;
+        int line;
+
     public:
-        ForCmd(Cmd *atriIni, Exp *ex, Cmd *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep);
+        ForCmd(Cmd *atriIni, Exp *ex, Cmd *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep, int line1);
         int eval();
         string codeGen();
 };
@@ -65,8 +71,10 @@ class StopSkipCmd : public Cmd{
     private:
         string cmd;
         stack<Cmd *> *pilhaCmdRepet;
+        int line;
+
     public:
-        StopSkipCmd(string comando, stack<Cmd *> *pilhaCmdRep);
+        StopSkipCmd(string comando, stack<Cmd *> *pilhaCmdRep, int line1);
         int eval();
         string codeGen();
 };
@@ -74,8 +82,10 @@ class StopSkipCmd : public Cmd{
 class ReadCmd : public Cmd{
     private:
         VarExp* var;
+        int line;
+
     public:
-        ReadCmd(Exp* varia);
+        ReadCmd(Exp* varia, int line1);
         int eval();
         string codeGen();
 };
@@ -83,6 +93,7 @@ class ReadCmd : public Cmd{
 class WriteCmd : public Cmd{
     private:
         list<Exp *> *cnjExp;
+
     public:
         WriteCmd(list<Exp *> *cnExp);
         int eval();
@@ -94,10 +105,11 @@ class ProcCmd : public Cmd{
         string id;
         list<Exp *> *expressoes;
         Escopo *atual;
+        int line;
 
     public:
-        ProcCmd(string id1, Escopo *atual1);
-        ProcCmd(string id1, list<Exp *> *exps, Escopo *atual1);
+        ProcCmd(string id1, Escopo *atual1, int line1);
+        ProcCmd(string id1, list<Exp *> *exps, Escopo *atual1, int line1);
         bool isInEscopo();
         int eval();
         string codeGen();
@@ -109,10 +121,11 @@ class RetCmd : public Cmd{
     private:
         Exp *retorno;
         stack<DeclSub *> *pilhaSubprog;
+        int line;
 
     public:
-        RetCmd(Exp *ret, stack<DeclSub *> *pilhaSub);
-        RetCmd(stack<DeclSub *> *pilhaSub);
+        RetCmd(Exp *ret, stack<DeclSub *> *pilhaSub, int line1);
+        RetCmd(stack<DeclSub *> *pilhaSub, int line1);
         int eval();
         string codeGen();    
 };
@@ -122,6 +135,7 @@ class BlocoCmd : public Cmd{
         list<Decl *> *declaracoes;
         list<Cmd *> *comandos;
         Escopo *atual;
+
     public:
         BlocoCmd(list<Decl *> *decl, Escopo* at);
         BlocoCmd(list<Cmd *> *com, Escopo* at);
@@ -137,8 +151,10 @@ class Programa{
     private:
         list<Decl *> *declaracoes;
         Escopo *global;
+        int line;
+
     public:
-        Programa(list<Decl *> *decl, Escopo *glob);
+        Programa(list<Decl *> *decl, Escopo *glob, int line1);
         int eval();
         string codeGen();
 };

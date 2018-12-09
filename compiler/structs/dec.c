@@ -57,14 +57,16 @@ string IntTipoVar::codeGen(){
 }
 
 //-------------------------------------------------------- DecVarSimples
-SpecVarSimples::SpecVarSimples(string id1, Exp *ini){
+SpecVarSimples::SpecVarSimples(string id1, Exp *ini, int line1){
     inicializacao = ini;
     id = id1;
+    line = line1;
 }
 
-SpecVarSimples::SpecVarSimples(string id1){
+SpecVarSimples::SpecVarSimples(string id1, int line1){
     inicializacao = nullptr;
     id = id1;
+    line = line1;
 }
 
 string SpecVarSimples::codeGen(){
@@ -90,7 +92,7 @@ bool SpecVarSimples::isArranjo(){
 bool SpecVarSimples::confereTipagem(string tipo){
     if(inicializacao != nullptr){
         if (tipo != inicializacao->getTipo()){
-            cout << "Erro semantico: inicializacao de variavel ("<< id 
+            cout << "Erro Semântico (l: " << line <<"): inicializaçã de variável ("<< id 
             <<") de tipo incorreto! ("<<inicializacao->getTipo() << " != "<<tipo <<")\n";
             return false;
         }
@@ -100,16 +102,18 @@ bool SpecVarSimples::confereTipagem(string tipo){
 }
 
 // ------------------------------------------------------------- SpecVarArranjo
-SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini){
+SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini, int line1){
     inicializacao = ini;
     tam = tama;
     id = id1;
+    line = line1;
 }
 
-SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama){
+SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama, int line1){
     inicializacao = nullptr;
     tam = tama;
     id = id1;
+    line = line1;
 }
 
 string SpecVarArranjo::codeGen(){
@@ -145,8 +149,8 @@ bool SpecVarArranjo::confereTipagem(string tipo){
         for(i=this->inicializacao->begin(); i != this->inicializacao->end(); ++i){
             count++;
             if ((*i)->getTipo() != tipo){
-                cout << "Erro Semantico: parametro #" << count 
-                << " da inicializacao de variavel  arranjo ("<<id
+                cout << "Erro Semântico (l: " << line <<"): parâmetro #" << count 
+                << " da inicialização de variável arranjo ("<<id
                 <<") possui tipo incorreto (" << (*i)->getTipo() << " != " <<tipo <<")\n";
 
                 retorno = false;

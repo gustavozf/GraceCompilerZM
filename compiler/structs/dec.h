@@ -96,7 +96,8 @@ class SpecVarArranjo : public SpecVar {
 class Param {
     private:
         string id;
-        bool arranjo;   
+        bool arranjo; 
+
     public:
         Param(string id1, bool arranj);
         string getId();
@@ -107,6 +108,7 @@ class SpecParam {
     private:
         list<Param *> *cnjParam;
         TipoVar *type;
+
     public:
         SpecParam(list<Param *> *lista, TipoVar *typ);
         list<Param *>* getCnjParam();
@@ -126,6 +128,7 @@ class DeclVar : public Decl{
     private:
         list<SpecVar *> *listaSpecVar;
         TipoVar *tipo;
+
     public:
         DeclVar(list<SpecVar *> *lista, TipoVar *type);
         string codeGen();
@@ -141,6 +144,7 @@ class DeclSub : public Decl{
         list<SpecParam *> *listaParam;
         BlocoCmd *bloco;
         stack<DeclSub *> *pilhaSubprog;
+        
     public:
         // Declaracao de Procedimento
         DeclSub(string id1, list<SpecParam *> *lista, Cmd *block, stack<DeclSub *> *pilhaSub);

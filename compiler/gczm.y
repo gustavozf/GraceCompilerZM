@@ -169,6 +169,9 @@ programa:
 				  saida.close();
 
 				  system((string("clang -S -emit-llvm ") + nomeSaida + string(" --output ./compiledOutputs/graceOut.ll")).c_str());
+				  system("llc -filetype=obj ./compiledOutputs/graceOut.ll");
+				  //system("gcc ./compiledOutputs/graceOut.o -fPIC -o ./compiledOutputs/graceOut");
+				  system("g++ ./compiledOutputs/graceOut.cpp -o ./compiledOutputs/graceOut");
 				}
 	;
 

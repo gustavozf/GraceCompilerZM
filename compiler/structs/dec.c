@@ -83,11 +83,13 @@ string SpecVarSimples::codeGen(ofstream &output){
 }
 
 int SpecVarSimples::eval(){
+    int cond = 1;
+
     if (inicializacao != nullptr){
-        inicializacao->eval();
+        cond &= inicializacao->eval();
     }
 
-    return 1;
+    return cond;
 }
 
 string SpecVarSimples::getId(){
@@ -149,15 +151,17 @@ string SpecVarArranjo::codeGen(ofstream &output){
 }
 
 int SpecVarArranjo::eval(){
+    int cond = 1;
+
     if (inicializacao != nullptr){
         list<Exp *>::iterator i;
 
         for (i = inicializacao->begin(); i != inicializacao->end(); ++i){
-            (*i)->eval();
+            cond &= (*i)->eval();
         }
     }
 
-    return 1;
+    return cond;
 }
 
 string SpecVarArranjo::getId(){
@@ -251,7 +255,7 @@ int DeclVar::eval(){
 
     // chama as avaliacoes das partes
     for(i = this->listaSpecVar->begin(); i != this->listaSpecVar->end(); ++i){
-        (*i)->eval();
+        retorno &= (*i)->eval();
     }
 
     return retorno;
@@ -370,14 +374,16 @@ string DeclSub::getId(){
 }
 
 int DeclSub::eval(){
+    int ret = 1;
+
     pilhaSubprog->push(this);
     
     // chamar a avaliacao das outras estruturas
-    bloco->eval();
+    ret &= bloco->eval();
     
     pilhaSubprog->pop();
 
-    return 1;
+    return ret;
 }
 
 string DeclSub::getTipoRetorno(){

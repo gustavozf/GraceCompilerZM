@@ -6,6 +6,7 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <string.h>
 #include <stack>
 #include <fstream>
 #include "./structs/exp.h"
@@ -33,8 +34,7 @@ int countEscopos = 1;
 stack<DeclSub *> *pilhaSubprog = new stack<DeclSub *>();
 stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 
-string nomeSaida = "./compiledOutputs/graceOut.cpp";
-ofstream saida(nomeSaida);
+string nomeSaida;//"./compiledOutputs/graceOut.cpp";
 %}
 
 /* Uniao que representa o valores basicos possiveis.
@@ -161,17 +161,23 @@ programa:
 	declaracoes { $$ = new Programa($1, escopoAtual, num_linhas); 
 				  raiz = $$; 
 				  cout << "\nPrograma reconhecido!\nRealizando Análise Semântica...\n";
-				  raiz->eval();
+				  int semanticaCorreta = raiz->eval();
 				  cout << "Análise Semântica Realizada!\n";
 
-				  cout << "Gerando código...\n";
-				  raiz->codeGen(saida);
-				  saida.close();
+				  if (semanticaCorreta){
+					cout << "Gerando código...\n";
+					ofstream saida(string("./compiledOutputs/") + nomeSaida + string(".cpp"));
+					raiz->codeGen(saida);
+					saida.close();
 
-				  system((string("clang -S -emit-llvm ") + nomeSaida + string(" --output ./compiledOutputs/graceOut.ll")).c_str());
-				  system("llc -filetype=obj ./compiledOutputs/graceOut.ll");
-				  //system("gcc ./compiledOutputs/graceOut.o -fPIC -o ./compiledOutputs/graceOut");
-				  system("g++ ./compiledOutputs/graceOut.cpp -o ./compiledOutputs/graceOut");
+					system((string("clang -S -emit-llvm ./compiledOutputs/") + nomeSaida + 
+							string(".cpp --output ./compiledOutputs/") + nomeSaida + 
+							string(".ll")).c_str());
+					system((string("llc -filetype=obj ./compiledOutputs/") + nomeSaida + string(".ll")).c_str());
+					//system("gcc ./compiledOutputs/graceOut.o -fPIC -o ./compiledOutputs/graceOut");
+					system((string("g++ ./compiledOutputs/") + nomeSaida + string(".cpp -o ./compiledOutputs/") + nomeSaida).c_str());
+				  }
+				  
 				}
 	;
 
@@ -402,6 +408,7 @@ variavel:
 /* Codificacao C++ */
 int main(int argc, char *argv[]){
 	yydebug = 0;
+	char *pch, *aux;
 
 	if(argc < 2){
 		cout << "ERRO: Eh necessario passar o nome do arquivo de entrada!\n";
@@ -409,8 +416,17 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 
-
 	FILE *entrada = fopen(argv[1], "r");
+
+	pch = strtok (argv[1], "/ ");
+	while (pch != NULL){
+		aux = pch;
+	    pch = strtok(NULL, "/");
+	}
+
+	printf("Compilando Arquivo: %s\n",aux);
+	aux = strtok(aux, ".grc");
+	nomeSaida.assign(aux);
 
 	if (!entrada) {
 		cout << "Erro ao abrir o arquivo: '" << argv[1] << "'!\n";

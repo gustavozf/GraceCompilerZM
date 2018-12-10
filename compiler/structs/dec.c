@@ -18,7 +18,8 @@ string StringTipoVar::getSize(){
     return tam;
 }
 
-string StringTipoVar::codeGen(){
+string StringTipoVar::codeGen(ofstream &output){
+    output << "\nstring ";
     return "";
 }
 
@@ -35,7 +36,8 @@ string BoolTipoVar::getSize(){
     return tam;
 }
 
-string BoolTipoVar::codeGen(){
+string BoolTipoVar::codeGen(ofstream &output){
+    output << "\nbool ";
     return "";
 }
 
@@ -52,7 +54,8 @@ string IntTipoVar::getSize(){
     return tam;
 }
 
-string IntTipoVar::codeGen(){
+string IntTipoVar::codeGen(ofstream &output){
+    output << "\nint ";
     return "";
 }
 
@@ -69,7 +72,13 @@ SpecVarSimples::SpecVarSimples(string id1, int line1){
     line = line1;
 }
 
-string SpecVarSimples::codeGen(){
+string SpecVarSimples::codeGen(ofstream &output){
+    output << id;
+    if (inicializacao != nullptr){
+        output << " = ";
+        inicializacao->codeGen(output);
+    }
+
     return "";
 }
 
@@ -116,7 +125,26 @@ SpecVarArranjo::SpecVarArranjo(string id1, Exp *tama, int line1){
     line = line1;
 }
 
-string SpecVarArranjo::codeGen(){
+string SpecVarArranjo::codeGen(ofstream &output){
+    output << id << "[";
+    tam->codeGen(output);
+    output << "]";
+    if (inicializacao != nullptr){
+        output << " = {";
+
+        list<Exp *>::iterator i = inicializacao->begin();
+        (*i)->codeGen(output);
+        ++i;
+
+        while(i != inicializacao->end()){
+            output << ", ";
+            (*i)->codeGen(output);
+            ++i;
+        }
+        output << "}";
+
+    }
+
     return "";
 }
 
@@ -150,8 +178,8 @@ bool SpecVarArranjo::confereTipagem(string tipo){
             count++;
             if ((*i)->getTipo() != tipo){
                 cout << "Erro Semântico (l: " << line <<"): parâmetro #" << count 
-                << " da inicialização de variável arranjo ("<<id
-                <<") possui tipo incorreto (" << (*i)->getTipo() << " != " <<tipo <<")\n";
+                << " da inicialização de variável arranjo '"<<id
+                <<"' possui tipo incorreto (" << (*i)->getTipo() << " != " <<tipo <<")\n";
 
                 retorno = false;
             }    
@@ -199,7 +227,15 @@ DeclVar::DeclVar(list<SpecVar *> *lista, TipoVar *type){
     tipo = type;
 }
 
-string DeclVar::codeGen(){
+string DeclVar::codeGen(ofstream &output){
+    list<SpecVar *>::iterator i;
+
+    for(i = listaSpecVar->begin(); i != listaSpecVar->end(); ++i){
+        output << "\n" << tipo->getTipo() << " ";
+        (*i)->codeGen(output);
+        output << ";\n";
+    }
+
     return "";
 }
 
@@ -277,7 +313,51 @@ DeclSub::DeclSub(string id1, TipoVar *ret, Cmd *block, stack<DeclSub *> *pilhaSu
     pilhaSubprog = pilhaSub;
 }
 
-string DeclSub::codeGen(){
+string DeclSub::codeGen(ofstream &output){
+    list<SpecParam *>::iterator i, k;
+    list<Param *>::iterator j;
+    int alterado = 0;
+
+    if(this->tipo == "funcao"){
+        output << "\n" << retorno->getTipo() << " " << id << "(";
+    } else {
+        output << "\nvoid " << id << "(";
+    }
+
+    k = listaParam->begin();
+    for(i = listaParam->begin(); i != listaParam->end(); ++i){
+        if (i != k){
+            output << ", ";
+            ++k;
+        }
+
+
+        j = (*i)->getCnjParam()->begin();
+
+        output << (*i)->getTipo() << " ";
+        if((*j)->getArranjo()){
+            output << "*";
+        }
+        output << (*j)->getId();
+        ++j;
+
+        while(j != (*i)->getCnjParam()->end()){
+            output << ", " << (*i)->getTipo() << " ";
+        
+            if((*j)->getArranjo()){
+                output << "*";
+            }
+
+            output << (*j)->getId();
+            ++j;
+        }
+
+    }
+
+    output << ") ";
+
+    bloco->codeGen(output);
+
     return "";
 }
 

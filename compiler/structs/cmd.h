@@ -11,7 +11,7 @@ class DeclSub;
 class Cmd{
     public:
         virtual int eval() = 0;
-        virtual string codeGen() = 0;
+        virtual string codeGen(ofstream &output) = 0;
 };
 
 class IfCmd : public Cmd{
@@ -24,7 +24,7 @@ class IfCmd : public Cmd{
         IfCmd(Exp *cnd, Cmd *thn, int line1);
         IfCmd(Exp *cnd, Cmd *thn, Cmd *elz, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 class WhileCmd : public Cmd{
@@ -37,7 +37,7 @@ class WhileCmd : public Cmd{
     public:
         WhileCmd(Exp *cnd, Cmd *cmd, stack<Cmd *> *pilhaCmdRep, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 class AtribCmd : public Cmd{
@@ -50,7 +50,7 @@ class AtribCmd : public Cmd{
     public:
         AtribCmd(Exp *varia, string typ, Exp *ex, int line1);
         int eval();
-        string codeGen();  
+        string codeGen(ofstream &output);  
 };
 
 class ForCmd : public Cmd{
@@ -64,7 +64,7 @@ class ForCmd : public Cmd{
     public:
         ForCmd(Cmd *atriIni, Exp *ex, Cmd *atriPasso, Cmd* cman, stack<Cmd *> *pilhaCmdRep, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 class StopSkipCmd : public Cmd{
@@ -76,7 +76,7 @@ class StopSkipCmd : public Cmd{
     public:
         StopSkipCmd(string comando, stack<Cmd *> *pilhaCmdRep, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 class ReadCmd : public Cmd{
@@ -87,7 +87,7 @@ class ReadCmd : public Cmd{
     public:
         ReadCmd(Exp* varia, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 class WriteCmd : public Cmd{
@@ -97,7 +97,7 @@ class WriteCmd : public Cmd{
     public:
         WriteCmd(list<Exp *> *cnExp);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
 };  
 
 class ProcCmd : public Cmd{
@@ -112,7 +112,7 @@ class ProcCmd : public Cmd{
         ProcCmd(string id1, list<Exp *> *exps, Escopo *atual1, int line1);
         bool isInEscopo();
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
         ElemTab* getElemTab();
 
 };
@@ -127,7 +127,7 @@ class RetCmd : public Cmd{
         RetCmd(Exp *ret, stack<DeclSub *> *pilhaSub, int line1);
         RetCmd(stack<DeclSub *> *pilhaSub, int line1);
         int eval();
-        string codeGen();    
+        string codeGen(ofstream &output);    
 };
 
 class BlocoCmd : public Cmd{
@@ -144,7 +144,7 @@ class BlocoCmd : public Cmd{
         Escopo* getEscopo();
 
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 class Programa{
@@ -156,7 +156,7 @@ class Programa{
     public:
         Programa(list<Decl *> *decl, Escopo *glob, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 #endif

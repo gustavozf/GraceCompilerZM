@@ -11,7 +11,7 @@ class Exp{
         // Realiza a avaliacao da expressao
         virtual int eval() = 0;
         // Gera o codigo da expressao
-        virtual string codeGen() = 0;
+        virtual string codeGen(ofstream &output) = 0;
 };
 
 class AritmExp : public Exp{  
@@ -23,7 +23,7 @@ class AritmExp : public Exp{
     public:
         AritmExp(Exp* expr1, Exp* expr2, string ope, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
 
 };
@@ -37,7 +37,7 @@ class RelExp : public Exp{
     public:
         RelExp(Exp* expr1, Exp* expr2, string ope, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
 };
 
@@ -50,7 +50,7 @@ class LogExp : public Exp{
     public:
         LogExp(Exp* expr1, Exp* expr2, string ope, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
 };
 
@@ -64,7 +64,7 @@ class IgExp : public Exp {
     public:
         IgExp(Exp* expr1, Exp* expr2, string ope, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
 };
 
@@ -76,7 +76,7 @@ class NegUnExp : public Exp {
     public:
         NegUnExp(Exp* expr, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
 };
 
@@ -88,7 +88,7 @@ class NegExp : public Exp {
     public:
         NegExp(Exp* expr, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
 };
 
@@ -100,7 +100,7 @@ class TerExp : public Exp{
     public:
         TerExp(Exp* expr1, Exp* expr2, Exp* expr3, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
 };
 
@@ -112,7 +112,7 @@ class ValExp : public Exp{
     public:
         ValExp(string val, string typ, int line1);
         int eval();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
 };
 
@@ -128,7 +128,7 @@ class VarExp : public Exp{
         VarExp(string id2, Escopo* atual1, int line1);
         int eval();
         bool isInEscopo();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
         string getId();
 };
@@ -146,7 +146,7 @@ class FuncExp : public Exp{
         FuncExp(string id1, list<Exp *> *exps, Escopo *atual1, int line1);
         int eval();
         bool isInEscopo();
-        string codeGen();
+        string codeGen(ofstream &output);
         string getTipo();
         ElemTab* getElemTab();
 };

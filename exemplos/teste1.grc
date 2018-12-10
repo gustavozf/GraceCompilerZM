@@ -29,7 +29,8 @@ def func2(k[] : int) : int{
 def main() : int {
     var i : int;
     var j : bool;
-    var w[2] = {4,5} : int;
+    // tipo errado
+    var w[2] = {4, "ola"} : int;
 
     // parametro passado, quando nao deveria
     proc1(10);

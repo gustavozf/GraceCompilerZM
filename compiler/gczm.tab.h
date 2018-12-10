@@ -104,7 +104,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 39 "gczm.y" /* yacc.c:1909  */
+#line 43 "gczm.y" /* yacc.c:1909  */
 
 	char *sval; // String
 	

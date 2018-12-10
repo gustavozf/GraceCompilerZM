@@ -91,12 +91,11 @@ extern int yydebug;
     T_ATRIB_MOD = 301,
     T_COND_OP_TER = 302,
     T_DOIS_PON = 303,
-    T_ERROR = 304,
-    T_ID = 305,
-    T_NUM = 306,
-    T_LIT_STRING = 307,
-    T_NEG_UNAR = 308,
-    T_THEN = 309
+    T_ID = 304,
+    T_NUM = 305,
+    T_LIT_STRING = 306,
+    T_NEG_UNAR = 307,
+    T_THEN = 308
   };
 #endif
 
@@ -105,7 +104,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 39 "gczm.y" /* yacc.c:1909  */
+#line 43 "gczm.y" /* yacc.c:1909  */
 
 	char *sval; // String
 	
@@ -129,7 +128,7 @@ union YYSTYPE
 	list<SpecParam *> *cnjSpecParam;
 	list<Decl *> *cnjDecl;
 
-#line 133 "gczm.tab.h" /* yacc.c:1909  */
+#line 132 "gczm.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

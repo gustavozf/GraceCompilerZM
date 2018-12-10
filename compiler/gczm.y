@@ -7,6 +7,7 @@
 #include <list>
 #include <string>
 #include <stack>
+#include <fstream>
 #include "./structs/exp.h"
 #include "./structs/cmd.h"
 #include "./structs/dec.h"
@@ -31,6 +32,9 @@ Escopo *escopoAtual = new Escopo(nullptr, 0);
 int countEscopos = 1;
 stack<DeclSub *> *pilhaSubprog = new stack<DeclSub *>();
 stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
+
+string nomeSaida = "./compiledOutputs/graceOut.cpp";
+ofstream saida(nomeSaida);
 %}
 
 /* Uniao que representa o valores basicos possiveis.
@@ -109,7 +113,6 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %token <sval> T_ATRIB_MOD        "%="
 %token <sval> T_COND_OP_TER      "?"
 %token <sval> T_DOIS_PON         ":"
-%token <sval> T_ERROR
 
 // tokens que assumem valores
 // %token <TIPO> <NOME>
@@ -160,6 +163,12 @@ programa:
 				  cout << "\nPrograma reconhecido!\nRealizando Análise Semântica...\n";
 				  raiz->eval();
 				  cout << "Análise Semântica Realizada!\n";
+
+				  cout << "Gerando código...\n";
+				  raiz->codeGen(saida);
+				  saida.close();
+
+				  system((string("clang -S -emit-llvm ") + nomeSaida + string(" --output ./compiledOutputs/graceOut.ll")).c_str());
 				}
 	;
 
@@ -397,6 +406,7 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 
+
 	FILE *entrada = fopen(argv[1], "r");
 
 	if (!entrada) {
@@ -408,11 +418,13 @@ int main(int argc, char *argv[]){
 
     yyparse();
 
+	fclose(entrada);
+
 	return 0;
 }
 
 void yyerror(const char *s){
-	cout<< "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): "<< s <<"\n";
+	cout<< "Erro Sintático (l: "<<num_linhas<< ", c: "<<num_carac<<"): "<< s <<"\n";
 
 	exit(-1);
 }

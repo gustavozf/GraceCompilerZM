@@ -12,7 +12,7 @@ class TipoVar{
     public:
         virtual string getTipo() = 0;
         virtual string getSize() = 0;
-        virtual string codeGen() = 0;
+        virtual string codeGen(ofstream &output) = 0;
 };
 
 class StringTipoVar : public TipoVar{
@@ -24,7 +24,7 @@ class StringTipoVar : public TipoVar{
         StringTipoVar(string tm);
         string getTipo();
         string getSize();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 class BoolTipoVar : public TipoVar{
@@ -35,7 +35,7 @@ class BoolTipoVar : public TipoVar{
         BoolTipoVar();
         string getTipo();
         string getSize();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 class IntTipoVar : public TipoVar{
@@ -46,7 +46,7 @@ class IntTipoVar : public TipoVar{
         IntTipoVar();
         string getTipo();
         string getSize();
-        string codeGen();
+        string codeGen(ofstream &output);
 };
 
 class SpecVar {
@@ -54,7 +54,7 @@ class SpecVar {
         string id;
 
     public:
-        virtual string codeGen() = 0;
+        virtual string codeGen(ofstream &output) = 0;
         virtual int eval() = 0;
         virtual string getId() = 0;
         virtual bool isArranjo() = 0;
@@ -69,7 +69,7 @@ class SpecVarSimples : public SpecVar {
     public:
         SpecVarSimples(string id1, Exp *ini, int line1);
         SpecVarSimples(string id1, int line1);
-        string codeGen();
+        string codeGen(ofstream &output);
         int eval();
         string getId();
         bool isArranjo();
@@ -85,7 +85,7 @@ class SpecVarArranjo : public SpecVar {
     public:
         SpecVarArranjo(string id1, Exp *tama, list<Exp *> *ini, int line1);
         SpecVarArranjo(string id1, Exp *tama, int line1);
-        string codeGen();
+        string codeGen(ofstream &output);
         int eval();
         string getId();
         bool isArranjo();
@@ -118,7 +118,7 @@ class SpecParam {
 
 class Decl{
     public:
-        virtual string codeGen() = 0;
+        virtual string codeGen(ofstream &output) = 0;
         virtual int eval() = 0;
         virtual void addTabSimb(Escopo *atual) = 0;
         virtual string getTipo() = 0;
@@ -131,7 +131,7 @@ class DeclVar : public Decl{
 
     public:
         DeclVar(list<SpecVar *> *lista, TipoVar *type);
-        string codeGen();
+        string codeGen(ofstream &output);
         int eval();
         void addTabSimb(Escopo *atual);
         string getTipo();
@@ -154,7 +154,7 @@ class DeclSub : public Decl{
         DeclSub(string id1, list<SpecParam *> *lista, TipoVar *ret, Cmd *block, stack<DeclSub *> *pilhaSub);
         DeclSub(string id1, TipoVar *ret, Cmd *block, stack<DeclSub *> *pilhaSub);
 
-        string codeGen();
+        string codeGen(ofstream &output);
         int eval();
         void addTabSimb(Escopo *atual);
         string getTipo();

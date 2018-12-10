@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <list>
 #include <stack>

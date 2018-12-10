@@ -29,7 +29,18 @@ int IfCmd::eval(){
     return retorno;
 }
 
-string IfCmd::codeGen(){
+string IfCmd::codeGen(ofstream &output){
+    output << "\nif(";
+    condicao->codeGen(output);
+    output << ") ";
+    then->codeGen(output);
+
+    if(els != nullptr){
+        output << "else ";
+        els->codeGen(output);
+        output << "\n";
+    }
+
     return "";
 }
 
@@ -58,7 +69,13 @@ int WhileCmd::eval(){
     return retorno;
 }
 
-string WhileCmd::codeGen(){
+string WhileCmd::codeGen(ofstream &output){
+    output << "\nwhile(";
+    condicao->codeGen(output);
+    output << ") ";
+    comando->codeGen(output);
+    output << "\n";
+
     return "";
 }
 
@@ -93,7 +110,17 @@ int ForCmd::eval(){
     return cond;
 }
 
-string ForCmd::codeGen(){
+string ForCmd::codeGen(ofstream &output){
+    output << "\nfor(";
+    atribIni->codeGen(output);
+    output << "; ";
+    exp->codeGen(output);
+    output << "; ";
+    atribPasso->codeGen(output);
+    output << ") ";
+    comando->codeGen(output);
+    output << "\n";
+
     return "";
 }
 
@@ -113,7 +140,13 @@ int StopSkipCmd::eval(){
     return 1;
 }
 
-string StopSkipCmd::codeGen(){
+string StopSkipCmd::codeGen(ofstream &output){
+    if(cmd == "stop"){
+        output << "\nbreak";
+    } else {
+        output <<  "\ncontinue";
+    }
+
     return "";
 }
 
@@ -163,7 +196,13 @@ int RetCmd::eval(){
     return ret;
 }
 
-string RetCmd::codeGen(){
+string RetCmd::codeGen(ofstream &output){
+    output << "\nreturn ";
+
+     if(this->retorno != nullptr){
+        this->retorno->codeGen(output);
+    }
+
     return "";
 }
 
@@ -201,7 +240,12 @@ int AtribCmd::eval(){
     return ret;
 }
 
-string AtribCmd::codeGen(){
+string AtribCmd::codeGen(ofstream &output){
+    //output << "\n";
+    var->codeGen(output);
+    output << " " << type << " ";
+    exp->codeGen(output);
+
     return "";
 }
 
@@ -220,7 +264,16 @@ int WriteCmd::eval(){
     return 1;
 }
 
-string WriteCmd::codeGen(){
+string WriteCmd::codeGen(ofstream &output){
+    list<Exp *>::iterator i;
+
+    output << "\ncout ";
+
+    for(i = cnjExp->begin(); i != cnjExp->end(); ++i){
+        output << "<< ";
+        (*i)->codeGen(output);
+    }
+
     return "";
 }
 
@@ -243,7 +296,10 @@ int ReadCmd::eval(){
     return ret;
 }
 
-string ReadCmd::codeGen(){
+string ReadCmd::codeGen(ofstream &output){
+    output << "\ncin >>";
+    var->codeGen(output);
+
     return "";
 }
 
@@ -289,7 +345,29 @@ int BlocoCmd::eval(){
     return 1;
 }
 
-string BlocoCmd::codeGen(){
+string BlocoCmd::codeGen(ofstream &output){
+    output << "\n{\n";
+
+     if(declaracoes != nullptr){
+        list<Decl *>::iterator i;
+        for(i=declaracoes->begin(); i != declaracoes->end(); ++i){
+            (*i)->codeGen(output);
+
+            output << ";\n";
+        }
+    }
+
+    if(comandos != nullptr){
+        list<Cmd *>::iterator j;
+        for(j=comandos->begin(); j != comandos->end(); ++j){
+            (*j)->codeGen(output);
+
+            output << ";\n";
+        }
+    }
+
+    output << "\n}";
+
     return "";
 }
 
@@ -396,7 +474,23 @@ ElemTab* ProcCmd::getElemTab(){
     return nullptr;    
 }
 
-string ProcCmd::codeGen(){
+string ProcCmd::codeGen(ofstream &output){
+    output << "\n" << id << "(";
+
+    if (expressoes != nullptr){
+        list<Exp *>::iterator k = expressoes->begin();
+        (*k)->codeGen(output);
+        ++k;
+        
+        while (k != expressoes->end()){
+            output << ", ";
+            (*k)->codeGen(output);
+            ++k;
+        }
+    }
+    
+    output << ")";
+
     return "";
 }
 
@@ -436,6 +530,14 @@ int Programa::eval(){
     return ret;
 }
 
-string Programa::codeGen(){
+string Programa::codeGen(ofstream &output){
+    list<Decl *>::iterator i;
+    
+    output << "#include <iostream>\n\nusing namespace std;\n";
+
+    for(i = declaracoes->begin(); i != declaracoes->end(); ++i){
+        (*i)->codeGen(output);
+    }
+
     return "";
 }

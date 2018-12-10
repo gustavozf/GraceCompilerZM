@@ -15,12 +15,16 @@ int AritmExp::eval(){
     }
 
     e1->eval();
-    e2->eval();
+    e2->eval(); 
 
     return ret;
 }
 
-string AritmExp::codeGen(){
+string AritmExp::codeGen(ofstream &output){
+    e1->codeGen(output);
+    output << " " << op << " ";
+    e2->codeGen(output);
+
     return "";
 }
 
@@ -52,7 +56,11 @@ int RelExp::eval(){
     return ret;
 }
 
-string RelExp::codeGen(){
+string RelExp::codeGen(ofstream &output){
+    e1->codeGen(output);
+    output << " " << op << " ";
+    e2->codeGen(output);
+
     return "";
 }
         
@@ -85,7 +93,11 @@ int LogExp::eval(){
     return ret;
 }
 
-string LogExp::codeGen(){
+string LogExp::codeGen(ofstream &output){
+    e1->codeGen(output);
+    output << " " << op << " ";
+    e2->codeGen(output);
+
     return "";
 }
 
@@ -118,7 +130,11 @@ int IgExp::eval(){
     return ret;
 }
 
-string IgExp::codeGen(){
+string IgExp::codeGen(ofstream &output){
+    e1->codeGen(output);
+    output << " " << op << " ";
+    e2->codeGen(output);
+
     return "";
 }
 
@@ -149,7 +165,10 @@ int NegUnExp::eval(){
     return ret;
 }
 
-string NegUnExp::codeGen(){
+string NegUnExp::codeGen(ofstream &output){
+    output << "-";
+    e1->codeGen(output);
+
     return "";
 }
 
@@ -180,7 +199,10 @@ int NegExp::eval(){
     return ret;
 }
 
-string NegExp::codeGen(){
+string NegExp::codeGen(ofstream &output){
+    output << "!";
+    e1->codeGen(output);
+
     return "";
 }
 
@@ -216,7 +238,14 @@ int TerExp::eval(){
     return ret;
 }
 
-string TerExp::codeGen(){
+string TerExp::codeGen(ofstream &output){
+    output << "(";
+    e1->codeGen(output);
+    output << ") ? ";
+    e2->codeGen(output);
+     output << " : ";
+    e3->codeGen(output);
+
     return "";
 }
         
@@ -239,7 +268,9 @@ int ValExp::eval(){
     return 1;
 }
 
-string ValExp::codeGen(){
+string ValExp::codeGen(ofstream &output){
+    output << valor;
+
     return valor;
 }
 
@@ -308,7 +339,15 @@ string VarExp::getId(){
     return id;
 }
 
-string VarExp::codeGen(){
+string VarExp::codeGen(ofstream &output){
+    output << id;
+
+    if(position != nullptr){
+        output << "[";
+        position->codeGen(output);
+        output << "]";
+    }
+
     return "";
 }
 
@@ -463,6 +502,23 @@ string FuncExp::getTipo(){
     return "error";
 }
 
-string FuncExp::codeGen(){
+string FuncExp::codeGen(ofstream &output){
+    output << id << "(";
+
+    if(expressoes != nullptr){
+        list<Exp *>::iterator i = expressoes->begin();
+
+        (*i)->codeGen(output);
+        ++i;
+
+        while( i != expressoes->end()){
+            output << ", ";
+            (*i)->codeGen(output);
+            ++i;
+        }
+    }
+
+    output << ")";
+
     return "";
 }

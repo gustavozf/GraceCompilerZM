@@ -38,6 +38,8 @@ def main(): int {
         write v[i], " ";
     }
 
+    write "\n";
+
     return 0;
 }
 

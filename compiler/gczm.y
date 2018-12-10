@@ -1,4 +1,3 @@
-%error-verbose
 %debug
 %{
 #define YYDEBUG 1
@@ -33,6 +32,7 @@ stack<DeclSub *> *pilhaSubprog = new stack<DeclSub *>();
 stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %}
 
+%define parse.error verbose
 /* Uniao que representa o valores basicos possiveis.
    Utilizada pela ferramenta
 */
@@ -109,7 +109,6 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %token <sval> T_ATRIB_MOD        "%="
 %token <sval> T_COND_OP_TER      "?"
 %token <sval> T_DOIS_PON         ":"
-%token <sval> T_ERROR
 
 // tokens que assumem valores
 // %token <TIPO> <NOME>
@@ -130,6 +129,7 @@ stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 %right T_NEG_UNAR  // 1
 
 %right T_THEN T_ELSE
+%precedence error
 
 /* Declaracao de Tipos */
 %type <sval> tiposAtrib atribAgreg
@@ -180,6 +180,7 @@ declaracao:
 // ------------------------------- Declaracao de Variaveis
 decVar:
 	T_VAR listaSpecVars ":" tipo ";"		{ $$ = new DeclVar($2, $4); }
+	| T_VAR listaSpecVars ":" tipo error	{ $$ = new DeclVar($2, $4); yyerrok;}
 	;
 
 tipo:
@@ -269,7 +270,8 @@ cmdSimples:
 
 // ------------------------------- Atribuicoes
 cmdAtrib:
-	variavel tiposAtrib expressao ";" 	{ $$ = new AtribCmd($1, $2, $3, num_linhas);}
+	variavel tiposAtrib expressao ";" 		{ $$ = new AtribCmd($1, $2, $3, num_linhas);}
+	| variavel tiposAtrib expressao error	{ $$ = new AtribCmd($1, $2, $3, num_linhas); yyerrok;} // testar
 	;
 
 tiposAtrib:
@@ -304,30 +306,38 @@ cmdAtribFor:
 	;
 
 cmdStop:
-	T_STOP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas);}
+	T_STOP ";"  	{$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas);}
+	| T_STOP error	{$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas); yyerrok;}
 	;
 
 cmdSkip:
-	T_SKIP ";"  {$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas);}
+	T_SKIP ";"  	{$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas);}
+	| T_SKIP error	{$$ = new StopSkipCmd($1, pilhaCmdRepet, num_linhas); yyerrok;}
 	;
 
 cmdReturn:
 	T_RETURN ";"					{$$ = new RetCmd(pilhaSubprog, num_linhas);}
 	| T_RETURN expressao ";"		{$$ = new RetCmd($2, pilhaSubprog, num_linhas);}
+	| T_RETURN error				{$$ = new RetCmd(pilhaSubprog, num_linhas); yyerrok;}
+	| T_RETURN expressao error      {$$ = new RetCmd($2, pilhaSubprog, num_linhas); yyerrok;}
 	;
 
 // ------------------------- Chamada Procedimento
 cmdChamadaProc:
 	T_ID "(" ")" ";"				{ $$ = new ProcCmd($1, escopoAtual, num_linhas);     }
 	| T_ID "(" cnjExpr ")" ";"		{ $$ = new ProcCmd($1, $3, escopoAtual, num_linhas); }
+	| T_ID "(" ")" error			{ $$ = new ProcCmd($1, escopoAtual, num_linhas); yyerrok; }
+	| T_ID "(" cnjExpr ")" error	{ $$ = new ProcCmd($1, $3, escopoAtual, num_linhas); yyerrok;}
 	;
 
 cmdRead:
 	T_READ variavel ";"		{ $$ = new ReadCmd($2, num_linhas); }
+	| T_READ variavel error	{$$ = new ReadCmd($2, num_linhas); yyerrok;}
 	;
 
 cmdWrite:
 	T_WRITE cnjExpr ";"		{ $$ = new WriteCmd($2); }
+	| T_WRITE cnjExpr error	{$$ = new WriteCmd($2); yyerrok;}
 	;
 
 // ----------------------------------- Blocos
@@ -383,6 +393,7 @@ expressao:
 variavel:
 	T_ID						{ $$ = new VarExp($1, escopoAtual, num_linhas);     }
 	| T_ID "[" expressao "]"	{ $$ = new VarExp($1, $3, escopoAtual, num_linhas); }
+	| T_ID "[" expressao error	{ $$ = new VarExp($1, $3, escopoAtual, num_linhas); yyerrok;} //w[1 = 2 nao sabe dizer o erro
 	;
 
 %%
@@ -411,8 +422,8 @@ int main(int argc, char *argv[]){
 	return 0;
 }
 
-void yyerror(const char *s){
+void yyerror(char const *s){
 	cout<< "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): "<< s <<"\n";
 
-	exit(-1);
+	//exit(-1);
 }

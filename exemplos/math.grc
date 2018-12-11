@@ -1,0 +1,111 @@
+def somaUm(i:int) : int{
+    return i + 1;
+}
+
+def quadrado(i : int) : int{
+    return i * i;
+}
+
+def sum(v[], tam : int) : int {
+    var soma = 0, i : int;
+
+    for(i=0; i<tam; i+=1) 
+        soma += v[i];
+
+    return soma;
+}
+
+def potencia(x, n : int) : int{
+    var i, total : int;
+
+    if(n < 1){
+        return -1;
+    }
+    
+    total = x;
+    for(i = 1; i < n; i+=1){
+        total *= x;
+    }
+
+    return total;
+}
+
+def fibonacci(x : int) : int{
+    var soma = 1, anterior = 1, i, temp : int;
+
+    if (x <= 1){
+        return x;
+    }
+
+    for(i=2; i<x; i+=1){
+        temp = soma;
+        soma += anterior;
+        anterior = temp;
+    }
+
+    return soma;
+}
+
+def fatorial(x : int) : int{
+    var fat = 1 : int;
+
+    while(x > 1){
+        fat *= x;
+        x -= 1;
+    }
+
+    return fat;
+}
+
+def checkNumPrimo(x : int) : bool{
+    var i : int;
+    var primo = true : bool;
+
+    if(x <= 1){
+        write "O número não é primo!\n";
+        return false;
+    }
+
+    for(i = 2; i <= x/2; i+=1){
+        if(x % i == 0){
+            primo = false;
+            stop;
+        }
+    }
+
+    if(primo){
+        write "O número '", x, "' é primo!\n";
+    } else {
+        write "O número '", x, "' não é primo!\n";
+    }
+
+    return primo;
+}
+
+
+def main() : int {
+    var retorno[3] : bool;
+    var num : int;
+    var tam = 10 : int;
+    var val[10] = {5, 5, 5, 5, 5, 5, 5, 5, 5, 5} : int;
+
+    num = 7;
+    retorno[0] = checkNumPrimo(13);
+    retorno[1] = checkNumPrimo(num);
+    retorno[2] = checkNumPrimo(34);
+
+    write "27 + 1 = ", somaUm(27), "\n";
+    write "3^2 = ", quadrado(3), "\n";
+    write "3^4 = ", potencia(3, 4), "\n";
+
+
+    write "Fibonacci(7) = ", fibonacci(num), "\n";
+    write "Fibonacci(9) = ", fibonacci(9), "\n";
+    
+    write "Fatorial(4) = ", fatorial(4), "\n";
+    write "Fatorial(6) = ", fatorial(6), "\n";
+
+    write "Soma de um vetor de 10 valores '5' = ", sum(val, tam), "\n";
+
+    return 0;
+}

@@ -1,3 +1,7 @@
 To do list:
 
 - 3 exemplos
+
+1 funcionando ok (matematica)
+
+1 - com erros semanticos (exp), sintaticos e lexicos

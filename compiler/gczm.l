@@ -117,6 +117,5 @@ int num_carac = 1;
 \n {num_linhas++; num_carac = 1;}
 
 	/* Elimina Demais Caracteres Indesejados */
-[0-9]+(\_|[a-zA-Z])+	{cout<<"Erro léxico (l: "<< num_linhas <<", c: "<< num_carac <<"): definição de ID inválida '"<<yytext <<"'!\n";}
 . 						{cout<<"Erro léxico (l: "<< num_linhas <<", c: "<< num_carac <<"): token ilegal '"<<yytext <<"'!\n";}
 %%

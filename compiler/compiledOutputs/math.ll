@@ -287,18 +287,18 @@ define zeroext i1 @_Z13checkNumPrimoi(i32) #5 {
 
 ; <label>:21:                                     ; preds = %16
   store i8 0, i8* %5, align 1
-  br label %23
+  br label %26
 
 ; <label>:22:                                     ; preds = %16
   br label %23
 
-; <label>:23:                                     ; preds = %22, %21
+; <label>:23:                                     ; preds = %22
   %24 = load i32, i32* %4, align 4
   %25 = add nsw i32 %24, 1
   store i32 %25, i32* %4, align 4
   br label %11
 
-; <label>:26:                                     ; preds = %11
+; <label>:26:                                     ; preds = %21, %11
   %27 = load i8, i8* %5, align 1
   %28 = trunc i8 %27 to i1
   br i1 %28, label %29, label %34

@@ -43,8 +43,8 @@ int num_carac = 1;
 "int"    { num_carac += 3; return T_INT;    								} 
 "read"   { num_carac += 4; return T_READ;   								} 
 "return" { num_carac += 6; return T_RETURN; 								} 
-"skip"   { num_carac += 4; return T_SKIP;   								} 
-"stop"   { num_carac += 4; return T_STOP;   								} 
+"skip"   { num_carac += 4; yylval.sval = strdup(yytext); return T_SKIP;   	} 
+"stop"   { num_carac += 4; yylval.sval = strdup(yytext); return T_STOP;   	} 
 "string" { num_carac += 6; return T_STRING; 								} 
 "true"   { num_carac += 4; yylval.sval = strdup(yytext); return T_TRUE;   	} 
 "var"    { num_carac += 3; return T_VAR;    								} 

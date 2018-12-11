@@ -873,12 +873,12 @@ YY_RULE_SETUP
 case 11:
 YY_RULE_SETUP
 #line 47 "gczm.l"
-{ num_carac += 4; return T_SKIP;   								} 
+{ num_carac += 4; yylval.sval = strdup(yytext); return T_SKIP;   	} 
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 48 "gczm.l"
-{ num_carac += 4; return T_STOP;   								} 
+{ num_carac += 4; yylval.sval = strdup(yytext); return T_STOP;   	} 
 	YY_BREAK
 case 13:
 YY_RULE_SETUP

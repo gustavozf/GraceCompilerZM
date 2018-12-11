@@ -288,7 +288,7 @@ int ReadCmd::eval(){
     int ret = 1;
 
     if(!var->isInEscopo()){
-        cout << "Erro Semântico (l: " << line <<"): Var (" << var->getId() << ") não visível ao escopo em que foi chamada!\n";
+        cout << "Erro Semântico (l: " << line <<"): Variável '" << var->getId() << "' não visível ao escopo em que foi chamada!\n";
         ret = 0;
     }
 

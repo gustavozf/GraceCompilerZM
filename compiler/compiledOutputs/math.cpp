@@ -127,7 +127,7 @@ if(x % i == 0)
 {
 primo = false;
 
-continue;
+break;
 
 };
 

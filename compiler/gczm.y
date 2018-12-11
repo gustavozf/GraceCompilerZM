@@ -34,6 +34,7 @@ int countEscopos = 1;
 stack<DeclSub *> *pilhaSubprog = new stack<DeclSub *>();
 stack<Cmd *> *pilhaCmdRepet = new stack<Cmd *>();
 
+int sintaticaCorreta = 1;
 string nomeSaida;//"./compiledOutputs/graceOut.cpp";
 %}
 

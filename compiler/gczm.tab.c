@@ -2366,14 +2366,14 @@ int main(int argc, char *argv[]){
 
 	FILE *entrada = fopen(argv[1], "r");
 
-	pch = strtok (argv[1], "/ ");
+	pch = strtok (argv[1], "/");
 	while (pch != NULL){
 		aux = pch;
 	    pch = strtok(NULL, "/");
 	}
 
 	printf("Compilando Arquivo: %s\n",aux);
-	aux = strtok(aux, ".grc");
+	aux = strtok(aux, ".");
 	nomeSaida.assign(aux);
 
 	if (!entrada) {

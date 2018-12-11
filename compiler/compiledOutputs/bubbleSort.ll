@@ -1,5 +1,5 @@
-; ModuleID = './compiledOutputs/bubbleSo.cpp'
-source_filename = "./compiledOutputs/bubbleSo.cpp"
+; ModuleID = './compiledOutputs/bubbleSort.cpp'
+source_filename = "./compiledOutputs/bubbleSort.cpp"
 target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-linux-gnu"
 
@@ -32,7 +32,7 @@ target triple = "x86_64-pc-linux-gnu"
 @.str.3 = private unnamed_addr constant [23 x i8] c"Arranjo ordenado:\0AA = \00", align 1
 @.str.4 = private unnamed_addr constant [2 x i8] c" \00", align 1
 @.str.5 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
-@llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_bubbleSo.cpp, i8* null }]
+@llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_bubbleSort.cpp, i8* null }]
 
 ; Function Attrs: noinline uwtable
 define internal void @__cxx_global_var_init() #0 section ".text.startup" {
@@ -225,7 +225,7 @@ declare dereferenceable(272) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std
 declare dereferenceable(280) %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"*, i32* dereferenceable(4)) #1
 
 ; Function Attrs: noinline uwtable
-define internal void @_GLOBAL__sub_I_bubbleSo.cpp() #0 section ".text.startup" {
+define internal void @_GLOBAL__sub_I_bubbleSort.cpp() #0 section ".text.startup" {
   call void @__cxx_global_var_init()
   ret void
 }

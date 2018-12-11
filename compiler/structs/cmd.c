@@ -19,11 +19,11 @@ int IfCmd::eval(){
     }
 
     // chama a avaliacao dos outros objetos
-    condicao->eval();
-    then->eval();
+    retorno &= condicao->eval();
+    retorno &= then->eval();
 
     if (els != nullptr){
-        els->eval();
+        retorno &= els->eval();
     }
 
     return retorno;
@@ -61,8 +61,8 @@ int WhileCmd::eval(){
     }
 
     // chamar os outros metodos
-    condicao->eval();
-    comando->eval();
+    retorno &= condicao->eval();
+    retorno &= comando->eval();
 
     pilhaCmdRepet->pop();
 
@@ -100,10 +100,10 @@ int ForCmd::eval(){
     }
 
     // chamar os outros metodos
-    atribIni->eval();
-    exp->eval();
-    atribPasso->eval();
-    comando->eval();
+    cond &= atribIni->eval();
+    cond &= exp->eval();
+    cond &= atribPasso->eval();
+    cond &= comando->eval();
 
     pilhaCmdRepet->pop();
 
@@ -190,7 +190,7 @@ int RetCmd::eval(){
     }
 
     if(this->retorno != nullptr){
-        this->retorno->eval();
+        ret &= this->retorno->eval();
     }
 
     return ret;
@@ -234,8 +234,8 @@ int AtribCmd::eval(){
         }
     }
 
-    var->eval();
-    exp->eval();
+    ret &= var->eval();
+    ret &= exp->eval();
 
     return ret;
 }
@@ -256,12 +256,13 @@ WriteCmd::WriteCmd(list<Exp *> *cnExp){
 
 int WriteCmd::eval(){
     list<Exp *>::iterator i;
+    int ret = 1;
 
     for(i = cnjExp->begin(); i != cnjExp->end(); ++i){
-        (*i)->eval();
+        ret &= (*i)->eval();
     }
 
-    return 1;
+    return ret;
 }
 
 string WriteCmd::codeGen(ofstream &output){
@@ -291,7 +292,7 @@ int ReadCmd::eval(){
         ret = 0;
     }
 
-    var->eval();
+    ret &= var->eval();
 
     return ret;
 }
@@ -328,21 +329,23 @@ Escopo* BlocoCmd::getEscopo(){
 }
 
 int BlocoCmd::eval(){
+    int cond = 1;
+
     if(declaracoes != nullptr){
         list<Decl *>::iterator i;
         for(i=declaracoes->begin(); i != declaracoes->end(); ++i){
-            (*i)->eval();
+            cond &= (*i)->eval();
         }
     }
 
     if(comandos != nullptr){
         list<Cmd *>::iterator j;
         for(j=comandos->begin(); j != comandos->end(); ++j){
-            (*j)->eval();
+            cond &= (*j)->eval();
         }
     }
 
-    return 1;
+    return cond;
 }
 
 string BlocoCmd::codeGen(ofstream &output){
@@ -448,7 +451,7 @@ int ProcCmd::eval(){
     if (expressoes != nullptr){
         list<Exp *>::iterator k;
         for(k = expressoes->begin(); k != expressoes->end(); ++k){
-            (*k)->eval();
+            ret &= (*k)->eval();
         }
     }
 
@@ -524,7 +527,7 @@ int Programa::eval(){
     }
 
     for(i = declaracoes->begin(); i != declaracoes->end(); ++i){
-        (*i)->eval();
+        ret &= (*i)->eval();
     }
 
     return ret;

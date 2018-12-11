@@ -14,8 +14,8 @@ int AritmExp::eval(){
         ret = 0;
     }
 
-    e1->eval();
-    e2->eval(); 
+    ret &= e1->eval();
+    ret &= e2->eval(); 
 
     return ret;
 }
@@ -50,8 +50,8 @@ int RelExp::eval(){
         ret = 0;
     }
 
-    e1->eval();
-    e2->eval();
+    ret &= e1->eval();
+    ret &= e2->eval();
 
     return ret;
 }
@@ -87,8 +87,8 @@ int LogExp::eval(){
         ret = 0;
     }
 
-    e1->eval();
-    e2->eval();
+    ret &= e1->eval();
+    ret &= e2->eval();
 
     return ret;
 }
@@ -124,8 +124,8 @@ int IgExp::eval(){
         ret = 0;
     }
     
-    e1->eval();
-    e2->eval();
+    ret &= e1->eval();
+    ret &= e2->eval();
 
     return ret;
 }
@@ -160,7 +160,7 @@ int NegUnExp::eval(){
         ret = 0;
     }
     
-    e1->eval();
+    ret &= e1->eval();
 
     return ret;
 }
@@ -194,7 +194,7 @@ int NegExp::eval(){
         ret = 0;
     }
 
-    e1->eval();
+    ret &= e1->eval();
 
     return ret;
 }
@@ -231,9 +231,9 @@ int TerExp::eval(){
         ret = 0;
     }
 
-    e1->eval();
-    e2->eval();
-    e3->eval();
+    ret &= e1->eval();
+    ret &= e2->eval();
+    ret &= e3->eval();
 
     return ret;
 }
@@ -329,7 +329,7 @@ int VarExp::eval(){
            ret = 0;
        }
 
-       this->position->eval();
+       ret &= this->position->eval();
     }
     
     return ret;
@@ -457,7 +457,7 @@ int FuncExp::eval(){
         list<Exp *>::iterator i;
 
         for(i = expressoes->begin(); i != expressoes->end(); ++i){
-            (*i)->eval();
+            ret &= (*i)->eval();
         }
     }
 

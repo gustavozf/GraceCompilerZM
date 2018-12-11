@@ -166,7 +166,7 @@ programa:
 				  int semanticaCorreta = raiz->eval();
 				  cout << "Análise Semântica Realizada!\n";
 
-				  if (semanticaCorreta){
+				  if (semanticaCorreta && sintaticaCorreta){
 					cout << "Gerando código...\n";
 					ofstream saida(string("./compiledOutputs/") + nomeSaida + string(".cpp"));
 					raiz->codeGen(saida);
@@ -458,5 +458,6 @@ int main(int argc, char *argv[]){
 void yyerror(char const *s){
 	cout<< "Erro Sintático (l: "<<num_linhas<< ", c: "<<num_carac<<"): "<< s <<"\n";
 
+	sintaticaCorreta = 0;
 	//exit(-1);
 }

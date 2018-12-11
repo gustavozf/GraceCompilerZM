@@ -1,0 +1,31 @@
+def calcDados(ns, cp, am : int){
+    write "Sala = ", ns,"\n";
+    write "Capacidade = ", cp, "\n";
+    write "Cadeiras Ocupadas = ", am, "\n";
+
+    if (am >= cp){
+        write "A sala", ns, " está lotada!";
+    }else{
+        write "A sala", ns, " ainda possui vagas!";
+    }
+}
+
+def main() : int{
+    var numSala, capacidade, alunosMat : int
+    var @luno, capacidad& : int;
+
+    numSala = 0
+ 
+    write "Digite o número da sala: "
+    read numSala;
+
+    write "Digite a capacidade da sala: ";
+    read capacidade;
+
+    write "Digite a quantidade de alunos matriculados: ";
+    read alunosMat
+
+    calcDados(numSala, capacidade, alunosMat)
+ 
+    return 0
+}

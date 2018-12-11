@@ -291,7 +291,7 @@ cmdSimples:
 // ------------------------------- Atribuicoes
 cmdAtrib:
 	variavel tiposAtrib expressao ";" 		{ $$ = new AtribCmd($1, $2, $3, num_linhas);}
-	| variavel tiposAtrib expressao error	{ $$ = new AtribCmd($1, $2, $3, num_linhas); yyerrok;} // testar
+	| variavel tiposAtrib expressao error	{ $$ = new AtribCmd($1, $2, $3, num_linhas); yyerrok;} 
 	;
 
 tiposAtrib:

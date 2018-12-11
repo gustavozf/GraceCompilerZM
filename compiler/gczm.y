@@ -340,7 +340,7 @@ cmdChamadaProc:
 	T_ID "(" ")" ";"				{ $$ = new ProcCmd($1, escopoAtual, num_linhas);     }
 	| T_ID "(" cnjExpr ")" ";"		{ $$ = new ProcCmd($1, $3, escopoAtual, num_linhas); }
 	| T_ID "(" ")" error			{ $$ = new ProcCmd($1, escopoAtual, num_linhas); yyerrok; }
-	| T_ID "(" cnjExpr ")" error	{ $$ = new ProcCmd($1, $3, escopoAtual, num_linhas); yyerrok;} //so se nao for em uma atribuicao
+	| T_ID "(" cnjExpr ")" error	{ $$ = new ProcCmd($1, $3, escopoAtual, num_linhas); yyerrok;}
 	;
 
 cmdRead:
@@ -438,13 +438,8 @@ int main(int argc, char *argv[]){
 	return 0;
 }
 
-<<<<<<< HEAD
 void yyerror(char const *s){
-	cout<< "Erro Sintatico (l: "<<num_linhas<< ", c: "<<num_carac<<"): "<< s <<"\n";
-=======
-void yyerror(const char *s){
 	cout<< "Erro Sintático (l: "<<num_linhas<< ", c: "<<num_carac<<"): "<< s <<"\n";
->>>>>>> e481a7e1a17f221d6f58d5c2743d6919c65accf0
 
 	//exit(-1);
 }

@@ -2,78 +2,78 @@
 
 using namespace std;
 
-int v[10];
-
-void bubblesort(int *v, int n) 
+void proc1() 
 {
 
-int i = 0;
+int x;
 
-int j;
+int y;
+
+int z;
 ;
 
-bool trocou = true;
+return 10;
+
+}
+void proc2(bool *y) 
+{
+
+return ;
+
+}
+bool func1(int x, int y, bool z) 
+{
+
+bool _;
 ;
 
-while(i < n - 1 && trocou) 
-{
-trocou = false;
-
-for(j = 0; j < n - i - 1; j += 1) 
+if(x > z) 
 {
 
-if(v[j] > v[j + 1]) 
+return false;
+
+}else 
 {
 
-int aux = v[j];
-;
-v[j] = v[j + 1];
-v[j + 1] = aux;
-trocou = true;
-
-};
+return 2;
 
 }
 ;
-i += 1;
+
+return true;
 
 }
-;
+int func2(int *k) 
+{
+
+return k[1];
 
 }
 int main() 
 {
 
 int i;
-
-int x;
 ;
 
-cout << "Digite os valores do arranjo:\n";
-
-for(i = 0; i < 10; i += 1) 
-{
-
-cout << "A["<< i<< "] = ";
-
-cin >>v[i];
-
-}
+bool j;
 ;
 
-bubblesort(v, 10);
-
-cout << "Arranjo ordenado:\nA = ";
-
-for(i = 0; i < 10; i += 1) 
-{
-
-cout << v[i]<< " ";
-
-}
+int w[2] = {4, "ola"};
 ;
 
-cout << "\n";
+proc1(10);
+
+proc2(w);
+
+proc2(w[0]);
+i = func1(10, 15, true);
+y = func1(10, 15);
+j = func1(true, false, "bob");
+i = w["a"];
+i = func2(w[1]);
+i = naoExisto();
+
+naoExistoTambem();
 
 return 0;
 

@@ -152,7 +152,6 @@ Gramática
 Terminais, com as regras onde eles aparecem
 
 $end (0) 0
-<<<<<<< HEAD
 error (256) 7 50 64 66 69 70 73 74 76 78 109
 T_BOOL (258) 8
 T_INT (259) 9
@@ -204,58 +203,6 @@ T_ID (304) 14 15 16 17 26 27 28 29 35 36 71 72 73 74 105 106 107 108
     109
 T_NUM (305) 11 23
 T_LIT_STRING (306) 22
-=======
-error (256)
-T_BOOL (258) 7
-T_INT (259) 8
-T_STRING (260) 9 10
-T_IF (261) 56 57
-T_ELSE (262) 57
-T_FOR (263) 59
-T_WHILE (264) 58
-T_WRITE (265) 68
-T_READ (266) 67
-T_DEF (267) 25 26 27 28
-T_RETURN (268) 63 64
-T_VAR (269) 6
-T_SKIP (270) 62
-T_STOP (271) 61
-T_TRUE (272) 19
-T_FALSE (273) 20
-"(" (274) 25 26 27 28 56 57 58 59 65 66 78 95 96
-")" (275) 25 26 27 28 56 57 58 59 65 66 78 95 96
-"[" (276) 10 15 16 35 98
-"]" (277) 10 15 16 35 98
-"{" (278) 16 72
-"}" (279) 16 73
-"," (280) 11 17 32
-";" (281) 6 29 48 59 61 62 63 64 65 66 67 68
-"+" (282) 84
-"-" (283) 79 85
-"*" (284) 81
-"/" (285) 82
-"%" (286) 83
-"==" (287) 90
-"!=" (288) 91
-">" (289) 88
-">=" (290) 89
-"<" (291) 86
-"<=" (292) 87
-"||" (293) 93
-"&&" (294) 92
-"!" (295) 80
-"=" (296) 14 16 50
-"+=" (297) 54
-"-=" (298) 55
-"*=" (299) 53
-"/=" (300) 51
-"%=" (301) 52
-"?" (302) 94
-":" (303) 6 27 28 31 94
-T_ID (304) 13 14 15 16 25 26 27 28 34 35 65 66 95 96 97 98
-T_NUM (305) 10 22
-T_LIT_STRING (306) 21
->>>>>>> e481a7e1a17f221d6f58d5c2743d6919c65accf0
 T_NEG_UNAR (307)
 T_THEN (308)
 
@@ -267,7 +214,6 @@ $accept (54)
 programa (55)
     à esquerda: 1, à direita: 0
 declaracoes (56)
-<<<<<<< HEAD
     à esquerda: 2 3, à direita: 1 2 79 81
 declaracao (57)
     à esquerda: 4 5, à direita: 2 3
@@ -342,81 +288,6 @@ expressao (90)
     104 108 109
 variavel (91)
     à esquerda: 107 108 109, à direita: 49 50 62 75 76 86
-=======
-    à esquerda: 2 3, à direita: 1 2 69 71
-declaracao (57)
-    à esquerda: 4 5, à direita: 2 3
-decVar (58)
-    à esquerda: 6, à direita: 4
-tipo (59)
-    à esquerda: 7 8 9 10, à direita: 6 27 28 31
-listaSpecVars (60)
-    à esquerda: 11 12, à direita: 6 11
-specVar (61)
-    à esquerda: 13 14 15 16, à direita: 11 12
-cnjExpr (62)
-    à esquerda: 17 18, à direita: 16 17 66 68 96
-valor (63)
-    à esquerda: 19 20 21 22, à direita: 77
-decSub (64)
-    à esquerda: 23 24, à direita: 5
-decProc (65)
-    à esquerda: 25 26, à direita: 23
-decFun (66)
-    à esquerda: 27 28, à direita: 24
-listaParametros (67)
-    à esquerda: 29 30, à direita: 25 27 29
-specParams (68)
-    à esquerda: 31, à direita: 29 30
-specParamsN (69)
-    à esquerda: 32 33, à direita: 31 32
-param (70)
-    à esquerda: 34 35, à direita: 32 33
-comando (71)
-    à esquerda: 36 37, à direita: 56 57 58 59 74 75
-cmdSimples (72)
-    à esquerda: 38 39 40 41 42 43 44 45 46 47, à direita: 36
-cmdAtrib (73)
-    à esquerda: 48, à direita: 38
-tiposAtrib (74)
-    à esquerda: 49 50, à direita: 48 60
-atribAgreg (75)
-    à esquerda: 51 52 53 54 55, à direita: 49
-cmdIf (76)
-    à esquerda: 56 57, à direita: 39
-cmdWhile (77)
-    à esquerda: 58, à direita: 40
-cmdFor (78)
-    à esquerda: 59, à direita: 41
-cmdAtribFor (79)
-    à esquerda: 60, à direita: 59
-cmdStop (80)
-    à esquerda: 61, à direita: 42
-cmdSkip (81)
-    à esquerda: 62, à direita: 43
-cmdReturn (82)
-    à esquerda: 63 64, à direita: 44
-cmdChamadaProc (83)
-    à esquerda: 65 66, à direita: 45
-cmdRead (84)
-    à esquerda: 67, à direita: 46
-cmdWrite (85)
-    à esquerda: 68, à direita: 47
-bloco (86)
-    à esquerda: 69 70 71, à direita: 25 26 27 28 37
-blocoBegin (87)
-    à esquerda: 72, à direita: 69 70 71
-blocoEnd (88)
-    à esquerda: 73, à direita: 69 70 71
-comandos (89)
-    à esquerda: 74 75, à direita: 70 71 74
-expressao (90)
-    à esquerda: 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92
-    93 94 95 96, à direita: 14 15 16 17 18 48 56 57 58 59 60 64 78
-    79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 98
-variavel (91)
-    à esquerda: 97 98, à direita: 48 60 67 76
->>>>>>> e481a7e1a17f221d6f58d5c2743d6919c65accf0
 
 
 Estado 0

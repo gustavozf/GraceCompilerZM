@@ -1,11 +1,14 @@
+// adiciona um ao valor passado
 def somaUm(i:int) : int{
     return i + 1;
 }
 
+// calcula o valor quadrado de um numero
 def quadrado(i : int) : int{
     return i * i;
 }
 
+// calcula a soma dos valores de um arranjo
 def sum(v[], tam : int) : int {
     var soma = 0, i : int;
 
@@ -15,6 +18,7 @@ def sum(v[], tam : int) : int {
     return soma;
 }
 
+// calcula o valor de x^n
 def potencia(x, n : int) : int{
     var i, total : int;
 
@@ -30,6 +34,7 @@ def potencia(x, n : int) : int{
     return total;
 }
 
+// calcula o valor da sequencia de fibonacci na posicao "x"
 def fibonacci(x : int) : int{
     var soma = 1, anterior = 1, i, temp : int;
 
@@ -46,6 +51,7 @@ def fibonacci(x : int) : int{
     return soma;
 }
 
+// Calcula x!
 def fatorial(x : int) : int{
     var fat = 1 : int;
 
@@ -57,6 +63,7 @@ def fatorial(x : int) : int{
     return fat;
 }
 
+// verifica se um numero eh primo
 def checkNumPrimo(x : int) : bool{
     var i : int;
     var primo = true : bool;

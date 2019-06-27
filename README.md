@@ -7,3 +7,7 @@
 Autores:
 - Gustavo Zanoni Felipe
 - Mariana Soder
+
+Mais detalhes sobre a linguagem em:
+- https://github.com/lucasnanni/ilp2018
+- https://din-ilp2018.readthedocs.io/en/latest/
